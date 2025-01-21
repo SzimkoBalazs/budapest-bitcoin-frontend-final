@@ -9,7 +9,7 @@ const grayBars = [
   "Network with speakers, industry leaders, and VIP guests in the Whale area.",
 ];
 
-const TicketCard = ({ borderColor }) => {
+const TicketCard = ({ ticketCardContent, borderColor }) => {
   return (
     <div
       className="flex w-[344px] h-[584px] pt-[16px] flex-col justify-between items-center rounded-[20px] border-[4px]  bg-black shadow-[1px_1px_0px_0px_#FFF,_2px_2px_0px_0px_#FFF,_3px_3px_0px_0px_#FFF,_4px_4px_0px_0px_#FFF,_5px_5px_0px_0px_#FFF,_6px_6px_0px_0px_#FFF,_7px_7px_0px_0px_#FFF,_8px_8px_0px_0px_#FFF]"
@@ -21,12 +21,12 @@ const TicketCard = ({ borderColor }) => {
         <div className="flex flex-col items-start self-stretch">
           <div className="flex px-[10px] py-[24px] justify-center items-center gap-[10px] self-stretch">
             <p className="flex-[1_0_0] text-white text-center font-exo text-[44px] font-extrabold leading-[100%] tracking-[2.2px]">
-              Expo Pass
+              {ticketCardContent.PassTitle}
             </p>
           </div>
         </div>
         <div className="flex flex-col items-start gap-[8px] self-stretch">
-          {grayBars.map((text, index) => (
+          {ticketCardContent.PassDescription.map((text, index) => (
             <div
               key={index}
               className={`flex items-center gap-[10px] px-[8px] py-[4px] bg-[#4D4D4D] ${

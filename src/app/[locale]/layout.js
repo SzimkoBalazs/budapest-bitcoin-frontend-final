@@ -2,6 +2,8 @@ import { Fredoka, Exo } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 
+import { LocaleProvider } from "@/context/LocaleContext";
+
 const fredoka = Fredoka({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
@@ -21,11 +23,14 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={`${fredoka.variable} ${exo.variable} antialiased flex`}>
-        <Navbar />
-        <main className="w-full min-h-screen bg-neutral-900">{children}</main>
-      </body>
-    </html>
+    <LocaleProvider>
+      <html lang="en">
+        <body
+          className={`${fredoka.variable} ${exo.variable} antialiased flex`}
+        >
+          <main className="w-full min-h-screen bg-neutral-900">{children}</main>
+        </body>
+      </html>
+    </LocaleProvider>
   );
 }

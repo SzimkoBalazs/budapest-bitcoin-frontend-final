@@ -1,0 +1,79 @@
+/* Alap stílusok */
+.gallery-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #0f0f0f;
+  overflow: hidden;
+}
+
+.swiper {
+  width: 100%;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.swiper-slide {
+  width: 300px;
+  height: 400px;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+  filter: blur(1px);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  align-items: flex-start;
+  transition: all 0.5s ease-in-out;
+}
+
+.swiper-slide-active {
+  filter: blur(0px);
+  transform: scale(1.1) translateY(-20px);
+}
+
+.swiper-pagination-bullet,
+.swiper-pagination-bullet-active {
+  background: #fff;
+}
+
+/* Szöveges tartalom */
+.slide-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.slide-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+}
+
+.slide-text {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 0 0 16px 16px;
+}
+
+.left-text {
+  font-size: 24px;
+  font-weight: 800;
+  color: #ffae0b;
+  max-width: 40%;
+  text-align: right;
+}
+
+.right-text {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  max-width: 50%;
+}

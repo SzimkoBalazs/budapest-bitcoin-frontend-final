@@ -11,7 +11,7 @@ const SectionMainTitle = ({ text, color }) => {
           style={{ backgroundColor: color }}
         />
         {/* Szöveg */}
-        <p className="text-white text-stroke font-exo text-[80px] font-bold leading-[100%] tracking-[12px] uppercase z-10 relative">
+        <p className="text-white text-stroke font-exo text-[56px] font-bold leading-[100%] tracking-[8.4px] uppercase z-10 relative">
           {text}
         </p>
       </div>

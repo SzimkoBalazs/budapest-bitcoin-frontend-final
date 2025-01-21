@@ -1,14 +1,14 @@
 import React from "react";
 
-const MovingEarlyBirdTicketBannerContent = () => {
+const MovingEarlyBirdTicketBannerContent = ({ bannerContent }) => {
   return (
     <>
       <p className="text-white font-exo text-[18px] font-extrabold leading-[130%] tracking-[2.7px]">
-        Early Bird tickets are live
+        {bannerContent.FirstText}
       </p>
       <p className="text-white font-exo text-[18px] font-normal leading-[130%] tracking-[2.7px]">
         {" "}
-        - stack a few sats for post-event beers!
+        {"-"} {bannerContent.SecondText}
       </p>
       <div className=" flex-shrink-0">
         <svg

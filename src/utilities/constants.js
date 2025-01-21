@@ -1,4 +1,4 @@
-const speakers = [
+export const speakers = [
   {
     name: "Lisa Hough",
     description: "Dedicated advocate for Bitcoin and the energy sector",
@@ -47,4 +47,23 @@ const speakers = [
   },
 ];
 
-export default speakers;
+export const gallerySliderData = [
+  {
+    image: "/lisa.jpeg",
+    leftText: "Afterparties Ruin bars & Sziget Festival",
+    rightText:
+      "Experience Budapest’s vibrant nightlife and the Sziget Festival.",
+  },
+  {
+    image: "/lisa.jpeg",
+    leftText: "Afterparties Ruin bars & Sziget Festival",
+    rightText:
+      "Experience Budapest’s vibrant nightlife and the Sziget Festival.",
+  },
+  {
+    image: "/lisa.jpeg",
+    leftText: "Afterparties Ruin bars & Sziget Festival",
+    rightText:
+      "Experience Budapest’s vibrant nightlife and the Sziget Festival.",
+  },
+];

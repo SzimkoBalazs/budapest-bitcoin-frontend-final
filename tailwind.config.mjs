@@ -6,6 +6,14 @@ export default {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    screens: {
+      fullhd: "1536px",
+      lx: "1120px",
+      lg: "1060px",
+      pop: "1246px",
+      ticket: "1275px",
+      speaker: "655px",
+    },
     extend: {
       fontFamily: {
         fredoka: ["var(--font-fredoka)", "sans-serif"],
