@@ -13,6 +13,7 @@ export default {
       pop: "1246px",
       ticket: "1275px",
       speaker: "655px",
+      gl: "900px",
     },
     extend: {
       fontFamily: {
