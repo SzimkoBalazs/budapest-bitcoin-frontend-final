@@ -7,7 +7,10 @@ import SectionMainTitle from "@/components/SectionMainTitle";
 
 const WhyPartnerWithUs = () => {
   return (
-    <div className="flex flex-col w-full items-center bg-neutral-950 pt-[56px]">
+    <div
+      id="partners"
+      className="flex flex-col w-full items-center bg-neutral-950 pt-[56px] scroll-mt-[80px]"
+    >
       <ContentWrapper className={"max-w-[1128px]"}>
         <div className="flex flex-col md:flex-row mx-auto mb-[80px] pb-[80px] pop:justify-between items-center pop:items-end self-stretch border-b-2 border-neutral-200">
           <div className="flex pop:pr-[16px] w-full md:w-[50%] flex-col items-center pop:items-start gap-[24px]">
@@ -32,7 +35,12 @@ const WhyPartnerWithUs = () => {
               </p>
             </div>
             <div className="flex items-start w-full">
-              <SecondaryCTAButton text="Become a partner" />
+              <SecondaryCTAButton
+                text="Become a partner"
+                type="button"
+                href="random@gmail.com"
+                actionType="mailto"
+              />
             </div>
           </div>
 

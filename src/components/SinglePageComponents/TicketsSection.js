@@ -48,7 +48,7 @@ const TicketsSection = async ({ locale }) => {
   const ticketCardContent = await fetchTicketCards(locale);
   console.log(ticketCardContent);
   return (
-    <div className="mb-[200px]">
+    <div id="tickets" className="mb-[200px] scroll-mt-[100px]">
       {/* Title Section */}
       <ContentWrapper className="max-w-[1128] mx-auto">
         <SectionMainTitle

@@ -4,9 +4,9 @@ import ContentWrapper from "@/utilities/ContentWrapper";
 
 const WhaleVenue = () => {
   return (
-      <div className="flex flex-col items-start">
-        <div className="flex flex-col w-full sm:w-[50%] gap-[24px]">
-          <div className="flex flex-col items-start">
+    <div className="flex flex-col items-start">
+      <div className="flex flex-col w-full sm:w-[50%] gap-[24px]">
+        <div className="flex flex-col items-start">
           <div className="flex flex-col items-start">
             <div className="flex relative flex-col justify-center items-center gap-[10px]">
               <span className="w-[217px] h-[24px] absolute bottom-[9px] left-0 z-0 bg-secondary-500" />
@@ -25,12 +25,14 @@ const WhaleVenue = () => {
           </p>
         </div>
         <div className="flex items-start w-full">
-          <SecondaryCTAButton text="CHECK THE LOCATION" />
-        </div>
+          <SecondaryCTAButton
+            text="CHECK THE LOCATION"
+            type="button"
+            actionType="googleMaps"
+          />
         </div>
       </div>
-
-
+    </div>
   );
 };
 

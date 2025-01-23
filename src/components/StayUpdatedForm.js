@@ -85,9 +85,6 @@ const StayUpdatedForm = () => {
           />
         </div>
       </form>
-      {message && (
-        <Notification message={message} onClose={() => setMessage("")} />
-      )}
     </div>
   );
 };
