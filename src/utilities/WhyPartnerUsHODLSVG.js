@@ -3,7 +3,7 @@ import React from "react";
 const WhyPartnerUsHODLSVG = () => {
   return (
     <svg
-      width="440"
+      width="100%"
       height="231"
       viewBox="0 0 440 231"
       fill="none"

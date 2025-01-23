@@ -13,6 +13,8 @@ export default {
       pop: "1246px",
       ticket: "1275px",
       speaker: "655px",
+      md:'768px',
+      sm:'640px',
     },
     extend: {
       fontFamily: {
@@ -51,6 +53,10 @@ export default {
       animation: {
         marquee: "marquee 15s linear infinite",
       },
+      minHeight:{
+        'mobile-menu':'calc(100vh - 80px)',
+        'mobile-menu-auto':'auto',
+      }
     },
   },
   plugins: [
@@ -60,6 +66,23 @@ export default {
           "-webkit-text-stroke-width": "2px",
           "-webkit-text-stroke-color": "#1F1F1F",
         },
+        ".hero-bg":{
+          "backgroundSize":'110%',
+          "backgroundPosition":'50% 0%',
+        },
+        ".hero-bg-mobile":{
+          "backgroundSize":"220%",
+          "backgroundPosition":"50% 0%",
+        },
+        ".big-title":{
+          "textShadow": "0px 0px 3px #000,  -1px 1px 0px #FFAE0B, -2px 2px 0px #FFAE0B, -3px 3px 0px #FFAE0B, -4px 4px 0px #FFAE0B, -5px 5px 0px #FFAE0B, -6px 6px 0px #FFAE0B, -7px 7px 0px #FFAE0B, -9px 9px 8px rgba(247, 147, 26, 0.20)",
+        },
+        ".big-title-mobile":{
+          "textShadow": "0px 0px 3px #000,  -1px 1px 0px #FFAE0B, -2px 2px 0px #FFAE0B, -3px 3px 0px #FFAE0B, -4px 4px 0px #FFAE0B, -5px 5px 0px #FFAE0B,  -7px 7px 6px rgba(247, 147, 26, 0.20)",
+        },
+        ".mobile-menu-container":{
+          "minHeight":"calc('100vh - 24px')",
+        }
       });
     },
   ],

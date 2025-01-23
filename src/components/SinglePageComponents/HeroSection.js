@@ -3,23 +3,13 @@ import HeroSectionContent from "../HeroSectionContent";
 
 const HeroSection = ({ locale }) => {
   return (
-    <section className="flex flex-col w-full h-[100vh] pb-[210px] bg-neutral-900 text-white">
-      {/* Háttér */}
-
-      <div
-        className="flex h-[593px] justify-center items-center flex-shrink-0 hero-background"
-        style={{
-          background: `url('/lanchid_nap.svg') `,
-          backgroundRepeat: "no-repeat",
-
-          backgroundPosition: "50%",
-        }}
-      ></div>
-      {/* Belső tartalom */}
-
-      <div className="flex justify-center mx-auto mt-[-100px]">
+    <section className="flex flex-col pb-[5%] w-full h-[100vh] px-4 md:px-10 bg-neutral-900 justify-end text-white hero-bg-mobile md:hero-bg"
+             style={{
+                 backgroundImage:`url('lanchid_nap.svg')`,
+                 backgroundColor:'#1f1f1f',
+                 backgroundRepeat:'no-repeat',
+                }}>
         <HeroSectionContent />
-      </div>
     </section>
   );
 };

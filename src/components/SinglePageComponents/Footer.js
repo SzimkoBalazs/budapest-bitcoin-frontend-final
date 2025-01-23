@@ -4,13 +4,9 @@ import GetInTouch from "../GetInTouch";
 
 const Footer = () => {
   return (
-    <div className="flex flex-col fullhd:flex-row justify-center items-center gap-[56px] fullhd:justify-between fullhd:items-start mx-auto self-stretch border-t-[4px] border-neutral-900 bg-[length:50px_50px] bg-repeat bg-lightgray px-[278px] pt-[80px] pb-[80px] pl-[280px] bg-black">
-      <div className="">
+    <div className="flex max-w-[1440px] mx-auto px-10 flex-col lg:flex-row gap-[56px] border-t-[4px] border-neutral-900 bg-[length:50px_50px] bg-repeat pt-[80px] pb-[80px] bg-black">
         <StayUpdatedForm />
-      </div>
-      <div>
         <GetInTouch />
-      </div>
     </div>
   );
 };

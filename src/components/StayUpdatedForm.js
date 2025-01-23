@@ -3,12 +3,12 @@ import SecondaryCTAButton from "./SecondaryCTAButton";
 
 const StayUpdatedForm = () => {
   return (
-    <div className="flex w-[400px] fullhd:w-[554px] flex-col items-center justify-center fullhd:items-start gap-[40px]">
+    <div className="flex max-w-[400px] lg:max-w-[554px] flex-col items-center justify-center lg:items-start gap-[40px]">
       <div className="flex flex-col items-start gap-[24px] self-stretch">
-        <div className="flex w-[364px] flex-col items-start gap-[64px]">
+        <div className="flex max-w-[364px] flex-col items-start gap-[64px]">
           <div className="flex flex-col justify-center items-start gap-[34px]">
-            <div className="flex relative w-[364px] flex-col justify-center items-start gap-[10px]">
-              <span className="z-0 left-0 w-[352px] h-[16px] absolute bottom-[4px] bg-primary-500" />
+            <div className="flex relative flex-col justify-center items-start gap-[10px]">
+              <span className="z-0 left-0 w-[75%] h-[12px] absolute bottom-[6px] bg-primary-500" />
               <p className="text-white z-10 [text-stroke-width:2px] [text-stroke-color:#1F1F1F] font-exo text-[40px] font-extrabold leading-[100%] tracking-[6px] uppercase">
                 Stay updated
               </p>
@@ -16,7 +16,7 @@ const StayUpdatedForm = () => {
           </div>
         </div>
         <div className="flex flex-col items-start gap-[8px] self-stretch">
-          <p className="w-[440px] text-[rgba(255,255,255,0.80)] font-exo text-[26px] font-extrabold leading-[110%] tracking-[2.6px]">
+          <p className="text-[rgba(255,255,255,0.80)] font-exo text-[26px] font-extrabold leading-[110%] tracking-[2.6px]">
             True Bitcoiners Stay Ahead!
           </p>
           <p className="self-stretch text-[rgba(255,255,255,0.80)] font-exo text-[20px] font-medium leading-[150%] tracking-[1px]">
@@ -25,7 +25,7 @@ const StayUpdatedForm = () => {
           </p>
         </div>
       </div>
-      <div className="flex flex-col fullhd:flex-row fullhd:items-start gap-[16px] self-stretch">
+      <div className="flex flex-col lg:flex-row lg:items-start gap-[16px] self-stretch">
         <div className="flex flex-col items-start gap-[8px] flex-[1_0_0]">
           <div className="flex h-[50px] px-[24px] py-[9px] items-center gap-[10px] self-stretch rounded-[43px] border-2 border-secondary-600 bg-neutral-950">
             <p className="text-neutral-300 text-center font-exo text-[14px] font-medium leading-normal">

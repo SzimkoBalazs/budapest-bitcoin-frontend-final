@@ -1,8 +1,16 @@
 "use client";
 
 import React, { useState } from "react";
+import NavLink from "@/components/NavLink";
+import GetYourPassCTAButton from "@/components/GetYourPassCTAButton";
+import SecondaryCTAButton from "@/components/SecondaryCTAButton";
 
-const NavHamburgerIcon = () => {
+// TODO: Ez keruljon be a strapibol
+const buttonText = {
+  ButtonText: "Get your pass",
+};
+
+const NavHamburgerIcon = ({navLinks}) => {
   const [isClicked, setIsClicked] = useState(false);
 
   // Gomb lenyomása
@@ -16,7 +24,7 @@ const NavHamburgerIcon = () => {
   };
 
   return (
-    <div className="xl:flex-none inline-flex flex-col items-start">
+    <div className="flex relative flex-col items-start">
       <div
         className={`flex w-[44px] h-[38px] p-[10px] flex-col justify-center items-center gap-[4px] rounded-[10px] border-2 border-black ${
           isClicked
@@ -51,6 +59,35 @@ const NavHamburgerIcon = () => {
           </svg>
         )}
       </div>
+        <div className="min-h-mobile-menu sm:min-h-mobile-menu-auto w-screen sm:w-[320px] right-[-26px] sm:right-[0px] justify-between"
+             style={{
+                 gap:40,
+                 position:'absolute',
+                 display: isClicked ? 'flex' : 'none',
+                 flexDirection:'column',
+                 alignItems:'center',
+                 top:48,
+                 padding: '12px 16px 24px 16px',
+                 justifyContent:'space-between',
+                 border:'2px solid #000',
+                 backgroundColor:'#1f1f1f',
+            }}>
+            <div className="flex flex-col gap-4">
+                {navLinks.map((navLink) => (
+                <li key={navLink.id} style={{listStyleType:'none'}}>
+                    <NavLink
+                    text={navLink.MenuItemText} // A megfelelő adatot használjuk
+                    path={navLink.url} // Az URL mezőt használjuk
+                    />
+                </li>
+                ))}
+            </div>
+            <div className="flex flex-col w-full items-center gap-4">
+                <GetYourPassCTAButton buttonText={buttonText} />
+                <SecondaryCTAButton text="Become a partner" />
+            </div>
+
+        </div>
     </div>
   );
 };

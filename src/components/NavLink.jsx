@@ -13,7 +13,7 @@ export default function NavLink(props) {
   return (
     <div
       className={cln(
-        "py-3 px-2 text-nowrap text-center text-[16px] font-exo font-bold leading-normal bg-clip-text",
+        "py-3 px-2 text-nowrap text-center text-[16px] font-exo font-bold leading-normal bg-clip-text bg-neutral-700 lx:bg-opacity-0 cursor-pointer rounded-md",
         active ? "text-primary-600" : "text-white hover:text-primary-600"
       )}
       style={{

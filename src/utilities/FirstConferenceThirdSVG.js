@@ -3,7 +3,7 @@ import React from "react";
 const FirstConferenceThirdSVG = () => {
   return (
     <svg
-      width="383"
+      width="auto"
       height="200"
       viewBox="0 0 383 200"
       fill="none"

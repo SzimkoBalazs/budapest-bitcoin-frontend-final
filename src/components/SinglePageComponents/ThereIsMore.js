@@ -8,15 +8,18 @@ import WhaleVenue from "../WhaleVenue";
 
 const ThereIsMore = () => {
   return (
-    <ContentWrapper className="pt-[156px]">
-      <div className="flex flex-col gap-[156px]">
-        <FirstConference />
-        <ThereIsMoreSectionDividerText />
-        <ProofOfPalinka />
-        <BudapestCultureGallery />
-        <WhaleVenue />
+      <div>
+          <ContentWrapper className="pt-[156px] mb-[156px] flex-col max-w-[1128] mx-auto">
+                <FirstConference />
+          </ContentWrapper>
+            <ThereIsMoreSectionDividerText />
+            <ContentWrapper className="pt-[156px] flex gap-[156px] flex-col max-w-[1128] mx-auto">
+                <ProofOfPalinka />
+                <BudapestCultureGallery />
+                <WhaleVenue />
+          </ContentWrapper>
       </div>
-    </ContentWrapper>
+
   );
 };
 

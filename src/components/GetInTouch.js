@@ -3,7 +3,7 @@ import React from "react";
 
 const GetInTouch = () => {
   return (
-    <div className="flex w-[440px] flex-col items-center fullhd:items-start gap-[40px]">
+    <div className="flex flex-col items-center fullhd:items-start gap-[40px]">
       <div className="flex flex-col items-center fullhd:items-start gap-[16px] self-stretch">
         <div className="flex justify-center items-center gap-[10px]">
           <p className="text-[rgba(255,255,255,0.80)] font-exo text-[18px] fullhd:text-[26px] font-extrabold leading-[110%] tracking-[1.8px] fullhd:tracking-[2.6px]">

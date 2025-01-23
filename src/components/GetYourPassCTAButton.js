@@ -13,7 +13,7 @@ const GetYourPassCTAButton = ({ buttonText }) => {
       >
         {/* A szöveges kapszula */}
         <div className="z-10 flex justify-center items-center gap-[4px] p-[4px_6px] rounded-[40px] bg-white group-hover:bg-transparent transition-all duration-75">
-          <p className="text-nowrap text-[rgba(0,0,0,0.80)] font-exo text-center text-[14px] font-extrabold leading-normal group-hover:text-white">
+          <p style={{textTransform:'uppercase'}} className="text-nowrap text-[rgba(0,0,0,0.80)] font-exo text-center text-[14px] font-extrabold leading-normal group-hover:text-white">
             {buttonText.ButtonText}
           </p>
         </div>

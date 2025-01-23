@@ -3,7 +3,7 @@ import React from "react";
 const BudapestMainLogo = () => {
   return (
     <div className="flex w-[625.38px] h-[115.96px] justify-center items-center">
-      <div className="flex flex-row w-[625.37px] h-[115.97px] flex-shrink-0 items-center gap-x-[8px]">
+      <div className="flex flex-row w-[625.37px] h-[115.97px] items-center gap-x-[8px]">
         <div>
           <svg
             xmlns="http://www.w3.org/2000/svg"

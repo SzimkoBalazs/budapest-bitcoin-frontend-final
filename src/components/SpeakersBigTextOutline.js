@@ -5,7 +5,7 @@ const SpeakersBigTextOutline = () => {
     <div>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="204"
+        width="100%"
         height="136"
         viewBox="0 0 204 136"
         fill="none"
@@ -20,7 +20,7 @@ const SpeakersBigTextOutline = () => {
 
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="202"
+        width="100%"
         height="144"
         viewBox="0 0 202 144"
         fill="none"
@@ -35,7 +35,7 @@ const SpeakersBigTextOutline = () => {
 
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="203"
+        width="100%"
         height="134"
         viewBox="0 0 203 134"
         fill="none"
@@ -50,7 +50,7 @@ const SpeakersBigTextOutline = () => {
 
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="202"
+        width="100%"
         height="178"
         viewBox="0 0 202 178"
         fill="none"
@@ -65,7 +65,7 @@ const SpeakersBigTextOutline = () => {
 
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="202"
+        width="100%"
         height="155"
         viewBox="0 0 202 155"
         fill="none"
@@ -80,7 +80,7 @@ const SpeakersBigTextOutline = () => {
 
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="203"
+        width="100%"
         height="134"
         viewBox="0 0 203 134"
         fill="none"
@@ -95,7 +95,7 @@ const SpeakersBigTextOutline = () => {
 
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="202"
+        width="100%"
         height="148"
         viewBox="0 0 202 148"
         fill="none"
@@ -110,7 +110,7 @@ const SpeakersBigTextOutline = () => {
 
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="204"
+        width="100%"
         height="136"
         viewBox="0 0 204 136"
         fill="none"
