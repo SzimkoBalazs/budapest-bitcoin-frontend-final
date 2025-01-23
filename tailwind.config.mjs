@@ -15,6 +15,7 @@ export default {
       speaker: "655px",
       md:'768px',
       sm:'640px',
+      gl: "900px",
     },
     extend: {
       fontFamily: {

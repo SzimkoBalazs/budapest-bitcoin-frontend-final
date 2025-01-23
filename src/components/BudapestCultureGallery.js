@@ -7,7 +7,9 @@ const BudapestCultureGallery = () => {
       <p className="max-w-[800px] text-neutral-200 text-center font-exo text-[50px] font-extrabold leading-[130%] tracking-[2.5px]">
         Explore Budapest’s rich culture with our exclusive side events:
       </p>
-      <SliderGallery />
+      <div className="w-full flex justify-center items-center overflow-hidden">
+        <SliderGallery />
+      </div>
     </div>
   );
 };

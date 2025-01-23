@@ -49,19 +49,25 @@ export const speakers = [
 
 export const gallerySliderData = [
   {
-    image: "/lisa.jpeg",
+    image: "/bptrialpic.jpg",
     leftText: "Afterparties Ruin bars & Sziget Festival",
     rightText:
       "Experience Budapest’s vibrant nightlife and the Sziget Festival.",
   },
   {
-    image: "/lisa.jpeg",
+    image: "/bptrialpic.jpg",
     leftText: "Afterparties Ruin bars & Sziget Festival",
     rightText:
       "Experience Budapest’s vibrant nightlife and the Sziget Festival.",
   },
   {
-    image: "/lisa.jpeg",
+    image: "/bptrialpic.jpg",
+    leftText: "Afterparties Ruin bars & Sziget Festival",
+    rightText:
+      "Experience Budapest’s vibrant nightlife and the Sziget Festival.",
+  },
+  {
+    image: "/bptrialpic.jpg",
     leftText: "Afterparties Ruin bars & Sziget Festival",
     rightText:
       "Experience Budapest’s vibrant nightlife and the Sziget Festival.",
