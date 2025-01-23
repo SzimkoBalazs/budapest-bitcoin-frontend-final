@@ -1,7 +1,36 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import SecondaryCTAButton from "./SecondaryCTAButton";
+import { subscribeToNewsletter } from "../utilities/api";
+import Notification from "@/utilities/Notification";
 
 const StayUpdatedForm = () => {
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!email) {
+      setMessage("Please enter a valid email address.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setMessage("");
+
+    const result = await subscribeToNewsletter(email);
+
+    if (result.success) {
+      setMessage("You have successfully subscribed!");
+    } else {
+      setMessage(result.message || "Something went wrong. Please try again.");
+    }
+
+    setIsSubmitting(false);
+  };
+
   return (
     <div className="flex max-w-[400px] lg:max-w-[554px] flex-col items-center justify-center lg:items-start gap-[40px]">
       <div className="flex flex-col items-start gap-[24px] self-stretch">
@@ -25,16 +54,24 @@ const StayUpdatedForm = () => {
           </p>
         </div>
       </div>
-      <div className="flex flex-col lg:flex-row lg:items-start gap-[16px] self-stretch">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col fullhd:flex-row fullhd:items-start gap-[16px] self-stretch"
+      >
         <div className="flex flex-col items-start gap-[8px] flex-[1_0_0]">
           <div className="flex h-[50px] px-[24px] py-[9px] items-center gap-[10px] self-stretch rounded-[43px] border-2 border-secondary-600 bg-neutral-950">
-            <p className="text-neutral-300 text-center font-exo text-[14px] font-medium leading-normal">
-              Email adress
-            </p>
+            <input
+              type="email"
+              placeholder="Email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="bg-transparent text-neutral-300 font-exo text-[14px] font-medium leading-normal w-full outline-none"
+              required
+            />
           </div>
           <div className="flex flex-col items-start gap-[10px] self-stretch">
             <div className="flex items-start gap-[10px] py-[12px] pl-[16px] pr-0">
-              <div className="flex w-[16px] h-[16px] p-[10px] flex-col items-start gap-[10px] rounded-[4px] border border-neutral-300"></div>
+              <input type="checkbox" required className="w-[16px] h-[16px]" />
               <p className="text-neutral-300 font-exo text-[14px] font-medium leading-normal">
                 I accept the regular conditions
               </p>
@@ -42,9 +79,15 @@ const StayUpdatedForm = () => {
           </div>
         </div>
         <div className="flex items-center mx-auto">
-          <SecondaryCTAButton text="Sign up" />
+          <SecondaryCTAButton
+            text={isSubmitting ? "Submitting..." : "Sign up"}
+            type="submit"
+          />
         </div>
-      </div>
+      </form>
+      {message && (
+        <Notification message={message} onClose={() => setMessage("")} />
+      )}
     </div>
   );
 };

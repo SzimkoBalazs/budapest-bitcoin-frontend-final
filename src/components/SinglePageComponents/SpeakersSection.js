@@ -53,6 +53,7 @@ const SpeakersSection = async ({ locale }) => {
   console.log(speakerSectionTag);
   return (
     <ContentWrapper
+      id="speakers"
       className="pt-[80px] relative mb-[200px]"
       styleProp={{
         background: `url('/SpeakersBG.jpeg')`,
@@ -61,25 +62,23 @@ const SpeakersSection = async ({ locale }) => {
         backgroundPosition: "center",
       }}
     >
-        <div className="flex flex-1 gap-10 max-w-[1440px] justify-between opacity-[0.05] z-0 absolute left-0 top-0 px-[40px] pt-[80px] mx-auto">
-              <div className="flex-1">
-                <SpeakersBigTextOutline />
-              </div>
-              <div className="flex-1">
-                <SpeakersBigTextOutline />
-              </div>
-              <div className="hidden sm:flex sm:flex-1">
-                <SpeakersBigTextOutline />
-              </div>
-
-
+      <div className="flex flex-1 gap-10 max-w-[1440px] justify-between opacity-[0.05] z-0 absolute left-0 top-0 px-[40px] pt-[80px] mx-auto">
+        <div className="flex-1">
+          <SpeakersBigTextOutline />
         </div>
+        <div className="flex-1">
+          <SpeakersBigTextOutline />
+        </div>
+        <div className="hidden sm:flex sm:flex-1">
+          <SpeakersBigTextOutline />
+        </div>
+      </div>
       <div className="relative z-10 mx-auto">
         <div className="flex flex-col gap-[16px] sm:gap-[24px] pt-[40px] max-w-[1128px] px-[16px] sm:px-[40px] mx-auto">
           <SectionMainTitle
             text={speakersTitle.SpeakersSectionTitleText}
-            color='bg-secondary-600'
-            underlineWidth={'97%'}
+            color="bg-secondary-600"
+            underlineWidth={"97%"}
           />
           <p className="text-[rgba(255,255,255,0.80)] font-exo text-[18px] sm:text-[26px] font-normal leading-[130%] tracking-[4px] self-stretch">
             {speakersTitle.SpeakersSectionDescription}
@@ -103,9 +102,9 @@ const SpeakersSection = async ({ locale }) => {
               />
             </div>
           ))}
-            <div className="flex items-center justify-center self-center">
+          <div className="flex items-center justify-center self-center">
             <MoreSpeakersTag speakerSectionTag={speakerSectionTag} />
-            </div>
+          </div>
         </div>
       </div>
     </ContentWrapper>

@@ -51,7 +51,10 @@ const TicketsSection = async ({ locale }) => {
     <div className="mb-[200px]">
       {/* Title Section */}
       <ContentWrapper className="max-w-[1128] mx-auto">
-        <SectionMainTitle text={ticketsTitle.TitleText} color="bg-primary-600" />
+        <SectionMainTitle
+          text={ticketsTitle.TitleText}
+          color="bg-primary-600"
+        />
       </ContentWrapper>
 
       {/* Banner Section */}

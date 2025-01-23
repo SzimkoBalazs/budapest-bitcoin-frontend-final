@@ -5,16 +5,19 @@ import SectionMainTitle from "@/components/SectionMainTitle";
 
 const WhatToExpectSection = () => {
   return (
-    <div className="flex py-[56px] flex-col items-center bg-neutral-950">
+    <div
+      id="what-to-expect"
+      className="flex py-[56px] flex-col items-center bg-neutral-950 scroll-mt-[250px]"
+    >
       <ContentWrapper className={"max-w-[1128]"}>
         <div className="flex flex-col lg:flex-row lg:max-w-[1210px] mx-auto justify-between items-center gap-[40px] self-stretch">
           <div className="flex w-full lg:w-[50%] flex-col items-start gap-[24px]">
             <div className="flex flex-col items-start gap-[64px] self-stretch">
               <div className="flex flex-col items-start gap-[34px] max-w-[672px]">
                 <SectionMainTitle
-                  text={'WHAT TO EXPECT'}
+                  text={"WHAT TO EXPECT"}
                   color="bg-neutral-700"
-                  underlineWidth={'45%'}
+                  underlineWidth={"45%"}
                 />
               </div>
             </div>
@@ -31,12 +34,12 @@ const WhatToExpectSection = () => {
           </div>
           <div className="flex w-full lg:w-[40%] gap-[24px] items-start">
             <div className="flex flex-1 flex-col justify-center items-center gap-[24px]">
-              <WhatToExpectCard number={'1000+'} text={'Attendees'}/>
-              <WhatToExpectCard number={'3'} text={'Stages'}/>
+              <WhatToExpectCard number={"1000+"} text={"Attendees"} />
+              <WhatToExpectCard number={"3"} text={"Stages"} />
             </div>
             <div className="flex flex-1 flex-col justify-center items-center gap-[24px]">
-              <WhatToExpectCard number={'70+'} text={'Speakers'}/>
-              <WhatToExpectCard number={'2'} text={'Days'}/>
+              <WhatToExpectCard number={"70+"} text={"Speakers"} />
+              <WhatToExpectCard number={"2"} text={"Days"} />
             </div>
           </div>
         </div>
