@@ -22,7 +22,7 @@ const NavHamburgerIcon = ({navLinks, currentLocale}) => {
 const handleClick = () => {
   const nextState = !isClicked; // Determine the next state
   setIsClicked(nextState); // Update state
-  if (nextState) {
+  if (nextState && window.innerWidth < 640) {
     document.body.classList.add('no-scroll'); // Add class if menu is opening
   } else {
     document.body.classList.remove('no-scroll'); // Remove class if menu is closing

@@ -20,6 +20,20 @@ const WhyPartnerWithUs = () => {
                   widthClass={'w-[200px] sm:w-[280px]'}
                   minWidth={210}
                 />
+                </div>
+              </div>
+              <div className="flex justify-center items-center gap-[10px]">
+                <p className="flex-[1_0_0] text-white font-exo text-[18px] font-normal leading-[150%] tracking-[1px]">
+                  Budapest is not just the host of the world’s first Satoshi
+                  Nakamoto statue; it’s also a hub for Bitcoin pioneers like
+                  Nick Szabo and Laszlo Hanyecz. Being an untapped market, with
+                  a rapidly growing Bitcoin community and favorable taxation
+                  policies, Hungary is a prime destination for businesses and
+                  investors looking to expand in Europe.
+                </p>
+              </div>
+              <div className="flex items-start w-full">
+                <SecondaryCTAButton text="Become a partner" />
               </div>
             </div>
             <div className="flex w-full md:w-[50%]">
@@ -42,9 +56,8 @@ const WhyPartnerWithUs = () => {
               </p>
             </div>
           </div>
-        </div>
-      </ContentWrapper>
-    </div>
+        </ContentWrapper>
+      </div>
   );
 };
 

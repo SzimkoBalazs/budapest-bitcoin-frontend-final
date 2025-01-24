@@ -60,10 +60,7 @@ const StayUpdatedForm = () => {
           </p>
         </div>
       </div>
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col fullhd:flex-row fullhd:items-start gap-[16px] self-stretch"
-      >
+      <form onSubmit={handleSubmit} className="flex flex-col lg:flex-row lg:items-start gap-[16px] self-stretch">
         <div className="flex flex-col items-start gap-[8px] flex-[1_0_0]">
           <div className="flex h-[50px] px-[24px] py-[9px] items-center gap-[10px] self-stretch rounded-[43px] border-2 border-secondary-600 bg-neutral-950">
             <input
@@ -71,7 +68,7 @@ const StayUpdatedForm = () => {
               placeholder="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="bg-transparent text-neutral-300 font-exo text-[14px] font-medium leading-normal w-full outline-none"
+              className="bg-transparent text-neutral-300 font-exo text-[14px] font-medium leading-normal outline-none"
               required
             />
           </div>
@@ -94,6 +91,7 @@ const StayUpdatedForm = () => {
           <SecondaryCTAButton
             text={isSubmitting ? "Submitting..." : "Sign up"}
             type="submit"
+            isChecked={isChecked && email}
           />
         </div>
       </form>
