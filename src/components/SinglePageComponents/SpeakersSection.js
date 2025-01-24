@@ -52,7 +52,7 @@ const SpeakersSection = async ({ locale }) => {
   const speakerSectionTag = await fetchSectionTag(locale);
   console.log(speakerSectionTag);
   return (
-      <div className="mb-[80px] w-full flex flex-col md:mb-[176px] relative"
+      <div id="speakers" className="mb-[80px] w-full flex flex-col md:mb-[176px] relative"
            style={{
                //background: `url('/SpeakersBG.jpeg')`,
                background:'linear-gradient(to top right, #1f1f1f 75%, #F7931A 35%)',
@@ -79,8 +79,8 @@ const SpeakersSection = async ({ locale }) => {
         <div className="flex flex-col gap-[16px] sm:gap-[24px] md:pt-[80px] max-w-[1128px] mx-auto">
           <SectionMainTitle
             text={speakersTitle.SpeakersSectionTitleText}
-            color='bg-secondary-600'
-            underlineWidth={'97%'}
+            color="bg-secondary-600"
+            underlineWidth={"97%"}
           />
           <p className="text-[rgba(255,255,255,0.80)] font-exo text-[18px] sm:text-[26px] font-normal leading-[130%] tracking-[4px] self-stretch">
             {speakersTitle.SpeakersSectionDescription}

@@ -12,23 +12,23 @@ const HeroSectionContent = () => {
     <div className="flex w-fit flex-col items-center gap-[48px] mx-auto">
       <div className="flex flex-col items-start lx:gap-[12px] gap-[24px]">
         <div className="flex flex-col gap-[-10px]">
-            <h4 className="text-white self-center lx:self-end w-fit inline-flex text-right font-exo text-[16px] font-medium leading-[130%] tracking-[2.08px] bg-neutral-900 p-[10px]">
-              Back to the roots.
-            </h4>
-            <h2
-                className="big-title-mobile md:big-title w-fit inline-flex text-[48px] md:text-[72px] lg:text-[94px] tracking-[6.24px] speaker:tracking-[12.48px]"
-                style={{
-                  color: "#FFF",
-                  textAlign: "center",
-                  fontFamily: "Fredoka",
-                  fontStyle: "normal",
-                  fontWeight: 600,
-                  lineHeight: "100%",
-                  textTransform: "uppercase",
-                }}
-              >
-                Budapest Bitcoin
-            </h2>
+          <h4 className="text-white self-center lx:self-end w-fit inline-flex text-right font-exo text-[16px] font-medium leading-[130%] tracking-[2.08px] bg-neutral-900 p-[10px]">
+            Back to the roots.
+          </h4>
+          <h2
+            className="big-title-mobile md:big-title w-fit inline-flex text-[48px] md:text-[72px] lg:text-[94px] tracking-[6.24px] speaker:tracking-[12.48px]"
+            style={{
+              color: "#FFF",
+              textAlign: "center",
+              fontFamily: "Fredoka",
+              fontStyle: "normal",
+              fontWeight: 600,
+              lineHeight: "100%",
+              textTransform: "uppercase",
+            }}
+          >
+            Budapest Bitcoin
+          </h2>
         </div>
         <div className="flex flex-col lx:flex-row relative lx:justify-between lx:gap-[0px] gap-[40px] items-center self-stretch">
           <div className="relative w-[343px] h-[52px] text-center lx:text-left">
@@ -38,7 +38,7 @@ const HeroSectionContent = () => {
                 {" "}
                 a bit of difference
               </span>
-                <span className="flex z-0 absolute bottom-[12px] sm:bottom-[0px] w-[56%] sm:w-[70%] h-[6px] bg-secondary-600" />
+              <span className="flex z-0 absolute bottom-[12px] sm:bottom-[0px] w-[56%] sm:w-[70%] h-[6px] bg-secondary-600" />
             </h3>
           </div>
           <div className="flex flex-col justify-center items-center">
@@ -57,7 +57,12 @@ const HeroSectionContent = () => {
       </div>
       <div className="flex flex-col sm:flex-row md:items-start gap-[16px]">
         <GetYourPassCTAButton buttonText={buttonText} />
-        <SecondaryCTAButton text="Become a partner" />
+        <SecondaryCTAButton
+          text="Become a partner"
+          type="button"
+          href="partners"
+          actionType="scroll"
+        />
       </div>
     </div>
   );

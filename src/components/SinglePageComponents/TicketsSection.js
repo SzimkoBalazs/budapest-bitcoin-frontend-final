@@ -48,10 +48,13 @@ const TicketsSection = async ({ locale }) => {
   const ticketCardContent = await fetchTicketCards(locale);
   console.log(ticketCardContent);
   return (
-    <div className="mb-[80px] md:mb-[200px]">
+    <div id="tickets" className="mb-[80px] md:mb-[200px]">
       {/* Title Section */}
       <ContentWrapper className="max-w-[1128] mx-auto">
-        <SectionMainTitle text={ticketsTitle.TitleText} color="bg-primary-600" />
+        <SectionMainTitle
+          text={ticketsTitle.TitleText}
+          color="bg-primary-600"
+        />
       </ContentWrapper>
 
       {/* Banner Section */}

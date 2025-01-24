@@ -8,7 +8,6 @@ const WhaleVenue = () => {
       <div className="flex flex-col items-start">
         <div className="flex flex-col w-full md:w-[70%] lg:w-[50%] gap-[24px]">
           <div className="flex flex-col items-start">
-          <div className="flex flex-col items-start">
             <div className="flex relative flex-col justify-center items-center gap-[10px]">
               <SectionMainTitle
                   textTop={'OUR ICONIC'}
@@ -28,12 +27,14 @@ const WhaleVenue = () => {
           </p>
         </div>
         <div className="flex items-start w-full">
-          <SecondaryCTAButton text="CHECK THE LOCATION" />
-        </div>
+          <SecondaryCTAButton
+            text="CHECK THE LOCATION"
+            type="button"
+            actionType="googleMaps"
+          />
         </div>
       </div>
-
-
+    </div>
   );
 };
 
