@@ -2,11 +2,12 @@
 
 import React, { useState } from "react";
 import SecondaryCTAButton from "./SecondaryCTAButton";
-import { subscribeToNewsletter } from "../utilities/api";
+import { subscribeToNewsletter } from "@/app/actions/newsletterSubscribe";
 import Notification from "@/utilities/Notification";
 
 const StayUpdatedForm = () => {
   const [email, setEmail] = useState("");
+  const [isChecked, setIsChecked] = useState(false);
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -24,6 +25,8 @@ const StayUpdatedForm = () => {
 
     if (result.success) {
       setMessage("You have successfully subscribed!");
+      setEmail("");
+      setIsChecked(false);
     } else {
       setMessage(result.message || "Something went wrong. Please try again.");
     }
@@ -71,7 +74,13 @@ const StayUpdatedForm = () => {
           </div>
           <div className="flex flex-col items-start gap-[10px] self-stretch">
             <div className="flex items-start gap-[10px] py-[12px] pl-[16px] pr-0">
-              <input type="checkbox" required className="w-[16px] h-[16px]" />
+              <input
+                type="checkbox"
+                required
+                checked={isChecked}
+                onChange={(e) => setIsChecked(e.target.checked)}
+                className="w-[16px] h-[16px]"
+              />
               <p className="text-neutral-300 font-exo text-[14px] font-medium leading-normal">
                 I accept the regular conditions
               </p>
