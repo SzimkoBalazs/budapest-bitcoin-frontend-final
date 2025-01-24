@@ -48,7 +48,7 @@ const TicketsSection = async ({ locale }) => {
   const ticketCardContent = await fetchTicketCards(locale);
   console.log(ticketCardContent);
   return (
-    <div className="mb-[200px]">
+    <div className="mb-[80px] md:mb-[200px]">
       {/* Title Section */}
       <ContentWrapper className="max-w-[1128] mx-auto">
         <SectionMainTitle text={ticketsTitle.TitleText} color="bg-primary-600" />
@@ -60,12 +60,8 @@ const TicketsSection = async ({ locale }) => {
       </div>
 
       {/* Space for Ticket Cards */}
-      <ContentWrapper className="pt-[64px]">
-        <div>
           {/* Ticket Cards Section */}
           <TicketCardComponent ticketCardContent={ticketCardContent} />
-        </div>
-      </ContentWrapper>
     </div>
   );
 };

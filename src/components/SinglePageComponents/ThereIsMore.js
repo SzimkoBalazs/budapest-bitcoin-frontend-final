@@ -9,14 +9,12 @@ import WhaleVenue from "../WhaleVenue";
 const ThereIsMore = () => {
   return (
       <div>
-          <ContentWrapper className="pt-[156px] mb-[156px] flex-col max-w-[1128] mx-auto">
+          <ContentWrapper className="pt-[56px] md:pt-[156px] mb-[220px] flex-col max-w-[1128] mx-auto">
                 <FirstConference />
           </ContentWrapper>
             <ThereIsMoreSectionDividerText />
-            <ContentWrapper className="pt-[156px] flex gap-[156px] flex-col max-w-[1128] mx-auto">
+            <ContentWrapper className="mt-[220px] flex flex-col max-w-[1128] mx-auto">
                 <ProofOfPalinka />
-                <BudapestCultureGallery />
-                <WhaleVenue />
           </ContentWrapper>
       </div>
 

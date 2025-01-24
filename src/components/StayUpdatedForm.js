@@ -1,25 +1,28 @@
 import React from "react";
 import SecondaryCTAButton from "./SecondaryCTAButton";
+import {cln} from "@/utilities/classnames";
 
 const StayUpdatedForm = () => {
   return (
-    <div className="flex max-w-[400px] lg:max-w-[554px] flex-col items-center justify-center lg:items-start gap-[40px]">
+    <div className="flex flex-1 max-w-[554px] flex-col items-center justify-center lg:items-start gap-[40px]">
       <div className="flex flex-col items-start gap-[24px] self-stretch">
         <div className="flex max-w-[364px] flex-col items-start gap-[64px]">
-          <div className="flex flex-col justify-center items-start gap-[34px]">
-            <div className="flex relative flex-col justify-center items-start gap-[10px]">
-              <span className="z-0 left-0 w-[75%] h-[12px] absolute bottom-[6px] bg-primary-500" />
-              <p className="text-white z-10 [text-stroke-width:2px] [text-stroke-color:#1F1F1F] font-exo text-[40px] font-extrabold leading-[100%] tracking-[6px] uppercase">
-                Stay updated
-              </p>
-            </div>
+          <div className="relative inline-block">
+            {/* Kék csík */}
+            <div
+              className={cln("absolute bottom-[6px] left-0 right-0 h-[8px] z-0 bg-primary-500 w-[97%] md:w-[65%] footerTitle:w-[95%]")}
+            />
+            {/* Szöveg */}
+            <h3 style={{fontWeight:800, textShadow:'2px 2px 2px rgba(0,0,0,1)'}} className="text-white font-exo text-[32px] leading-[100%] tracking-[8.4px] uppercase z-10 relative">
+              STAY UPDATED
+            </h3>
           </div>
         </div>
         <div className="flex flex-col items-start gap-[8px] self-stretch">
-          <p className="text-[rgba(255,255,255,0.80)] font-exo text-[26px] font-extrabold leading-[110%] tracking-[2.6px]">
+          <p className="text-[rgba(255,255,255,0.80)] font-exo text-[22px] font-extrabold leading-[110%] tracking-[2.6px]">
             True Bitcoiners Stay Ahead!
           </p>
-          <p className="self-stretch text-[rgba(255,255,255,0.80)] font-exo text-[20px] font-medium leading-[150%] tracking-[1px]">
+          <p className="self-stretch text-[rgba(255,255,255,0.80)] font-exo text-[16px] font-medium leading-[150%] tracking-[1px]">
             Sign up for our newsletter to get the latest updates on Budapest
             Bitcoin 2025.
           </p>

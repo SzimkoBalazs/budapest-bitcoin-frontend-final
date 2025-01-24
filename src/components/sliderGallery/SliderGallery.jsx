@@ -85,9 +85,9 @@ const SliderGallery = () => {
                 <path
                   d="M25 3L3 24L25 45"
                   stroke="black"
-                  stroke-opacity="0.5"
-                  stroke-width="6"
-                  stroke-linejoin="round"
+                  strokeOpacity="0.5"
+                  strokeWidth="6"
+                  strokeLinejoin="round"
                 />
               </svg>
             </div>
@@ -105,9 +105,9 @@ const SliderGallery = () => {
                 <path
                   d="M3 45L25 24L3 3"
                   stroke="black"
-                  stroke-opacity="0.5"
-                  stroke-width="6"
-                  stroke-linejoin="round"
+                  strokeOpacity="0.5"
+                  strokeWidth="6"
+                  strokeLinejoin="round"
                 />
               </svg>
             </div>

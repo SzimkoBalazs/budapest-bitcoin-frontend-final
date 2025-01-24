@@ -7,14 +7,15 @@ const WhatToExpectSection = () => {
   return (
     <div className="flex py-[56px] flex-col items-center bg-neutral-950">
       <ContentWrapper className={"max-w-[1128]"}>
-        <div className="flex flex-col lg:flex-row lg:max-w-[1210px] mx-auto justify-between items-center gap-[40px] self-stretch">
-          <div className="flex w-full lg:w-[50%] flex-col items-start gap-[24px]">
+        <div className="flex flex-col md:flex-row mx-auto justify-between items-center gap-[40px] self-stretch">
+          <div className="flex w-full md:w-[50%] flex-col items-start gap-[24px]">
             <div className="flex flex-col items-start gap-[64px] self-stretch">
               <div className="flex flex-col items-start gap-[34px] max-w-[672px]">
                 <SectionMainTitle
-                  text={'WHAT TO EXPECT'}
+                    textTop={'What to'}
+                    textBottom={'expect'}
                   color="bg-neutral-700"
-                  underlineWidth={'45%'}
+                  widthClass={'w-[80%]'}
                 />
               </div>
             </div>
@@ -29,7 +30,7 @@ const WhatToExpectSection = () => {
               </p>
             </div>
           </div>
-          <div className="flex w-full lg:w-[40%] gap-[24px] items-start">
+          <div className="flex w-full md:w-[50%] gap-[24px] items-start">
             <div className="flex flex-1 flex-col justify-center items-center gap-[24px]">
               <WhatToExpectCard number={'1000+'} text={'Attendees'}/>
               <WhatToExpectCard number={'3'} text={'Stages'}/>

@@ -4,24 +4,35 @@ import React, { useState } from "react";
 import NavLink from "@/components/NavLink";
 import GetYourPassCTAButton from "@/components/GetYourPassCTAButton";
 import SecondaryCTAButton from "@/components/SecondaryCTAButton";
+import LanguageSwitch from "@/components/LanguageSwitch";
 
 // TODO: Ez keruljon be a strapibol
 const buttonText = {
   ButtonText: "Get your pass",
 };
 
-const NavHamburgerIcon = ({navLinks}) => {
+const NavHamburgerIcon = ({navLinks, currentLocale}) => {
   const [isClicked, setIsClicked] = useState(false);
 
   // Gomb lenyomása
-  const handleMouseDown = () => {
-    // Aktív lenyomás alatt az :active stílus dolgozik
-  };
+  // const handleMouseDown = () => {
+  //   !isClicked && setIsClicked(true)
+  // };
+
+const handleClick = () => {
+  const nextState = !isClicked; // Determine the next state
+  setIsClicked(nextState); // Update state
+  if (nextState) {
+    document.body.classList.add('no-scroll'); // Add class if menu is opening
+  } else {
+    document.body.classList.remove('no-scroll'); // Remove class if menu is closing
+  }
+};
 
   // Gomb felengedése
-  const handleMouseUp = () => {
-    setIsClicked(!isClicked);
-  };
+  // const handleMouseUp = () => {
+  //   isClicked && setIsClicked(false);
+  // };
 
   return (
     <div className="flex relative flex-col items-start">
@@ -31,8 +42,8 @@ const NavHamburgerIcon = ({navLinks}) => {
             ? "bg-neutral-700 shadow-[0_3px_0_0_#000] active:shadow-none active:bg-neutral-200 active:bg-none active:translate-y-[3px]" // Ha az X állapot aktív
             : "bg-[linear-gradient(270deg,_#FFAE0B_50.49%,_#FFF_50.5%)] shadow-[0_3px_0_0_#000] active:bg-primary-500 active:bg-none active:shadow-none active:translate-y-[3px]"
         } transition-all duration-100`}
-        onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
+        onClick={handleClick}
+        //onMouseUp={handleMouseUp}
       >
         {!isClicked ? (
           // Alapállapot: 3 vonal
@@ -59,17 +70,16 @@ const NavHamburgerIcon = ({navLinks}) => {
           </svg>
         )}
       </div>
-        <div className="min-h-mobile-menu sm:min-h-mobile-menu-auto w-screen sm:w-[320px] right-[-26px] sm:right-[0px] justify-between"
+        <div className="h-mobile-menu sm:h-auto w-screen sm:w-[320px] right-[-16px] sm:right-[0px] justify-between px-4 pt-[24px] pb-[48px] sm:pb-[24px]"
              style={{
                  gap:40,
                  position:'absolute',
                  display: isClicked ? 'flex' : 'none',
                  flexDirection:'column',
                  alignItems:'center',
+                 border:'2px solid black',
                  top:48,
-                 padding: '12px 16px 24px 16px',
                  justifyContent:'space-between',
-                 border:'2px solid #000',
                  backgroundColor:'#1f1f1f',
             }}>
             <div className="flex flex-col gap-4">
@@ -82,7 +92,8 @@ const NavHamburgerIcon = ({navLinks}) => {
                 </li>
                 ))}
             </div>
-            <div className="flex flex-col w-full items-center gap-4">
+            <div className="flex flex-col w-full items-center gap-6">
+                <LanguageSwitch currentLocale={currentLocale} />
                 <GetYourPassCTAButton buttonText={buttonText} />
                 <SecondaryCTAButton text="Become a partner" />
             </div>

@@ -1,18 +1,21 @@
 import React from "react";
 import SecondaryCTAButton from "./SecondaryCTAButton";
 import ContentWrapper from "@/utilities/ContentWrapper";
+import SectionMainTitle from "@/components/SectionMainTitle";
 
 const WhaleVenue = () => {
   return (
       <div className="flex flex-col items-start">
-        <div className="flex flex-col w-full sm:w-[50%] gap-[24px]">
+        <div className="flex flex-col w-full md:w-[70%] lg:w-[50%] gap-[24px]">
           <div className="flex flex-col items-start">
           <div className="flex flex-col items-start">
             <div className="flex relative flex-col justify-center items-center gap-[10px]">
-              <span className="w-[217px] h-[24px] absolute bottom-[9px] left-0 z-0 bg-secondary-500" />
-              <p className="text-white [-webkit-text-stroke-width:2px] [-webkit-text-stroke-color:#1F1F1F] font-exo text-[56px] font-extrabold z-10 leading-[100%] tracking-[8.4px] uppercase self-stretch">
-                OUR ICONIC WHALE VENUE
-              </p>
+              <SectionMainTitle
+                  textTop={'OUR ICONIC'}
+                  textBottom={'WHALE VENUE'}
+            color='bg-secondary-600'
+            widthClass={'w-[48%] xs:w-[98%]'}
+          />
             </div>
           </div>
         </div>

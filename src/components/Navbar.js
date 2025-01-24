@@ -39,7 +39,7 @@ const Navbar = async ({ locale }) => {
   const buttonText = await fetchGYPButton(locale);
 
   return (
-    <div className="fixed top-0 left-0 w-full flex justify-center items-center bg-neutral-900 p-[10px] z-50 h-[60px] lx:h-[80px]" style={{borderBottom:'2px solid black'}}>
+    <div className="fixed top-0 left-0 w-full flex justify-center items-center bg-neutral-900 z-50 h-[60px] lx:h-[80px]" style={{borderBottom:'2px solid black'}}>
       <header className="flex flex-row w-full max-w-[1400px] justify-between items-center px-4 sm:px-10">
         <div className="w-[156px]">
           <BTCBudapestLogo />
@@ -52,7 +52,7 @@ const Navbar = async ({ locale }) => {
           <GetYourPassCTAButton buttonText={buttonText} />
         </div>
         <div className="flex lx:hidden">
-          <NavHamburgerIcon navLinks={navLinks}/>
+          <NavHamburgerIcon navLinks={navLinks} currentLocale={locale}/>
         </div>
       </header>
     </div>

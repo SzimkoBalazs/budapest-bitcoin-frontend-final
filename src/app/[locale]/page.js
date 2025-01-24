@@ -7,6 +7,8 @@ import ThereIsMore from "@/components/SinglePageComponents/ThereIsMore";
 import WhaleVenuePicturesSection from "@/components/SinglePageComponents/WhaleVenuePicturesSection";
 import WhyPartnerWithUs from "@/components/SinglePageComponents/WhyPartnerWithUs";
 import Footer from "@/components/SinglePageComponents/Footer";
+import GallerySection from "@/components/SinglePageComponents/GallerySection";
+import MidFooter from "@/components/SinglePageComponents/MidFooter";
 
 export default async function Home({ params }) {
   const { locale } = params;
@@ -16,9 +18,11 @@ export default async function Home({ params }) {
       <Navbar locale={locale} />
       <HeroSection locale={locale} />
       <SpeakersSection locale={locale} />
+        {/*<MidFooter/>*/}
       <TicketsSection locale={locale} />
       <WhatToExpectSection />
       <ThereIsMore />
+        <GallerySection/>
       <WhaleVenuePicturesSection />
       <WhyPartnerWithUs />
       <Footer />

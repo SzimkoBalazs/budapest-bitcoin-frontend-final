@@ -15,7 +15,9 @@ export default {
       speaker: "655px",
       md:'768px',
       sm:'640px',
+      xs:'500px',
       gl: "900px",
+      footerTitle:'800px',
     },
     extend: {
       fontFamily: {
@@ -54,8 +56,11 @@ export default {
       animation: {
         marquee: "marquee 15s linear infinite",
       },
+      height:{
+        'mobile-menu':'calc(100dvh - 56px)',
+      },
       minHeight:{
-        'mobile-menu':'calc(100vh - 80px)',
+        'mobile-menu':'500px',
         'mobile-menu-auto':'auto',
       }
     },
@@ -82,7 +87,10 @@ export default {
           "textShadow": "0px 0px 3px #000,  -1px 1px 0px #FFAE0B, -2px 2px 0px #FFAE0B, -3px 3px 0px #FFAE0B, -4px 4px 0px #FFAE0B, -5px 5px 0px #FFAE0B,  -7px 7px 6px rgba(247, 147, 26, 0.20)",
         },
         ".mobile-menu-container":{
-          "minHeight":"calc('100vh - 24px')",
+          "height":"100dvh",
+        },
+        ".no-scroll":{
+          "overflow":"hidden"
         }
       });
     },

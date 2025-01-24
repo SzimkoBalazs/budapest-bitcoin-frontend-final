@@ -52,16 +52,16 @@ const SpeakersSection = async ({ locale }) => {
   const speakerSectionTag = await fetchSectionTag(locale);
   console.log(speakerSectionTag);
   return (
-    <ContentWrapper
-      className="pt-[80px] relative mb-[200px]"
-      styleProp={{
-        background: `url('/SpeakersBG.jpeg')`,
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
-        <div className="flex flex-1 gap-10 max-w-[1440px] justify-between opacity-[0.05] z-0 absolute left-0 top-0 px-[40px] pt-[80px] mx-auto">
+      <div className="mb-[80px] w-full flex flex-col md:mb-[176px] relative"
+           style={{
+               //background: `url('/SpeakersBG.jpeg')`,
+               background:'linear-gradient(to top right, #1f1f1f 75%, #F7931A 35%)',
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+           }}
+      >
+          <div className="flex w-full flex-row items-between opacity-[0.05] z-0 absolute left-0 top-0 px-[40px] pt-[80px]">
               <div className="flex-1">
                 <SpeakersBigTextOutline />
               </div>
@@ -71,11 +71,12 @@ const SpeakersSection = async ({ locale }) => {
               <div className="hidden sm:flex sm:flex-1">
                 <SpeakersBigTextOutline />
               </div>
-
-
         </div>
+          <ContentWrapper
+            className="pt-[80px] relative"
+          >
       <div className="relative z-10 mx-auto">
-        <div className="flex flex-col gap-[16px] sm:gap-[24px] pt-[40px] max-w-[1128px] px-[16px] sm:px-[40px] mx-auto">
+        <div className="flex flex-col gap-[16px] sm:gap-[24px] md:pt-[80px] max-w-[1128px] mx-auto">
           <SectionMainTitle
             text={speakersTitle.SpeakersSectionTitleText}
             color='bg-secondary-600'
@@ -86,13 +87,15 @@ const SpeakersSection = async ({ locale }) => {
           </p>
           <SecondaryCTAButton text="Become a speaker" />
         </div>
-
-        <div className="flex justify-center items-start mt-[64px] content-start gap-y-[80px] self-stretch speaker:flex-wrap overflow-x-auto overflow-hidden scroll-container">
-          {speakerCardData.map((speaker, index) => (
+      </div>
+    </ContentWrapper>
+              {/*SPEAKER CARDS CONTAINER*/}
+              <div className="max-w-[1128px] z-20 relative scrollbar-container px-[16px] sm:px-[40px] h-auto mt-10 flex gl:mx-auto gl:justify-center items-start content-center gap-x-[40px] md:gap-y-[80px] md:gap-x-[40px] pb-[24px] overflow-x-scroll flex-nowrap md:flex-wrap">
+                  {speakerCardData.map((speaker, index) => (
             <div
               key={index}
-              className={`flex min-w-[280px] justify-center items-start gap-[10px] flex-[1_0_0] ${
-                index % 2 === 1 ? "speaker:mt-[48px]" : ""
+              className={`flex min-w-fit md:min-w-[200px] justify-center items-start gap-[10px] flex-[1_0_0] ${
+                index % 2 === 1 ? "mt-0 md:mt-[48px]" : ""
               }`}
             >
               <SpeakerCard
@@ -103,12 +106,10 @@ const SpeakersSection = async ({ locale }) => {
               />
             </div>
           ))}
-            <div className="flex items-center justify-center self-center">
             <MoreSpeakersTag speakerSectionTag={speakerSectionTag} />
-            </div>
         </div>
       </div>
-    </ContentWrapper>
+
   );
 };
 
