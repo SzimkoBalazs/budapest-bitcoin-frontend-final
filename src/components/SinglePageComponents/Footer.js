@@ -30,7 +30,7 @@ const Footer = async ({ locale }) => {
       }}
     >
       <div className="flex flex-col md:flex-row items-center md:justify-between md:items-start w-full max-w-[1128px] px-4 sm:px-10 gap-[56px] md:gap-20">
-        <StayUpdatedForm data={partnerUsSectionData} />
+        <StayUpdatedForm data={partnerUsSectionData} locale={locale} />
         <GetInTouch data={partnerUsSectionData} />
       </div>
       <div

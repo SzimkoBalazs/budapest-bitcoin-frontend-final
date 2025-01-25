@@ -4,11 +4,11 @@ import React, { useState } from "react";
 import SecondaryCTAButton from "./SecondaryCTAButton";
 import { cln } from "@/utilities/classnames";
 import { subscribeToNewsletter } from "@/app/actions/newsletterSubscribe";
-import Notification from "@/utilities/Notification";
+import Link from "next/link";
 
-const StayUpdatedForm = ({ data }) => {
+const StayUpdatedForm = ({ data, locale }) => {
   const [email, setEmail] = useState("");
-  const [isChecked, setIsChecked] = useState(false);
+
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -90,15 +90,13 @@ const StayUpdatedForm = ({ data }) => {
           </div>
           <div className="flex flex-col items-start gap-[10px] self-stretch">
             <div className="flex items-start gap-[10px] py-[12px] pl-[16px] pr-0">
-              <input
-                type="checkbox"
-                required
-                checked={isChecked}
-                onChange={(e) => setIsChecked(e.target.checked)}
-                className="w-[16px] h-[16px]"
-              />
               <p className="text-neutral-300 font-exo text-[14px] font-medium leading-normal">
-                {data.AcceptConditionsText}
+                {data.AcceptConditionsFirstText}{" "}
+                <Link href={`/${locale}/terms-and-conditions`}>
+                  <span className="text-neutral-300 font-exo text-[14px] font-medium leading-normal">
+                    {data.AcceptConditionsSecondText}
+                  </span>
+                </Link>
               </p>
             </div>
           </div>
@@ -113,7 +111,7 @@ const StayUpdatedForm = ({ data }) => {
                 : buttonText
             }
             type="submit"
-            isChecked={isChecked && email}
+            isChecked={email}
             submitted={submitted}
           />
         </div>
