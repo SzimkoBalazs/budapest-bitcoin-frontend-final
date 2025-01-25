@@ -15,7 +15,6 @@ export default async function Home({ params }) {
 
   return (
     <>
-      <Navbar locale={locale} />
       <HeroSection locale={locale} />
       <SpeakersSection locale={locale} />
       {/*<MidFooter/>*/}

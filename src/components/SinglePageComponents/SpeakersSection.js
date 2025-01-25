@@ -40,7 +40,7 @@ const SpeakersSection = async ({ locale }) => {
   return (
     <div
       id="speakers"
-      className="mb-[80px] w-full flex flex-col md:mb-[176px] relative"
+      className="mb-[80px] md:mb-[176px] relative"
       style={{
         //background: `url('/SpeakersBG.jpeg')`,
         background: "linear-gradient(to top right, #1f1f1f 75%, #F7931A 35%)",
@@ -49,20 +49,20 @@ const SpeakersSection = async ({ locale }) => {
         backgroundPosition: "center",
       }}
     >
-      <div className="flex w-full flex-row items-between opacity-[0.05] z-0 absolute left-0 top-0 px-[40px] pt-[80px]">
-        <div className="flex-1">
+      <div className="flex w-full flex-row items-between opacity-[0.075] z-0 absolute left-0 top-0 px-[40px] pt-[80px]">
+        <div className="flex justify-center flex-1">
           <SpeakersBigTextOutline />
         </div>
-        <div className="flex-1">
+        <div className="flex justify-center flex-1">
           <SpeakersBigTextOutline />
         </div>
-        <div className="hidden sm:flex sm:flex-1">
+        <div className="hidden justify-center sm:flex sm:flex-1">
           <SpeakersBigTextOutline />
         </div>
       </div>
-      <ContentWrapper className="pt-[80px] relative">
+      <ContentWrapper className="pt-[80px] relative max-w-[1128px] mx-auto">
         <div className="relative z-10 mx-auto">
-          <div className="flex flex-col gap-[16px] sm:gap-[24px] md:pt-[80px] max-w-[1128px] mx-auto">
+          <div className="flex flex-col gap-[16px] sm:gap-[24px] md:pt-[80px]">
             <SectionMainTitle
               text={speakerSetionData.MainTitle}
               color="bg-secondary-600"
@@ -92,7 +92,7 @@ const SpeakersSection = async ({ locale }) => {
             <SpeakerCard
               name={speaker.Name}
               description={speaker.Position}
-              image={`${process.env.NEXT_PUBLIC_STRAPI_URL}${speaker.Picture.formats.thumbnail.url}`}
+              image={`${process.env.NEXT_PUBLIC_STRAPI_URL}${speaker.Picture.formats.small.url}`}
               company={speaker.Company}
             />
           </div>

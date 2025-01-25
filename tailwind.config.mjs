@@ -17,8 +17,13 @@ export default {
       md:'768px',
       sm:'640px',
       xs:'500px',
+      xxs:'390px',
       gl: "900px",
       footerTitle:'800px',
+      navbarBreak:'1200px',
+      whatToExpectBreak:'1000px',
+      whaleTextXs:'410px',
+      whaleTextXsHu:'373px',
     },
     extend: {
       fontFamily: {
@@ -58,7 +63,9 @@ export default {
         marquee: "marquee 15s linear infinite",
       },
       height:{
-        'mobile-menu':'calc(100dvh - 56px)',
+        'mobile-menu':'calc(100dvh - 16px)',
+        'hero-section':'calc(90vh)',
+        'hero-section-small':'calc(110vh)',
       },
       minHeight:{
         'mobile-menu':'500px',
@@ -75,6 +82,10 @@ export default {
         },
         ".hero-bg":{
           "backgroundSize":'110%',
+          "backgroundPosition":'50% 0%',
+        },
+        ".hero-bg-middle":{
+          "backgroundSize":'140%',
           "backgroundPosition":'50% 0%',
         },
         ".hero-bg-mobile":{

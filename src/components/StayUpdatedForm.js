@@ -49,7 +49,7 @@ const StayUpdatedForm = ({ data, locale }) => {
             {/* Kék csík */}
             <div
               className={cln(
-                "absolute bottom-[6px] left-0 right-0 h-[8px] z-0 bg-primary-500 w-[97%] md:w-[65%] footerTitle:w-[95%]"
+                "absolute bottom-[6px] left-0 right-0 h-[8px] z-0 bg-primary-500", locale === 'hu' ? 'w-[250px]' : 'w-[97%] md:w-[65%] footerTitle:w-[95%]'
               )}
             />
             {/* Szöveg */}
@@ -75,7 +75,7 @@ const StayUpdatedForm = ({ data, locale }) => {
       </div>
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col lg:flex-row lg:items-start gap-[16px] self-stretch"
+        className="flex flex-col xs:items-start xs:flex-row gap-[16px] self-stretch"
       >
         <div className="flex flex-col items-start gap-[8px] flex-[1_0_0]">
           <div className="flex h-[50px] px-[24px] py-[9px] items-center gap-[10px] self-stretch rounded-[43px] border-2 border-secondary-600 bg-neutral-950">
@@ -84,7 +84,7 @@ const StayUpdatedForm = ({ data, locale }) => {
               placeholder={data.EmailFormPlaceholderText}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="bg-transparent text-neutral-300 font-exo text-[14px] font-medium leading-normal outline-none"
+              className="bg-transparent text-neutral-300 font-exo text-[14px] font-medium leading-normal outline-none w-full"
               required
             />
           </div>
@@ -93,7 +93,7 @@ const StayUpdatedForm = ({ data, locale }) => {
               <p className="text-neutral-300 font-exo text-[14px] font-medium leading-normal">
                 {data.AcceptConditionsFirstText}{" "}
                 <Link href={`/${locale}/terms-and-conditions`}>
-                  <span className="text-neutral-300 font-exo text-[14px] font-medium leading-normal">
+                  <span className="text-neutral-300 font-exo text-[14px] font-medium leading-normal underline">
                     {data.AcceptConditionsSecondText}
                   </span>
                 </Link>

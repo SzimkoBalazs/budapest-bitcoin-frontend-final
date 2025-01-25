@@ -22,7 +22,7 @@ const WhaleVenuePicturesSection = async ({ locale }) => {
   return (
     <div className="mb-[80px] sm:mb-[200px]">
       <ContentWrapper className="mt-[64px] sm:mt-[160px] flex flex-col max-w-[1128] mx-auto">
-        <WhaleVenue whaleVenueSectionData={whaleVenueSectionData} />
+        <WhaleVenue whaleVenueSectionData={whaleVenueSectionData} locale={locale}/>
       </ContentWrapper>
       <div className="flex overflow-hidden md:mt-[-56px] flex-col md:flex-row w-full items-center md:items-end gap-[20px]">
         <div className="flex w-[150%] sm:pr-0 md:w-[60%] h-[100%] md:h-auto max-h-[600px] rounded-[30px]">

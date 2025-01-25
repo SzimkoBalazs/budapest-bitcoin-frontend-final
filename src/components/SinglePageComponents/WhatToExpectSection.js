@@ -22,18 +22,19 @@ const WhatToExpectSection = async ({ locale }) => {
   return (
     <div
       id="what-to-expect"
-      className="flex py-[56px] flex-col items-center bg-neutral-950 scroll-mt-[250px]"
+      className="flex py-[56px] flex-col items-center bg-neutral-950 scroll-mt-[200px]"
     >
       <ContentWrapper className={"max-w-[1128]"}>
-        <div className="flex flex-col md:flex-row mx-auto justify-between items-center gap-[40px] self-stretch">
-          <div className="flex w-full md:w-[50%] flex-col items-start gap-[24px]">
+        <div className="flex flex-col whatToExpectBreak:flex-row mx-auto justify-between items-center gap-[40px] self-stretch">
+          <div className="flex w-full max-w-[560px] whatToExpectBreak:max-w-full  whatToExpectBreak:w-[50%] flex-col items-start gap-[24px]">
             <div className="flex flex-col items-start gap-[64px] self-stretch">
               <div className="flex flex-col items-start gap-[34px] max-w-[672px]">
                 <SectionMainTitle
                   textTop={whatToExpectSectionData.TopTitleText}
                   textBottom={whatToExpectSectionData.BottomTitleText}
                   color="bg-neutral-700"
-                  widthClass={"w-[80%]"}
+                  widthClass={locale === 'hu' ? "w-[97%]" : "w-[80%]"}
+                  textSize={locale === 'hu' && 'text-[36px] sm:text-[52px]'}
                 />
               </div>
             </div>
@@ -43,7 +44,7 @@ const WhatToExpectSection = async ({ locale }) => {
               </p>
             </div>
           </div>
-          <div className="flex w-full md:w-[50%] gap-[24px] items-start">
+          <div className="flex w-full whatToExpectBreak:w-[50%] gap-[24px] items-start">
             <div className="flex flex-1 flex-col justify-center items-center gap-[24px]">
               <WhatToExpectCard
                 number={whatToExpectSectionData.FirstCardNumber}

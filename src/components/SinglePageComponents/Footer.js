@@ -22,7 +22,7 @@ const Footer = async ({ locale }) => {
   return (
     <div
       id="contact"
-      className="flex flex-col items-center gap-y-[56px] md:gap-y-[56px] w-full justify-center border-neutral-900 border-t-[4px] pt-[80px]"
+      className="flex flex-col items-center gap-y-[56px] gl:gap-y-[56px] w-full justify-center border-neutral-900 border-t-[4px] pt-[80px]"
       style={{
         background: `url('/bitcoin_background.svg')`,
         backgroundSize: "10%",

@@ -1,6 +1,7 @@
 import { Fredoka, Exo } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
+import Navbar from "@/components/Navbar";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -18,9 +19,9 @@ export const metadata = {
   title: "Budapest Bitcoin",
   description: "The Bitcoin Conference with a bit of difference",
   icons: {
-    icon: "/bpconflogo.png",
-    shortcut: "/bpconflogo.png",
-    apple: "/bpconflogo.png",
+    icon: "/bpconflogo.svg",
+    shortcut: "/bpconflogo.svg",
+    apple: "/bpconflogo.svg",
   },
 };
 
@@ -58,6 +59,7 @@ export default async function RootLayout({ children, params }) {
             style={{ display: "none", visibility: "hidden" }}
           ></iframe>
         </noscript>
+        <Navbar locale={locale} />
         <main className="w-full min-h-screen bg-neutral-900">{children}</main>
       </body>
     </html>

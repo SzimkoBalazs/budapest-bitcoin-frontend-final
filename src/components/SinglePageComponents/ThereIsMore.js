@@ -29,6 +29,7 @@ const ThereIsMore = async ({ locale }) => {
       <ThereIsMoreSectionDividerText
         firstText={thereIsMoreSectionData.SectionDividerFirstText}
         secondText={thereIsMoreSectionData.SectionDividerSecondText}
+        locale={locale}
       />
       <ContentWrapper className="mt-[220px] flex flex-col max-w-[1128] mx-auto">
         <ProofOfPalinka data={thereIsMoreSectionData} />

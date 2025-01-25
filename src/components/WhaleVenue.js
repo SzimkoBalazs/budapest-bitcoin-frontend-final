@@ -3,10 +3,10 @@ import SecondaryCTAButton from "./SecondaryCTAButton";
 import ContentWrapper from "@/utilities/ContentWrapper";
 import SectionMainTitle from "@/components/SectionMainTitle";
 
-const WhaleVenue = ({ whaleVenueSectionData }) => {
+const WhaleVenue = ({ whaleVenueSectionData, locale }) => {
   return (
     <div className="flex flex-col items-start">
-      <div className="flex flex-col w-full md:w-[70%] lg:w-[50%] gap-[24px]">
+      <div className="flex flex-col w-full md:w-[80%] lg:w-[50%] gap-[24px]">
         <div className="flex flex-col items-start">
           <div className="flex flex-col items-start">
             <div className="flex relative flex-col justify-center items-center gap-[10px]">
@@ -14,7 +14,7 @@ const WhaleVenue = ({ whaleVenueSectionData }) => {
                 textTop={whaleVenueSectionData.TitleTopText}
                 textBottom={whaleVenueSectionData.TitleBottomText}
                 color="bg-secondary-600"
-                widthClass={"w-[48%] xs:w-[98%]"}
+                widthClass={locale === 'hu' ? "w-[195px] whaleTextXs:w-[97%] lg:w-[290px]" : "w-[143px] whaleTextXsHu:w-[97%]"}
               />
             </div>
           </div>

@@ -23,7 +23,7 @@ const WhyPartnerWithUs = async ({ locale }) => {
   return (
     <div
       id="partners"
-      className="flex flex-col w-full items-center bg-neutral-950 pt-[56px] pb-[56px]"
+      className="flex flex-col w-full items-center bg-neutral-950 pt-[56px] pb-[56px] scroll-mt-[150px]"
     >
       <ContentWrapper className={"max-w-[1128px]"}>
         <div className="flex w-full flex-col md:flex-row mx-auto mb-[80px] pb-[80px] pop:justify-between items-center pop:items-end self-stretch border-b-2 border-neutral-200">
@@ -34,7 +34,8 @@ const WhyPartnerWithUs = async ({ locale }) => {
                   textTop={partnerUsSectionData.TitleTopText}
                   textBottom={partnerUsSectionData.TitleBottomText}
                   color="bg-primary-500"
-                  widthClass={"w-[200px] sm:w-[280px]"}
+                  textSize={locale === 'hu' && 'text-[34px] sm:text-[52px]'}
+                  widthClass={locale === 'hu' ? 'w-[280px] sm:w-[440px]' : "w-[240px] sm:w-[310px]"}
                   minWidth={210}
                 />
               </div>
