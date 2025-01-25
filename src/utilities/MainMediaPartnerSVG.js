@@ -5,7 +5,7 @@ const MainMediaPartnerSVG = () => {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="100%"
-      height="auto"
+      height="100%"
       viewBox="0 0 376 44"
       fill="none"
     >

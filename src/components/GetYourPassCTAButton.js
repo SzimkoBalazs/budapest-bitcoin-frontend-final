@@ -18,7 +18,7 @@ const GetYourPassCTAButton = ({ buttonText }) => {
               style={{ textTransform: "uppercase" }}
               className="text-nowrap text-[rgba(0,0,0,0.80)] font-exo text-center text-[14px] font-extrabold leading-normal group-hover:text-white"
             >
-              {buttonText.ButtonText}
+              {buttonText}
             </p>
           </div>
           <div

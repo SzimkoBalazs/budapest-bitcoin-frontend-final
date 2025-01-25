@@ -7,7 +7,6 @@ import { useTranslation } from "react-i18next";
 import i18nConfig from "../../i18nConfig";
 
 const LanguageSwitch = ({ currentLocale }) => {
-  console.log(currentLocale);
   const router = useRouter();
   const currentPathname = usePathname();
 

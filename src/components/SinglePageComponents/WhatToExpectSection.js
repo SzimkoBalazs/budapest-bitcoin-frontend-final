@@ -3,7 +3,22 @@ import ContentWrapper from "@/utilities/ContentWrapper";
 import WhatToExpectCard from "@/components/WhatToExpectCard";
 import SectionMainTitle from "@/components/SectionMainTitle";
 
-const WhatToExpectSection = () => {
+async function fetchWhatToExpectSectionData(locale) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/what-to-expect-section?locale=${locale}`
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch speakers section's data");
+  }
+
+  const data = await res.json();
+  return data.data || [];
+}
+
+const WhatToExpectSection = async ({ locale }) => {
+  const whatToExpectSectionData = await fetchWhatToExpectSectionData(locale);
+
   return (
     <div
       id="what-to-expect"
@@ -15,32 +30,39 @@ const WhatToExpectSection = () => {
             <div className="flex flex-col items-start gap-[64px] self-stretch">
               <div className="flex flex-col items-start gap-[34px] max-w-[672px]">
                 <SectionMainTitle
-                    textTop={'What to'}
-                    textBottom={'expect'}
+                  textTop={whatToExpectSectionData.TopTitleText}
+                  textBottom={whatToExpectSectionData.BottomTitleText}
                   color="bg-neutral-700"
-                  widthClass={'w-[80%]'}
+                  widthClass={"w-[80%]"}
                 />
               </div>
             </div>
             <div className="flex justify-center items-start gap-[10px] self-stretch">
               <p className="flex-[1_0_0] text-white font-exo text-[18px] font-medium leading-[150%] tracking-[1px]">
-                Bitcoin Budapest is where real connections come alive. No
-                distractions, no noise - just Bitcoin, networking, and good
-                Budapest vibes. From learning the fundamentals to diving into
-                advanced topics, this is your chance to reconnect to the roots
-                of Bitcoin while enjoying the charm of one of Europe’s most
-                captivating cities.
+                {whatToExpectSectionData.Description}
               </p>
             </div>
           </div>
           <div className="flex w-full md:w-[50%] gap-[24px] items-start">
             <div className="flex flex-1 flex-col justify-center items-center gap-[24px]">
-              <WhatToExpectCard number={"1000+"} text={"Attendees"} />
-              <WhatToExpectCard number={"3"} text={"Stages"} />
+              <WhatToExpectCard
+                number={whatToExpectSectionData.FirstCardNumber}
+                text={whatToExpectSectionData.FirstCardText}
+              />
+              <WhatToExpectCard
+                number={whatToExpectSectionData.ThirdCardNumber}
+                text={whatToExpectSectionData.ThirdCardText}
+              />
             </div>
             <div className="flex flex-1 flex-col justify-center items-center gap-[24px]">
-              <WhatToExpectCard number={"70+"} text={"Speakers"} />
-              <WhatToExpectCard number={"2"} text={"Days"} />
+              <WhatToExpectCard
+                number={whatToExpectSectionData.SecondCardNumber}
+                text={whatToExpectSectionData.SecondCardText}
+              />
+              <WhatToExpectCard
+                number={whatToExpectSectionData.FourthCardNumber}
+                text={whatToExpectSectionData.FourthCardText}
+              />
             </div>
           </div>
         </div>

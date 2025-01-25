@@ -1,14 +1,14 @@
 import React from "react";
 
-const MovingEarlyBirdTicketBannerContent = ({ bannerContent }) => {
+const MovingEarlyBirdTicketBannerContent = ({ firstText, secondText }) => {
   return (
     <>
       <p className="text-white font-exo text-[18px] font-extrabold leading-[130%] tracking-[2.7px]">
-        {bannerContent.FirstText}
+        {firstText}
       </p>
       <p className="text-white font-exo text-[18px] font-normal leading-[130%] tracking-[2.7px]">
         {" "}
-        {"-"} {bannerContent.SecondText}
+        {"-"} {secondText}
       </p>
       <div className=" flex-shrink-0">
         <svg

@@ -12,7 +12,7 @@ import "swiper/css/navigation";
 import { Navigation, Pagination, EffectCoverflow } from "swiper/modules";
 import { gallerySliderData } from "@/utilities/constants";
 
-const SliderGallery = () => {
+const SliderGallery = ({ data }) => {
   return (
     <div className="slider-container">
       <Swiper
@@ -36,7 +36,7 @@ const SliderGallery = () => {
         modules={[EffectCoverflow, Pagination, Navigation]}
         className="swiper_container"
       >
-        {gallerySliderData.map((slide, index) => (
+        {data.map((slide, index) => (
           <SwiperSlide key={index}>
             {({ isActive }) => (
               <div
@@ -46,7 +46,10 @@ const SliderGallery = () => {
                     : "opacity-50 transition-all duration-700 scale-75"
                 }`}
               >
-                <img src={slide.image} alt="slide_image" />
+                <img
+                  src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${slide.CardImage.formats.large.url}`}
+                  alt="slide_image"
+                />
                 <div
                   className={`card-content absolute flex flex-col gl:flex-row w-full bottom-0 min-h-[192px] p-[12px] gl:px-0 gl:py-[24px] 
                       justify-center items-center gap-[16px] gl:gap-[30px] flex-[1_0_0] 
@@ -58,10 +61,10 @@ const SliderGallery = () => {
                       }`}
                 >
                   <p className="text-primary-500 w-[268px] text-center gl:text-right font-exo text-[22px] gl:text-[32px] font-extrabold leading-[110%] tracking-[3.3px] gl:tracking-[4.8px]">
-                    {slide.leftText}
+                    {slide.LeftText}
                   </p>
                   <p className="text-white/80 w-[257px] text-center gl:text-left font-exo text-[18px] gl:text-[24px] font-medium leading-[150%] tracking-[0.9px] gl:tracking-[1.2px]">
-                    {slide.rightText}
+                    {slide.RightText}
                   </p>
                 </div>
               </div>

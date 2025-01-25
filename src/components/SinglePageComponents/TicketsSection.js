@@ -3,26 +3,13 @@ import SectionMainTitle from "../SectionMainTitle";
 import ContentWrapper from "@/utilities/ContentWrapper";
 import TicketCardComponent from "../TicketCardComponent";
 
-async function fetchTicketsTitle(locale) {
+async function fetchTicketsSectionData(locale) {
   const res = await fetch(
-    `${process.env.STRAPI_URL}/api/ticket-section-main-title?locale=${locale}`
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/ticket-section?locale=${locale}`
   );
 
   if (!res.ok) {
-    throw new Error("Failed to fetch ticket section's title");
-  }
-
-  const data = await res.json();
-  return data.data || [];
-}
-
-async function fetchBannerContent(locale) {
-  const res = await fetch(
-    `${process.env.STRAPI_URL}/api/early-bird-ticket-banner?locale=${locale}`
-  );
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch moving banner's content");
+    throw new Error("Failed to fetch ticket section's data");
   }
 
   const data = await res.json();
@@ -31,7 +18,7 @@ async function fetchBannerContent(locale) {
 
 async function fetchTicketCards(locale) {
   const res = await fetch(
-    `${process.env.STRAPI_URL}/api/ticket-cards?locale=${locale}&sort=order`
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/ticket-cards?locale=${locale}&sort=order`
   );
 
   if (!res.ok) {
@@ -43,28 +30,31 @@ async function fetchTicketCards(locale) {
 }
 
 const TicketsSection = async ({ locale }) => {
-  const ticketsTitle = await fetchTicketsTitle(locale);
-  const bannerContent = await fetchBannerContent(locale);
+  const ticketSectionData = await fetchTicketsSectionData(locale);
+
   const ticketCardContent = await fetchTicketCards(locale);
-  console.log(ticketCardContent);
+
   return (
     <div id="tickets" className="mb-[80px] md:mb-[200px]">
       {/* Title Section */}
       <ContentWrapper className="max-w-[1128] mx-auto">
         <SectionMainTitle
-          text={ticketsTitle.TitleText}
+          text={ticketSectionData.TitleText}
           color="bg-primary-600"
         />
       </ContentWrapper>
 
       {/* Banner Section */}
       <div className="mt-[32px] w-full bg-neutral-900">
-        <MovingEarlyBirdTicketBanner bannerContent={bannerContent} />
+        <MovingEarlyBirdTicketBanner
+          firstText={ticketSectionData.MovingBannerFirstText}
+          secondText={ticketSectionData.MovingBannerSecondText}
+        />
       </div>
 
       {/* Space for Ticket Cards */}
-          {/* Ticket Cards Section */}
-          <TicketCardComponent ticketCardContent={ticketCardContent} />
+      {/* Ticket Cards Section */}
+      <TicketCardComponent ticketCardContent={ticketCardContent} />
     </div>
   );
 };

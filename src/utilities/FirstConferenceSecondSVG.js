@@ -4,7 +4,7 @@ const FirstConferenceSecondSVG = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="auto"
+      width="100%"
       height="200"
       viewBox="0 0 191 200"
       fill="none"

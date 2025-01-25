@@ -6,12 +6,7 @@ import GetYourPassCTAButton from "@/components/GetYourPassCTAButton";
 import SecondaryCTAButton from "@/components/SecondaryCTAButton";
 import LanguageSwitch from "@/components/LanguageSwitch";
 
-// TODO: Ez keruljon be a strapibol
-const buttonText = {
-  ButtonText: "Get your pass",
-};
-
-const NavHamburgerIcon = ({navLinks, currentLocale}) => {
+const NavHamburgerIcon = ({ navLinks, currentLocale, buttonText }) => {
   const [isClicked, setIsClicked] = useState(false);
 
   // Gomb lenyomása
@@ -19,15 +14,15 @@ const NavHamburgerIcon = ({navLinks, currentLocale}) => {
   //   !isClicked && setIsClicked(true)
   // };
 
-const handleClick = () => {
-  const nextState = !isClicked; // Determine the next state
-  setIsClicked(nextState); // Update state
-  if (nextState && window.innerWidth < 640) {
-    document.body.classList.add('no-scroll'); // Add class if menu is opening
-  } else {
-    document.body.classList.remove('no-scroll'); // Remove class if menu is closing
-  }
-};
+  const handleClick = () => {
+    const nextState = !isClicked; // Determine the next state
+    setIsClicked(nextState); // Update state
+    if (nextState && window.innerWidth < 640) {
+      document.body.classList.add("no-scroll"); // Add class if menu is opening
+    } else {
+      document.body.classList.remove("no-scroll"); // Remove class if menu is closing
+    }
+  };
 
   // Gomb felengedése
   // const handleMouseUp = () => {
@@ -70,35 +65,36 @@ const handleClick = () => {
           </svg>
         )}
       </div>
-        <div className="h-mobile-menu sm:h-auto w-screen sm:w-[320px] right-[-16px] sm:right-[0px] justify-between px-4 pt-[24px] pb-[48px] sm:pb-[24px]"
-             style={{
-                 gap:40,
-                 position:'absolute',
-                 display: isClicked ? 'flex' : 'none',
-                 flexDirection:'column',
-                 alignItems:'center',
-                 border:'2px solid black',
-                 top:48,
-                 justifyContent:'space-between',
-                 backgroundColor:'#1f1f1f',
-            }}>
-            <div className="flex flex-col gap-4">
-                {navLinks.map((navLink) => (
-                <li key={navLink.id} style={{listStyleType:'none'}}>
-                    <NavLink
-                    text={navLink.MenuItemText} // A megfelelő adatot használjuk
-                    path={navLink.url} // Az URL mezőt használjuk
-                    />
-                </li>
-                ))}
-            </div>
-            <div className="flex flex-col w-full items-center gap-6">
-                <LanguageSwitch currentLocale={currentLocale} />
-                <GetYourPassCTAButton buttonText={buttonText} />
-                <SecondaryCTAButton text="Become a partner" />
-            </div>
-
+      <div
+        className="h-mobile-menu sm:h-auto w-screen sm:w-[320px] right-[-16px] sm:right-[0px] justify-between px-4 pt-[24px] pb-[48px] sm:pb-[24px]"
+        style={{
+          gap: 40,
+          position: "absolute",
+          display: isClicked ? "flex" : "none",
+          flexDirection: "column",
+          alignItems: "center",
+          border: "2px solid black",
+          top: 48,
+          justifyContent: "space-between",
+          backgroundColor: "#1f1f1f",
+        }}
+      >
+        <div className="flex flex-col gap-4">
+          {navLinks.map((navLink) => (
+            <li key={navLink.id} style={{ listStyleType: "none" }}>
+              <NavLink
+                text={navLink.MenuItemText} // A megfelelő adatot használjuk
+                path={navLink.url} // Az URL mezőt használjuk
+              />
+            </li>
+          ))}
         </div>
+        <div className="flex flex-col w-full items-center gap-6">
+          <LanguageSwitch currentLocale={currentLocale} />
+          <GetYourPassCTAButton buttonText={buttonText} />
+          <SecondaryCTAButton text="Become a partner" />
+        </div>
+      </div>
     </div>
   );
 };

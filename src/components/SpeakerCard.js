@@ -2,7 +2,6 @@ import React from "react";
 import ImageForSpeakerCard from "./ImageForSpeakerCard";
 
 const SpeakerCard = ({ name, description, image, company }) => {
-  console.log(image);
   return (
     <div className="flex flex-col items-start ">
       {/* Felső kép */}

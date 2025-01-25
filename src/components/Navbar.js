@@ -9,7 +9,7 @@ import NavHamburgerIcon from "./NavHamburgerIcon";
 
 async function fetchNavLinks(locale) {
   const res = await fetch(
-    `${process.env.STRAPI_URL}/api/navbar-menu-items?locale=${locale}&sort=order`
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/navbar-menu-items?locale=${locale}&sort=order`
   );
 
   if (!res.ok) {
@@ -22,7 +22,7 @@ async function fetchNavLinks(locale) {
 
 async function fetchGYPButton(locale) {
   const res = await fetch(
-    `https://strapi.budapestbitcoin.com/api/get-your-pass-button?locale=${locale}`
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/get-your-pass-button?locale=${locale}`
   );
 
   if (!res.ok) {
@@ -39,20 +39,34 @@ const Navbar = async ({ locale }) => {
   const buttonText = await fetchGYPButton(locale);
 
   return (
-    <div className="fixed top-0 left-0 w-full flex justify-center items-center bg-neutral-900 z-50 h-[60px] lx:h-[80px]" style={{borderBottom:'2px solid black'}}>
+    <div
+      className="fixed top-0 left-0 w-full flex justify-center items-center bg-neutral-900 z-50 h-[60px] lx:h-[80px]"
+      style={{ borderBottom: "2px solid black" }}
+    >
       <header className="flex flex-row w-full max-w-[1400px] justify-between items-center px-4 sm:px-10">
         <div className="w-[156px]">
           <BTCBudapestLogo />
         </div>
-        <div className="hidden lx:flex" style={{position:'absolute', left:'50%', transform:'translateX(-50%)'}}>
+        <div
+          className="hidden lx:flex"
+          style={{
+            position: "absolute",
+            left: "50%",
+            transform: "translateX(-50%)",
+          }}
+        >
           <NavbarWebComponent navLinks={navLinks} />
         </div>
         <div className="hidden lx:flex justify-end items-center   gap-4 xl:gap-8">
           <LanguageSwitch currentLocale={locale} />
-          <GetYourPassCTAButton buttonText={buttonText} />
+          <GetYourPassCTAButton buttonText={buttonText.ButtonText} />
         </div>
         <div className="flex lx:hidden">
-          <NavHamburgerIcon navLinks={navLinks} currentLocale={locale}/>
+          <NavHamburgerIcon
+            navLinks={navLinks}
+            currentLocale={locale}
+            buttonText={buttonText.ButtonText}
+          />
         </div>
       </header>
     </div>

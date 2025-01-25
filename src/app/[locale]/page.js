@@ -11,21 +11,21 @@ import GallerySection from "@/components/SinglePageComponents/GallerySection";
 import MidFooter from "@/components/SinglePageComponents/MidFooter";
 
 export default async function Home({ params }) {
-  const { locale } = params;
-  console.log(locale);
+  const { locale } = await params;
+
   return (
     <>
       <Navbar locale={locale} />
       <HeroSection locale={locale} />
       <SpeakersSection locale={locale} />
-        {/*<MidFooter/>*/}
+      {/*<MidFooter/>*/}
       <TicketsSection locale={locale} />
-      <WhatToExpectSection />
-      <ThereIsMore />
-        <GallerySection/>
-      <WhaleVenuePicturesSection />
-      <WhyPartnerWithUs />
-      <Footer />
+      <WhatToExpectSection locale={locale} />
+      <ThereIsMore locale={locale} />
+      <GallerySection locale={locale} />
+      <WhaleVenuePicturesSection locale={locale} />
+      <WhyPartnerWithUs locale={locale} />
+      <Footer locale={locale} />
     </>
   );
 }
