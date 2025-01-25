@@ -18,10 +18,10 @@ const HeroSection = async ({ locale }) => {
   const heroSectionData = await fetchHeroSectionData(locale);
   return (
     <section
-        id="home-page"
+      id="home-page"
       className="flex flex-col pb-[5%] w-full h-hero-section-small xxs:h-hero-section sm:h-[100vh] px-4 md:px-10 bg-neutral-900 justify-end text-white hero-bg-mobile lg:hero-bg md:hero-bg-middle"
       style={{
-        backgroundImage: `url('lanchid_nap.svg')`,
+        backgroundImage: `url('/lanchid_nap.svg')`,
         backgroundColor: "#1f1f1f",
         backgroundRepeat: "no-repeat",
       }}

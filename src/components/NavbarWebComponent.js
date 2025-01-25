@@ -1,7 +1,7 @@
 import React from "react";
 import NavLink from "./NavLink";
 
-const NavbarWebComponent = ({ navLinks }) => {
+const NavbarWebComponent = ({ navLinks, locale }) => {
   return (
     <nav
       style={{
@@ -16,6 +16,7 @@ const NavbarWebComponent = ({ navLinks }) => {
             <NavLink
               text={navLink.MenuItemText} // A megfelelő adatot használjuk
               path={navLink.url} // Az URL mezőt használjuk
+              locale={locale}
             />
           </li>
         ))}

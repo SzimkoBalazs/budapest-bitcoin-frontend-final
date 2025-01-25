@@ -45,9 +45,7 @@ const Navbar = async ({ locale }) => {
     >
       <header className="flex flex-row w-full max-w-[1400px] justify-between items-center px-4 sm:px-10">
         <div className="w-[156px]">
-            <a href="#home-page">
-              <BTCBudapestLogo />
-            </a>
+          <BTCBudapestLogo locale={locale} />
         </div>
         <div
           className="hidden navbarBreak:flex"
@@ -57,7 +55,7 @@ const Navbar = async ({ locale }) => {
             transform: "translateX(-50%)",
           }}
         >
-          <NavbarWebComponent navLinks={navLinks} />
+          <NavbarWebComponent navLinks={navLinks} locale={locale} />
         </div>
         <div className="hidden navbarBreak:flex justify-end items-center   gap-4 xl:gap-8">
           <LanguageSwitch currentLocale={locale} />
