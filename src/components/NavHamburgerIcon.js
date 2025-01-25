@@ -81,7 +81,7 @@ const NavHamburgerIcon = ({ navLinks, currentLocale, buttonText }) => {
       >
         <div className="flex flex-col gap-4">
           {navLinks.map((navLink) => (
-            <li key={navLink.id} style={{ listStyleType: "none" }}>
+            <li onClick={()=>setIsClicked(false)} key={navLink.id} style={{ listStyleType: "none" }}>
               <NavLink
                 text={navLink.MenuItemText} // A megfelelő adatot használjuk
                 path={navLink.url} // Az URL mezőt használjuk

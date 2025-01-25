@@ -33,7 +33,7 @@ async function fetchGYPButton(locale) {
   return data.data || [];
 }
 
-const Navbar = async ({ locale }) => {
+const Navbar = async ({ locale, params }) => {
   // const locale = "hu"; // Változtasd dinamikusan, ha van nyelvkezelés
   const navLinks = await fetchNavLinks(locale);
   const buttonText = await fetchGYPButton(locale);

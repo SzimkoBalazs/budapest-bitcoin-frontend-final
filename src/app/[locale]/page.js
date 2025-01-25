@@ -8,7 +8,7 @@ import WhaleVenuePicturesSection from "@/components/SinglePageComponents/WhaleVe
 import WhyPartnerWithUs from "@/components/SinglePageComponents/WhyPartnerWithUs";
 import Footer from "@/components/SinglePageComponents/Footer";
 import GallerySection from "@/components/SinglePageComponents/GallerySection";
-import MidFooter from "@/components/SinglePageComponents/MidFooter";
+import ComingSoonForm from "@/components/SinglePageComponents/ComingSoonForm";
 
 export default async function Home({ params }) {
   const { locale } = await params;
@@ -17,8 +17,8 @@ export default async function Home({ params }) {
     <>
       <HeroSection locale={locale} />
       <SpeakersSection locale={locale} />
-      {/*<MidFooter/>*/}
       <TicketsSection locale={locale} />
+        <ComingSoonForm locale={locale}/>
       <WhatToExpectSection locale={locale} />
       <ThereIsMore locale={locale} />
       <GallerySection locale={locale} />

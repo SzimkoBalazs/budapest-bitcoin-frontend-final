@@ -22,7 +22,7 @@ const WhatToExpectSection = async ({ locale }) => {
   return (
     <div
       id="what-to-expect"
-      className="flex py-[56px] flex-col items-center bg-neutral-950 scroll-mt-[200px]"
+      className="flex py-[56px] flex-col items-center bg-neutral-950 scroll-mt-[40px] sm:scroll-mt-[60px]"
     >
       <ContentWrapper className={"max-w-[1128]"}>
         <div className="flex flex-col whatToExpectBreak:flex-row mx-auto justify-between items-center gap-[40px] self-stretch">

@@ -40,9 +40,8 @@ const SpeakersSection = async ({ locale }) => {
   return (
     <div
       id="speakers"
-      className="mb-[80px] md:mb-[176px] relative"
+      className="mb-[80px] md:mb-[176px] relative scroll-mt-[0px]"
       style={{
-        //background: `url('/SpeakersBG.jpeg')`,
         background: "linear-gradient(to top right, #1f1f1f 75%, #F7931A 35%)",
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
