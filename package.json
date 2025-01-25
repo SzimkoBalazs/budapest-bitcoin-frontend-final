@@ -15,6 +15,7 @@
     "next-i18n-router": "^5.5.1",
     "next-intl": "^3.26.3",
     "react": "^19.0.0",
+    "react-cookiebot": "^1.0.10",
     "react-dom": "^19.0.0",
     "react-i18next": "^15.4.0",
     "react-slick": "^0.30.3",

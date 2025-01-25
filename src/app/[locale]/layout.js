@@ -17,6 +17,11 @@ const exo = Exo({
 export const metadata = {
   title: "Budapest Bitcoin",
   description: "The Bitcoin Conference with a bit of difference",
+  icons: {
+    icon: "/bpconflogo.png",
+    shortcut: "/bpconflogo.png",
+    apple: "/bpconflogo.png",
+  },
 };
 
 export default async function RootLayout({ children, params }) {
@@ -24,6 +29,15 @@ export default async function RootLayout({ children, params }) {
   return (
     <html lang={locale}>
       <head>
+        {/*COOKIEBOT*/}
+        <Script
+          id="Cookiebot"
+          src="https://consent.cookiebot.com/uc.js"
+          data-cbid="a1fe3ac0-062d-4494-b81e-8093bea015ea"
+          data-blockingmode="auto"
+          type="text/javascript"
+        ></Script>
+
         {/* Google Tag Manager */}
         <Script id="google-tag-manager" strategy="afterInteractive">
           {`
