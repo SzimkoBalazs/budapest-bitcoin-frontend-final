@@ -1,7 +1,8 @@
 import SocialIconsSVG from "@/utilities/SocialIconsSVG";
+import Link from "next/link";
 import React from "react";
 
-const GetInTouch = ({ data }) => {
+const GetInTouch = ({ data, locale }) => {
   const socialLinks = {
     fbLink: data.FacebookLink,
     linkedInLink: data.LinkedInLink,
@@ -32,6 +33,9 @@ const GetInTouch = ({ data }) => {
         <div className="flex items-center gap-[24px] self-stretch">
           <SocialIconsSVG links={socialLinks} />
         </div>
+      </div>
+      <div className="flex flex-col items-center md:items-start gap-[16px]">
+        <Link href={`/${locale}/terms-and-conditions`} className="fullhd:flex-[1_0_0] text-[rgba(255,255,255,0.80)] font-exo text-[16px] font-medium leading-[150%] underline tracking-[1px]">{data.TermsConditionsUnderSocials}</Link>
       </div>
     </div>
   );

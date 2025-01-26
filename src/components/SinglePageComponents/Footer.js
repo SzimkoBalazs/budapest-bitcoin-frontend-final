@@ -31,15 +31,16 @@ const Footer = async ({ locale }) => {
     >
       <div className="flex flex-col gl:flex-row items-center gl:justify-between gl:items-start w-full max-w-[1128px] px-4 sm:px-10 gap-[56px] gl:gap-20">
         <StayUpdatedForm data={partnerUsSectionData} locale={locale} />
-        <GetInTouch data={partnerUsSectionData} />
+        <GetInTouch data={partnerUsSectionData} locale={locale} />
       </div>
       <div
-        className="flex w-full justify-center max-w-[400px] py-10"
+        className="flex flex-col gap-y-4 items-center w-full justify-center max-w-[400px] py-10"
         style={{ borderTop: "2px solid #4d4d4d" }}
       >
         <div className="w-[156px]">
           <BTCBudapestLogo />
         </div>
+        <p className="text-neutral-300 font-exo text-[12px] font-medium leading-normal">{partnerUsSectionData.FooterBrandName}</p>
       </div>
     </div>
   );

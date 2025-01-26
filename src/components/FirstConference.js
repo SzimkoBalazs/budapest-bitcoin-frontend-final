@@ -24,7 +24,7 @@ const FirstConference = ({ data }) => {
           </p>
         </div>
       </div>
-      <div className="flex flex-1 mt-[32px] min-w-[320px] gap-4 max-w-[440px] flex-col items-start">
+      <div className="flex flex-1 min-w-[320px] gap-4 max-w-[440px] flex-col items-start">
         <div className="h-[200px] mx-auto">
           <FirstConferenceSecondSVG />
         </div>
@@ -37,7 +37,7 @@ const FirstConference = ({ data }) => {
           </p>
         </div>
       </div>
-      <div className="flex flex-1 mt-[32px] min-w-[320px] gap-[24px] sm:gap-[40px] max-w-[440px] flex-col items-start">
+      <div className="flex flex-1 pt-[6px] min-w-[320px] gap-[24px] sm:gap-[40px] max-w-[440px] flex-col items-start">
         <div className="max-h-[200px] w-full">
           <FirstConferenceThirdSVG />
         </div>

@@ -15,7 +15,7 @@ const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
 
   const submittingText = comingSoonFormData ? comingSoonFormData.SubmittingButtonText : data.SubmittingButtonText;
   const buttonText = comingSoonFormData ? comingSoonFormData.ButtonText : data.ButtonText;
-  const buttonSuccessText = comingSoonFormData ? comingSoonFormData.ButtonText : data.ButtonSuccessText;
+  const buttonSuccessText = comingSoonFormData ? comingSoonFormData.ButtonSuccessText : data.ButtonSuccessText;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -93,7 +93,7 @@ const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
               required
             />
           </div>
-          <div className="flex flex-col items-start gap-[10px] self-stretch">
+          {data || comingSoonFormData ? <div className="flex flex-col items-start gap-[10px] self-stretch">
             <div className="flex items-start gap-[10px] py-[12px] pl-[16px] pr-0">
               <p className="text-neutral-300 font-exo text-[14px] font-medium leading-normal">
                 {comingSoonFormData ? comingSoonFormData.AcceptConditionsFirstText : data.AcceptConditionsFirstText}{" "}
@@ -104,7 +104,7 @@ const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
                 </Link>
               </p>
             </div>
-          </div>
+          </div> : <></>}
         </div>
         <div className="flex items-center mx-auto">
           <SecondaryCTAButton

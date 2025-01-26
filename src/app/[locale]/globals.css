@@ -32,3 +32,34 @@ body {
   border-radius:10px;
   box-shadow:0px 0px 6px 7px rgba(0,0,0,0.05);
 }
+
+@keyframes moveStopSequence {
+  0% {
+    transform: translateX(142px); /* Start position */
+  }
+  20% {
+    transform: translateX(170px); /* Move a bit */
+    animation-timing-function: cubic-bezier(0.7, 0, 1, 0.5); /* Fast stop */
+  }
+  30% {
+    transform: translateX(170px); /* Pause */
+  }
+  50% {
+    transform: translateX(195px); /* Move a bit more */
+    animation-timing-function: cubic-bezier(0.7, 0, 1, 0.5); /* Fast stop */
+  }
+  60% {
+    transform: translateX(195px); /* Pause */
+  }
+  80% {
+    transform: translateX(215px); /* Final move */
+    animation-timing-function: cubic-bezier(0.7, 0, 1, 0.5); /* Fast stop */
+  }
+  90% {
+    transform: translateX(215px); /* Pause */
+  }
+  100% {
+    transform: translateX(142px); /* Linear return */
+    animation-timing-function: linear; /* Smooth return */
+  }
+}

@@ -18,7 +18,7 @@ const page = async ({ params }) => {
   const { locale } = await params;
   const termsSectionData = await fetchTermsData(locale);
   return (
-    <div className="container mx-auto px-4 py-8 mt-[100px] rounded-md">
+    <div className="container max-w-[720px] mx-auto px-4 py-8 mt-[100px] rounded-md">
       <ReactMarkdown
         components={{
           h1: ({ node, ...props }) => (
