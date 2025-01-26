@@ -15,6 +15,7 @@ const LanguageSwitch = ({ currentLocale }) => {
   const [previousPath, setPreviousPath] = useState(currentPathname);
 
   const toggleLanguage = async () => {
+    if(isLoading) return
     setIsLoading(true);
     // Új nyelv meghatározása
     const newLocale = currentLocale === "en" ? "hu" : "en";
@@ -65,19 +66,24 @@ const LanguageSwitch = ({ currentLocale }) => {
                 border: '2px solid black',
                 borderRadius:30,
           }}>
-            <SectionMainTitle
+            <div style={{ display:'flex', width:'auto', height:"auto"}}>
+              <div style={{ display:'flex',overflow:'hidden', animation: ongoingLoading ? 'moveStopSequenceWidth 2s infinite' : 'none'}}>
+                <SectionMainTitle
               text={'Loading....'}
               color="bg-secondary-600"
               underlineWidth={"97%"}
             />
-            <span className="bg-neutral-900" style={{
-              display:'flex',
-              width:100,
-              height:50,
-              animation: ongoingLoading ? 'moveStopSequence 2s infinite' : 'none',
-              position:'absolute',
-              zIndex:100
-            }}/>
+              </div>
+
+            </div>
+            {/*<span className="bg-neutral-900" style={{*/}
+            {/*  display:'flex',*/}
+            {/*  width:100,*/}
+            {/*  height:50,*/}
+            {/*  animation: ongoingLoading ? 'moveStopSequence 2s infinite' : 'none',*/}
+            {/*  position:'absolute',*/}
+            {/*  zIndex:100*/}
+            {/*}}/>*/}
           </div>
       }
       {/* Kék csúszka */}
