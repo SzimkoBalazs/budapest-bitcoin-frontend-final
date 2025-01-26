@@ -34,7 +34,7 @@ export default async function RootLayout({ children, params }) {
         <Script
           id="Cookiebot"
           src="https://consent.cookiebot.com/uc.js"
-          data-cbid="a1fe3ac0-062d-4494-b81e-8093bea015ea"
+          data-cbid={process.env.COKKIEBOT_DOMAIN_GROUPID}
           data-blockingmode="auto"
           type="text/javascript"
         ></Script>
@@ -53,7 +53,7 @@ export default async function RootLayout({ children, params }) {
       <body className={`${fredoka.variable} ${exo.variable} antialiased flex`}>
         <noscript>
           <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-WKNK93HV"
+            src={`https://www.googletagmanager.com/ns.html?id=${process.env.GOOGLE_TAG_MANAGER_ID}`}
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
