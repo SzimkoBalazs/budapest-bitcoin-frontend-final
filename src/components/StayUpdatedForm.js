@@ -8,14 +8,21 @@ import Link from "next/link";
 
 const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
   const [email, setEmail] = useState("");
-
+  const [isFirstChecked, setIsFirstChecked] = useState(false);
+  const [isSecondChecked, setIsSecondChecked] = useState(false);
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const submittingText = comingSoonFormData ? comingSoonFormData.SubmittingButtonText : data.SubmittingButtonText;
-  const buttonText = comingSoonFormData ? comingSoonFormData.ButtonText : data.ButtonText;
-  const buttonSuccessText = comingSoonFormData ? comingSoonFormData.ButtonSuccessText : data.ButtonSuccessText;
+  const submittingText = comingSoonFormData
+    ? comingSoonFormData.SubmittingButtonText
+    : data.SubmittingButtonText;
+  const buttonText = comingSoonFormData
+    ? comingSoonFormData.ButtonText
+    : data.ButtonText;
+  const buttonSuccessText = comingSoonFormData
+    ? comingSoonFormData.ButtonSuccessText
+    : data.ButtonSuccessText;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,7 +40,8 @@ const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
       setMessage("You have successfully subscribed!");
       setEmail("");
       setSubmitted(true);
-      setIsChecked(false);
+      setIsFirstChecked(false);
+      setIsSecondChecked(false);
     } else {
       setMessage(result.message || "Something went wrong. Please try again.");
     }
@@ -42,18 +50,28 @@ const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
   };
 
   // Mid form or footer form
-  const underlineWidth = comingSoonFormData ? 'w-[250px] sm:w-[290px]' : 'w-[250px]'
-  const underlineWidthEn = comingSoonFormData ? 'w-[270px] sm:w-[420px]' : 'w-[97%] md:w-[65%] footerTitle:w-[95%]'
+  const underlineWidth = comingSoonFormData
+    ? "w-[250px] sm:w-[290px]"
+    : "w-[250px]";
+  const underlineWidthEn = comingSoonFormData
+    ? "w-[270px] sm:w-[420px]"
+    : "w-[97%] md:w-[65%] footerTitle:w-[95%]";
 
   return (
     <div className="flex flex-1 max-w-[554px] flex-col items-center justify-center lg:items-start gap-[40px]">
       <div className="flex flex-col items-start gap-[24px] self-stretch">
-        <div className={cln("flex flex-col items-start gap-[64px]", comingSoonFormData ? 'max-w-none' : 'max-w-[364px]')}>
+        <div
+          className={cln(
+            "flex flex-col items-start gap-[64px]",
+            comingSoonFormData ? "max-w-none" : "max-w-[364px]"
+          )}
+        >
           <div className="relative inline-block">
             {/* Kék csík */}
             <div
               className={cln(
-                "absolute bottom-[5px] left-0 right-0 h-[6px] z-0 bg-primary-500", locale === 'hu' ? underlineWidth : underlineWidthEn
+                "absolute bottom-[5px] left-0 right-0 h-[6px] z-0 bg-primary-500",
+                locale === "hu" ? underlineWidth : underlineWidthEn
               )}
             />
             {/* Szöveg */}
@@ -64,18 +82,23 @@ const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
               }}
               className="text-white font-exo text-[26px] sm:text-[32px] leading-[100%] tracking-[8.4px] uppercase z-10 relative"
             >
-              {comingSoonFormData ? comingSoonFormData.MainTitle : data.MainTitle}
+              {comingSoonFormData
+                ? comingSoonFormData.MainTitle
+                : data.MainTitle}
             </h3>
           </div>
         </div>
         <div className="flex flex-col items-start gap-[8px] self-stretch">
           <p className="text-[rgba(255,255,255,0.80)] font-exo text-[20px] sm:text-[22px] font-extrabold leading-[110%] tracking-[2.6px]">
-            {comingSoonFormData ? comingSoonFormData.FirstLeftText : data.FirstLeftText}
+            {comingSoonFormData
+              ? comingSoonFormData.FirstLeftText
+              : data.FirstLeftText}
           </p>
-          {!comingSoonFormData &&
+          {!comingSoonFormData && (
             <p className="self-stretch text-[rgba(255,255,255,0.80)] font-exo text-[16px] font-medium leading-[150%] tracking-[1px]">
               {data.SecondLeftText}
-            </p>}
+            </p>
+          )}
         </div>
       </div>
       <form
@@ -86,25 +109,67 @@ const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
           <div className="flex h-[50px] px-[24px] py-[9px] items-center gap-[10px] self-stretch rounded-[43px] border-2 border-secondary-600 bg-neutral-950">
             <input
               type="email"
-              placeholder={comingSoonFormData ? comingSoonFormData.EmailFormPlaceholderText : data.EmailFormPlaceholderText}
+              placeholder={
+                comingSoonFormData
+                  ? comingSoonFormData.EmailFormPlaceholderText
+                  : data.EmailFormPlaceholderText
+              }
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="bg-transparent text-neutral-300 font-exo text-[14px] font-medium leading-normal outline-none w-full"
               required
             />
           </div>
-          {data || comingSoonFormData ? <div className="flex flex-col items-start gap-[10px] self-stretch">
-            <div className="flex items-start gap-[10px] py-[12px] pl-[16px] pr-0">
-              <p className="text-neutral-300 font-exo text-[14px] font-medium leading-normal">
-                {comingSoonFormData ? comingSoonFormData.AcceptConditionsFirstText : data.AcceptConditionsFirstText}{" "}
-                <Link href={`/${locale}/terms-and-conditions`}>
-                  <span className="text-neutral-300 font-exo text-[14px] font-medium leading-normal underline">
-                    {comingSoonFormData ? comingSoonFormData.AcceptConditionsSecondText : data.AcceptConditionsSecondText}
-                  </span>
-                </Link>
-              </p>
+          {data || comingSoonFormData ? (
+            <div className="flex flex-col items-start self-stretch">
+              <div className="flex items-start gap-[10px] mt-2 sm:mt-0 py-[4px] pl-[16px] pr-0">
+                <input
+                  id={comingSoonFormData ? "secondInput" : "firstInput"}
+                  type="checkbox"
+                  required
+                  checked={isFirstChecked}
+                  onChange={(e) => setIsFirstChecked(e.target.checked)}
+                  className="w-[16px] h-[16px] p-4"
+                />
+                <label
+                  className="text-neutral-300 font-exo text-[14px] pb-2 sm:pb-0font-medium leading-normal"
+                  htmlFor={comingSoonFormData ? "secondInput" : "firstInput"}
+                >
+                  {comingSoonFormData
+                    ? comingSoonFormData.NewsletterAcceptCheckboxText
+                    : data.NewsletterAcceptCheckboxText}
+                </label>
+              </div>
+
+              <div className="flex items-start gap-[10px]  py-[4px] pl-[16px] pr-0">
+                <input
+                  id={comingSoonFormData ? "secondInput" : "firstInput"}
+                  type="checkbox"
+                  required
+                  checked={isSecondChecked}
+                  onChange={(e) => setIsSecondChecked(e.target.checked)}
+                  className="w-[16px] h-[16px] p-4"
+                />
+                <label
+                  className="text-neutral-300 font-exo text-[14px] pb-2 sm:pb-0font-medium leading-normal"
+                  htmlFor={comingSoonFormData ? "secondInput" : "firstInput"}
+                >
+                  {comingSoonFormData
+                    ? comingSoonFormData.AcceptConditionsFirstText
+                    : data.AcceptConditionsFirstText}{" "}
+                  <Link href={`/${locale}/terms-and-conditions`}>
+                    <span className="text-neutral-300 font-exo text-[14px] font-medium leading-normal underline">
+                      {comingSoonFormData
+                        ? comingSoonFormData.AcceptConditionsSecondText
+                        : data.AcceptConditionsSecondText}
+                    </span>
+                  </Link>
+                </label>
+              </div>
             </div>
-          </div> : <></>}
+          ) : (
+            <></>
+          )}
         </div>
         <div className="flex items-center mx-auto">
           <SecondaryCTAButton
@@ -116,7 +181,7 @@ const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
                 : buttonText
             }
             type="submit"
-            isChecked={email}
+            isChecked={isFirstChecked && isSecondChecked && email}
             submitted={submitted}
           />
         </div>
