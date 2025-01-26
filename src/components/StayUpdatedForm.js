@@ -42,6 +42,9 @@ const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
       setSubmitted(true);
       setIsFirstChecked(false);
       setIsSecondChecked(false);
+      setTimeout(()=>{
+        setSubmitted(false)
+      },1000)
     } else {
       setMessage(result.message || "Something went wrong. Please try again.");
     }
