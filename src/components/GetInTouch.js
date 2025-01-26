@@ -35,7 +35,12 @@ const GetInTouch = ({ data, locale }) => {
         </div>
       </div>
       <div className="flex flex-col items-center md:items-start gap-[16px]">
-        <Link href={`/${locale}/terms-and-conditions`} className="fullhd:flex-[1_0_0] text-[rgba(255,255,255,0.80)] font-exo text-[16px] font-medium leading-[150%] underline tracking-[1px]">{data.TermsConditionsUnderSocials}</Link>
+        <Link
+          href={`/${locale}/terms-and-conditions`}
+          className="fullhd:flex-[1_0_0] text-[rgba(255,255,255,0.80)] font-exo text-[16px] font-medium leading-[150%] underline tracking-[1px]"
+        >
+          {data.TermsConditionsUnderSocials}
+        </Link>
       </div>
     </div>
   );
