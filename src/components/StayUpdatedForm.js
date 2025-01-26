@@ -122,18 +122,18 @@ const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
           </div>
           {data || comingSoonFormData ? (
             <div className="flex flex-col items-start self-stretch">
-              <div className="flex items-start gap-[10px] mt-2 sm:mt-0 py-[4px] pl-[16px] pr-0">
+              <div className="flex items-start gap-[10px] mt-2 sm:mt-0 py-[4px] pl-[12px] pr-0">
                 <input
-                  id={comingSoonFormData ? "secondInput" : "firstInput"}
+                  id={comingSoonFormData ? "firstInputCs" : "firstInput"}
                   type="checkbox"
                   required
                   checked={isFirstChecked}
                   onChange={(e) => setIsFirstChecked(e.target.checked)}
-                  className="w-[16px] h-[16px] p-4"
+                  className="max-w-[18px] max-h-[18px] mt-1"
                 />
                 <label
-                  className="text-neutral-300 font-exo text-[14px] pb-2 sm:pb-0font-medium leading-normal"
-                  htmlFor={comingSoonFormData ? "secondInput" : "firstInput"}
+                  className="text-neutral-300 font-exo text-[14px] pb-2 sm:pb-0 font-medium leading-normal"
+                  htmlFor={comingSoonFormData ? "firstInputCs" : "firstInput"}
                 >
                   {comingSoonFormData
                     ? comingSoonFormData.NewsletterAcceptCheckboxText
@@ -141,18 +141,18 @@ const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
                 </label>
               </div>
 
-              <div className="flex items-start gap-[10px]  py-[4px] pl-[16px] pr-0">
+              <div className="flex items-start gap-[10px] mt-2 sm:mt-0 py-[4px] pl-[12px] pr-0">
                 <input
-                  id={comingSoonFormData ? "secondInput" : "firstInput"}
+                  id={comingSoonFormData ? "secondInputCs" : "secondInput"}
                   type="checkbox"
                   required
                   checked={isSecondChecked}
                   onChange={(e) => setIsSecondChecked(e.target.checked)}
-                  className="w-[16px] h-[16px] p-4"
+                  className="max-w-[18px] max-h-[18px] mt-1"
                 />
                 <label
-                  className="text-neutral-300 font-exo text-[14px] pb-2 sm:pb-0font-medium leading-normal"
-                  htmlFor={comingSoonFormData ? "secondInput" : "firstInput"}
+                  className="text-neutral-300 font-exo text-[14px] pb-2 sm:pb-0 font-medium leading-normal"
+                  htmlFor={comingSoonFormData ? "secondInputCs" : "secondInput"}
                 >
                   {comingSoonFormData
                     ? comingSoonFormData.AcceptConditionsFirstText
