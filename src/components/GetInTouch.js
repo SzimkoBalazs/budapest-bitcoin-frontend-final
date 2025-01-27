@@ -12,7 +12,7 @@ const GetInTouch = ({ data, locale }) => {
   };
   return (
     <div className="flex flex-col w-fit gap-[40px]">
-      <div className="flex flex-col items-center md:items-start gap-[16px] self-stretch">
+      <div className="flex flex-col items-center gl:items-start gap-[16px] self-stretch">
         <div className="flex justify-center items-center gap-[10px]">
           <p className="text-[rgba(255,255,255,0.80)] font-exo text-[18px] xxs:text-[20px] md:text-[22px] font-extrabold leading-[110%] tracking-[1.8px] fullhd:tracking-[2.6px]">
             {data.FirstRigthText}
@@ -24,7 +24,7 @@ const GetInTouch = ({ data, locale }) => {
           </p>
         </div>
       </div>
-      <div className="flex flex-col items-center md:items-start gap-[16px]">
+      <div className="flex flex-col items-center gl:items-start gap-[16px]">
         <div className="flex justify-center items-center gap-[10px]">
           <p className="text-[rgba(255,255,255,0.80)] font-exo text-[18px] xxs:text-[20px] md:text-[22px] font-extrabold leading-[110%] tracking-[1.8px] fullhd:tracking-[2.6px]">
             {data.SecondRightText}
@@ -34,7 +34,7 @@ const GetInTouch = ({ data, locale }) => {
           <SocialIconsSVG links={socialLinks} />
         </div>
       </div>
-      <div className="flex flex-col items-center md:items-start gap-[16px]">
+      <div className="flex flex-col items-center gl:items-start gap-[16px]">
         <Link
           href={`/${locale}/terms-and-conditions`}
           className="fullhd:flex-[1_0_0] text-[rgba(255,255,255,0.80)] font-exo text-[16px] font-medium leading-[150%] underline tracking-[1px]"
