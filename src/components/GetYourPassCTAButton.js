@@ -2,9 +2,11 @@
 import React, { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
-const GetYourPassCTAButton = ({ locale, buttonText, setIsClicked }) => {
+const GetYourPassCTAButton = ({ locale, buttonText, setIsClicked, href, anchorOrButton = 'anchor', type, handleButtonClick, isSubmitting, buttonStyle }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isTouched, setIsTouched] = useState(false);
+
+  const isActive = isHovered || isTouched || isSubmitting
 
   const pathname = usePathname();
   const router = useRouter();
@@ -30,17 +32,8 @@ const GetYourPassCTAButton = ({ locale, buttonText, setIsClicked }) => {
     setIsClicked && setIsClicked(false)
   };
 
-  return (
-    <a
-        href="#tickets"
-        onClick={handleClick}
-        onMouseEnter={() => !isMobile && setIsHovered(true)}
-        onMouseLeave={() => !isMobile && setIsHovered(false)}
-        onTouchStart={()=> isMobile && setIsTouched(true)}
-        onTouchEnd={()=> isMobile && setIsTouched(false)}
-        className="cursor-pointer relative flex h-[50px] px-[16px] items-center gap-1 rounded-[40px] border-2 border-black shadow-[0px_6px_0px_0px_#000] transition-shadow duration-100 bg-white active:shadow-none active:translate-y-[6px]"
-    >
-          {/* A szöveges kapszula */}
+    const buttonContent = (
+        <>
             <p
               style={{
                   textTransform: "uppercase",
@@ -49,33 +42,31 @@ const GetYourPassCTAButton = ({ locale, buttonText, setIsClicked }) => {
                   fontWeight:800,
                   padding:'4px 6px',
                   borderRadius:40,
-                  color:isHovered || isTouched ? 'white' : 'rgba(0,0,0,0.80)',
-                  backgroundColor: isHovered || isTouched ? 'rgba(0,0,0,0)' : 'white',
+                  color: isActive ? 'white' : 'rgba(0,0,0,0.80)',
+                  backgroundColor: isActive ? 'rgba(0,0,0,0)' : 'white',
             }}
               className="transition-all duration-0 sm:duration-600 text-nowrap font-exo leading-normal z-10"
             >
-              {buttonText}
+                {buttonText}
             </p>
-            {/*  BACKGROUND ANIMATING*/}
           <div
               className="transition-all duration-0 sm:duration-500"
             style={{
               display: "flex",
               height: "100%",
-              width: isHovered || isTouched ? "100%" : "50%",
+              width: isActive ? "100%" : "50%",
               //transition: "all 0.4s ease-in-out",
               position: "absolute",
               right: 0,
               backgroundColor: "#F7931A",
-              borderTopLeftRadius: isHovered || isTouched ? 20 : 0,
-              borderBottomLeftRadius: isHovered || isTouched ? 20 : 0,
+              borderTopLeftRadius: isActive ? 20 : 0,
+              borderBottomLeftRadius: isActive ? 20 : 0,
               borderTopRightRadius: 20,
               borderBottomRightRadius: 20,
             }}
           />
-          {/*  background animating */}
-          {/* Az SVG ikon */}
-          <div className="flex pb-[1px] items-center">
+
+          <div className="flex pb-[1px] items-center ml-1">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="18.641"
@@ -93,8 +84,33 @@ const GetYourPassCTAButton = ({ locale, buttonText, setIsClicked }) => {
               </g>
             </svg>
           </div>
+        </>
+        )
+
+  return anchorOrButton === 'anchor' ? (
+    <a
+        href={href ? href : "#tickets"}
+        onClick={handleClick}
+        onMouseEnter={() => !isMobile && setIsHovered(true)}
+        onMouseLeave={() => !isMobile && setIsHovered(false)}
+        onTouchStart={()=> isMobile && setIsTouched(true)}
+        onTouchEnd={()=> isMobile && setIsTouched(false)}
+        className="cursor-pointer min-w-[144px] relative flex h-[50px] px-[16px] items-center rounded-[40px] border-2 border-black shadow-[0px_6px_0px_0px_#000] transition-shadow duration-100 bg-white active:shadow-none active:translate-y-[6px] justify-center"
+    >
+        {buttonContent}
     </a>
-  );
+  ) : <button
+      style={buttonStyle}
+      type={type}
+      onClick={handleButtonClick}
+      onMouseEnter={() => !isMobile && setIsHovered(true)}
+        onMouseLeave={() => !isMobile && setIsHovered(false)}
+        onTouchStart={()=> isMobile && setIsTouched(true)}
+        onTouchEnd={()=> isMobile && setIsTouched(false)}
+      className="cursor-pointer min-w-[144px] relative flex h-[50px] px-[16px] items-center rounded-[40px] border-2 border-black shadow-[0px_6px_0px_0px_#000] transition-shadow duration-100 bg-white active:shadow-none active:translate-y-[6px] justify-center"
+>
+      {buttonContent}
+  </button>;
 };
 
 export default GetYourPassCTAButton;

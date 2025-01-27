@@ -5,6 +5,7 @@ import SecondaryCTAButton from "./SecondaryCTAButton";
 import { cln } from "@/utilities/classnames";
 import { subscribeToNewsletter } from "@/app/actions/newsletterSubscribe";
 import Link from "next/link";
+import GetYourPassCTAButton from "@/components/GetYourPassCTAButton";
 
 const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
   const [email, setEmail] = useState("");
@@ -44,7 +45,7 @@ const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
       setIsSecondChecked(false);
       setTimeout(()=>{
         setSubmitted(false)
-      },1000)
+      },2000)
     } else {
       setMessage(result.message || "Something went wrong. Please try again.");
     }
@@ -175,7 +176,8 @@ const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
           )}
         </div>
         <div className="flex items-center mx-auto">
-          <SecondaryCTAButton
+          {comingSoonFormData ? <GetYourPassCTAButton buttonStyle={{opacity:isFirstChecked && isSecondChecked && email ? 1 : 0.65}} buttonText={isSubmitting ? submittingText : submitted ? buttonSuccessText : buttonText } anchorOrButton={"button"} type={"submit"} isSubmitting={isSubmitting}/>
+            : <SecondaryCTAButton
             text={
               submitted
                 ? buttonSuccessText
@@ -186,7 +188,7 @@ const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
             type="submit"
             isChecked={isFirstChecked && isSecondChecked && email}
             submitted={submitted}
-          />
+          />}
         </div>
       </form>
     </div>
