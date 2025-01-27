@@ -4,11 +4,14 @@ import { usePathname, useRouter } from "next/navigation";
 
 const GetYourPassCTAButton = ({ locale, buttonText, setIsClicked }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isTouched, setIsTouched] = useState(false);
 
   const pathname = usePathname();
   const router = useRouter();
   const path = "/tickets";
   const newpath = path.slice(1);
+
+  const isMobile = window.innerWidth < 560;
 
     const handleClick = (e) => {
     e.preventDefault();
@@ -28,39 +31,51 @@ const GetYourPassCTAButton = ({ locale, buttonText, setIsClicked }) => {
   };
 
   return (
-    <a href="#tickets" onClick={handleClick}>
-      <div className="flex justify-center items-center">
-        <div
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          className="cursor-pointer relative flex h-[50px] px-[16px] items-center gap-1 rounded-[40px] border-2 border-black shadow-[0px_6px_0px_0px_#000] transition-shadow duration-100  bg-white active:shadow-none active:translate-y-[6px] group"
-        >
+    <a
+        href="#tickets"
+        onClick={handleClick}
+        onMouseEnter={() => !isMobile && setIsHovered(true)}
+        onMouseLeave={() => !isMobile && setIsHovered(false)}
+        onTouchStart={()=> isMobile && setIsTouched(true)}
+        onTouchEnd={()=> isMobile && setIsTouched(false)}
+        className="cursor-pointer relative flex h-[50px] px-[16px] items-center gap-1 rounded-[40px] border-2 border-black shadow-[0px_6px_0px_0px_#000] transition-shadow duration-100 bg-white active:shadow-none active:translate-y-[6px]"
+    >
           {/* A szöveges kapszula */}
-          <div className="z-10 flex justify-center items-center gap-[4px] p-[4px_6px] rounded-[40px] bg-white group-hover:bg-transparent transition-all duration-75">
             <p
-              style={{ textTransform: "uppercase" }}
-              className="text-nowrap text-[rgba(0,0,0,0.80)] font-exo text-center text-[14px] font-extrabold leading-normal group-hover:text-white"
+              style={{
+                  textTransform: "uppercase",
+                  textAlign:'center',
+                  fontSize:14,
+                  fontWeight:800,
+                  padding:'4px 6px',
+                  borderRadius:40,
+                  color:isHovered || isTouched ? 'white' : 'rgba(0,0,0,0.80)',
+                  backgroundColor: isHovered || isTouched ? 'rgba(0,0,0,0)' : 'white',
+            }}
+              className="transition-all duration-0 sm:duration-600 text-nowrap font-exo leading-normal z-10"
             >
               {buttonText}
             </p>
-          </div>
+            {/*  BACKGROUND ANIMATING*/}
           <div
+              className="transition-all duration-0 sm:duration-500"
             style={{
               display: "flex",
               height: "100%",
-              width: isHovered ? "100%" : "50%",
-              transition: "all 0.6s ease-in-out",
+              width: isHovered || isTouched ? "100%" : "50%",
+              //transition: "all 0.4s ease-in-out",
               position: "absolute",
               right: 0,
               backgroundColor: "#F7931A",
-              borderTopLeftRadius: isHovered ? 20 : 0,
-              borderBottomLeftRadius: isHovered ? 20 : 0,
+              borderTopLeftRadius: isHovered || isTouched ? 20 : 0,
+              borderBottomLeftRadius: isHovered || isTouched ? 20 : 0,
               borderTopRightRadius: 20,
               borderBottomRightRadius: 20,
             }}
           />
+          {/*  background animating */}
           {/* Az SVG ikon */}
-          <div className="flex pb-[1px] items-center gap-[10px]">
+          <div className="flex pb-[1px] items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="18.641"
@@ -78,8 +93,6 @@ const GetYourPassCTAButton = ({ locale, buttonText, setIsClicked }) => {
               </g>
             </svg>
           </div>
-        </div>
-      </div>
     </a>
   );
 };
