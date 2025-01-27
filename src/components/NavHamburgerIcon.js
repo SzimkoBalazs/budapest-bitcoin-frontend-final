@@ -66,16 +66,15 @@ const NavHamburgerIcon = ({ navLinks, currentLocale, buttonText }) => {
         )}
       </div>
       <div
-        className="h-mobile-menu sm:h-auto w-screen sm:w-[320px] right-[-16px] sm:right-[0px] justify-between px-4 pt-[24px] pb-[15vh] sm:pb-[24px]"
+        className="h-mobile-menu sm:h-auto w-screen sm:w-[320px] right-[-16px] sm:right-[0px] px-4 pt-[24px] pb-[40px] sm:pb-[24px] overflow-y-scroll gap-y-[32px]"
         style={{
-          gap: 40,
           position: "absolute",
           display: isClicked ? "flex" : "none",
           flexDirection: "column",
           alignItems: "center",
+            justifyContent:'space-between',
           border: "2px solid black",
           top: 48,
-          justifyContent: "space-between",
           backgroundColor: "#1f1f1f",
         }}
       >
