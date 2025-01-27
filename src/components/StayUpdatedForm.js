@@ -54,10 +54,10 @@ const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
 
   // Mid form or footer form
   const underlineWidth = comingSoonFormData
-    ? "w-[250px] sm:w-[290px]"
-    : "w-[250px]";
+    ? "w-[220px] xxs:w-[230px] sm:w-[290px]"
+    : "w-[200px] xxs:w-[350px] sm:w-[250px]";
   const underlineWidthEn = comingSoonFormData
-    ? "w-[270px] sm:w-[420px]"
+    ? "w-[250px] xxs:w-[320px] sm:w-[420px]"
     : "w-[97%] md:w-[65%] footerTitle:w-[95%]";
 
   return (
@@ -83,7 +83,7 @@ const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
                 fontWeight: 800,
                 textShadow: "2px 2px 2px rgba(0,0,0,1)",
               }}
-              className="text-white font-exo text-[26px] sm:text-[32px] leading-[100%] tracking-[8.4px] uppercase z-10 relative"
+              className="text-white font-exo text-[26px] sm:text-[32px] leading-[100%] tracking-[6px] sm:tracking-[8.4px] uppercase z-10 relative"
             >
               {comingSoonFormData
                 ? comingSoonFormData.MainTitle

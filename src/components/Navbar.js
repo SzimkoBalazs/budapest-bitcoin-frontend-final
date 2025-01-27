@@ -59,7 +59,7 @@ const Navbar = async ({ locale, params }) => {
         </div>
         <div className="hidden navbarBreak:flex justify-end items-center   gap-4 xl:gap-8">
           <LanguageSwitch currentLocale={locale} />
-          <GetYourPassCTAButton buttonText={buttonText.ButtonText} />
+          <GetYourPassCTAButton buttonText={buttonText.ButtonText} locale={locale}/>
         </div>
         <div className="flex navbarBreak:hidden">
           <NavHamburgerIcon

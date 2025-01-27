@@ -27,14 +27,14 @@ const HeroSectionContent = ({ heroSectionData }) => {
           </h2>
         </div>
         <div className="flex flex-col lx:flex-row relative lx:justify-between lx:gap-[0px] gap-[40px] items-center self-stretch">
-          <div className="relative w-[343px] h-[52px] text-center lx:text-left">
+          <div className="relative max-w-[343px] h-[52px] text-center lx:text-left">
             <h3 className="flex flex-col items-center lx:items-start text-white font-exo text-[16px] sm:text-[22px] font-medium leading-[130%] tracking-[2.2px]">
               {heroSectionData.HeroSectionDescriptionFirstPart}
               <span className="flex relative w-fit mx-auto lx:mx-0 text-white z-20 font-exo text-[18px] sm:text-[24px] font-bold leading-[130%] tracking-[2.4px]">
                 {" "}
                 {heroSectionData.HeroSectionDescriptionSecondPart}
               </span>
-              <span className="flex z-0 absolute bottom-[12px] sm:bottom-[0px] w-[56%] sm:w-[70%] h-[6px] bg-secondary-600" />
+              <span className="flex z-0 absolute bottom-[12px] sm:bottom-[0px] w-[180px] sm:w-[230px] h-[6px] bg-secondary-600" />
             </h3>
           </div>
           <div className="flex flex-col justify-center items-center">

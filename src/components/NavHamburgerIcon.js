@@ -66,7 +66,7 @@ const NavHamburgerIcon = ({ navLinks, currentLocale, buttonText }) => {
         )}
       </div>
       <div
-        className="h-mobile-menu sm:h-auto w-screen sm:w-[320px] right-[-16px] sm:right-[0px] justify-between px-4 pt-[24px] pb-[48px] sm:pb-[24px]"
+        className="h-mobile-menu sm:h-auto w-screen sm:w-[320px] right-[-16px] sm:right-[0px] justify-between px-4 pt-[24px] pb-[15vh] sm:pb-[24px]"
         style={{
           gap: 40,
           position: "absolute",
@@ -99,8 +99,8 @@ const NavHamburgerIcon = ({ navLinks, currentLocale, buttonText }) => {
         </div>
         <div className="flex flex-col w-full items-center gap-6">
           <LanguageSwitch currentLocale={currentLocale} />
-          <GetYourPassCTAButton buttonText={buttonText} />
-          <SecondaryCTAButton text="Become a partner" />
+          <GetYourPassCTAButton buttonText={buttonText} setIsClicked={setIsClicked} locale={currentLocale}/>
+          <SecondaryCTAButton text="Become a partner" actionType={"scroll"}  setIsClicked={setIsClicked} locale={currentLocale}/>
         </div>
       </div>
     </div>

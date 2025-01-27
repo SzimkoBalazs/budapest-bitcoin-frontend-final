@@ -34,8 +34,8 @@ const WhyPartnerWithUs = async ({ locale }) => {
                   textTop={partnerUsSectionData.TitleTopText}
                   textBottom={partnerUsSectionData.TitleBottomText}
                   color="bg-primary-500"
-                  textSize={locale === 'hu' && 'text-[34px] sm:text-[52px]'}
-                  widthClass={locale === 'hu' ? 'w-[280px] sm:w-[440px]' : "w-[240px] sm:w-[310px]"}
+                  textSize={locale === 'hu' && 'text-[32px] xxs:text-[34px] sm:text-[52px]'}
+                  widthClass={locale === 'hu' ? 'w-[250px] xxs:w-[270px] sm:w-[440px]' : "w-[210px] sm:w-[310px]"}
                   minWidth={210}
                 />
               </div>
@@ -49,7 +49,7 @@ const WhyPartnerWithUs = async ({ locale }) => {
               <SecondaryCTAButton
                 text={partnerUsSectionData.ButtonText}
                 type="button"
-                href=""
+                href="fanny@budapestbitcoin.com"
                 actionType="mailto"
               />
             </div>
@@ -60,9 +60,9 @@ const WhyPartnerWithUs = async ({ locale }) => {
         </div>
         <div className="flex flex-col items-center gap-[40px]">
           <div className="flex p-[10px] justify-center items-center gap-[10px]">
-            <p className="text-neutral-200 text-center font-exo text-[32px] md:text-[40px] font-extrabold leading-[130%] tracking-[2.5px]">
+            <h3 className="text-neutral-200 text-center font-exo text-[28px] xs:text-[32px] md:text-[40px] font-extrabold leading-[130%] tracking-[2.5px]">
               {partnerUsSectionData.MediaPartnerText}
-            </p>
+            </h3>
           </div>
           <div className="flex max-w-[440px] px-[16px] flex-col items-center gap-[40px]">
             <div className="flex w-full max-w-full">

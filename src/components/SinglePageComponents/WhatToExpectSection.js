@@ -34,7 +34,7 @@ const WhatToExpectSection = async ({ locale }) => {
                   textBottom={whatToExpectSectionData.BottomTitleText}
                   color="bg-neutral-700"
                   widthClass={locale === 'hu' ? "w-[97%]" : "w-[80%]"}
-                  textSize={locale === 'hu' && 'text-[36px] sm:text-[52px]'}
+                  textSize={locale === 'hu' && 'text-[32px] xs:text-[36px] sm:text-[52px]'}
                 />
               </div>
             </div>

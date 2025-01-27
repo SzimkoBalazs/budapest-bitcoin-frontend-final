@@ -1,11 +1,34 @@
 "use client";
 import React, { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
-const GetYourPassCTAButton = ({ buttonText }) => {
+const GetYourPassCTAButton = ({ locale, buttonText, setIsClicked }) => {
   const [isHovered, setIsHovered] = useState(false);
 
+  const pathname = usePathname();
+  const router = useRouter();
+  const path = "/tickets";
+  const newpath = path.slice(1);
+
+    const handleClick = (e) => {
+    e.preventDefault();
+
+    // Ellenőrizzük, hogy a homepage-en vagyunk-e
+    if (pathname === "/" || pathname === "/en" || pathname === "/hu") {
+      const section = document.getElementById(path.slice(1));
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      // Navigálás a home oldalra, majd hash érték hozzáadása a görgetéshez
+      router.push(`/${locale || "en"}#${newpath}`);
+    }
+    document.body.classList.remove("no-scroll");
+    setIsClicked && setIsClicked(false)
+  };
+
   return (
-    <a href={`#tickets`}>
+    <a href="#tickets" onClick={handleClick}>
       <div className="flex justify-center items-center">
         <div
           onMouseEnter={() => setIsHovered(true)}

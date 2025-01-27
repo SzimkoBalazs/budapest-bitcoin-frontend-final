@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 const SecondaryCTAButton = ({
   text,
@@ -9,6 +10,8 @@ const SecondaryCTAButton = ({
   actionType,
   isChecked = true,
   submitted = false,
+    setIsClicked,
+    locale,
 }) => {
   // Függvény, amely meghatározza a megfelelő hivatkozást az actionType alapján
   const getHref = () => {
@@ -24,14 +27,27 @@ const SecondaryCTAButton = ({
     }
   };
 
+    const pathname = usePathname();
+  const router = useRouter();
+  const path = "/partners";
+  const newpath = path.slice(1);
+
   const handleClick = (e) => {
     if (actionType === "scroll") {
       e.preventDefault();
-      const section = document.getElementById(href);
+      // Ellenőrizzük, hogy a homepage-en vagyunk-e
+    if (pathname === "/" || pathname === "/en" || pathname === "/hu") {
+      const section = document.getElementById(path.slice(1));
       if (section) {
         section.scrollIntoView({ behavior: "smooth" });
       }
+    } else {
+      // Navigálás a home oldalra, majd hash érték hozzáadása a görgetéshez
+      router.push(`/${locale || "en"}#${newpath}`);
     }
+    document.body.classList.remove("no-scroll");
+    setIsClicked && setIsClicked(false)
+  }
   };
 
   return actionType === "mailto" || actionType === "googleMaps" ? (
@@ -39,6 +55,7 @@ const SecondaryCTAButton = ({
       href={getHref()}
       target={actionType === "googleMaps" ? "_blank" : "_self"}
       rel="noopener noreferrer"
+      style={{width:'fit-content'}}
     >
       <button
         type={type}

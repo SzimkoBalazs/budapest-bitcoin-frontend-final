@@ -87,8 +87,8 @@ const SliderGallery = ({ data }) => {
               >
                 <path
                   d="M25 3L3 24L25 45"
-                  stroke="black"
-                  strokeOpacity="0.5"
+                  stroke="white"
+                  strokeOpacity="0.3"
                   strokeWidth="6"
                   strokeLinejoin="round"
                 />
@@ -107,8 +107,8 @@ const SliderGallery = ({ data }) => {
               >
                 <path
                   d="M3 45L25 24L3 3"
-                  stroke="black"
-                  strokeOpacity="0.5"
+                  stroke="white"
+                  strokeOpacity="0.3"
                   strokeWidth="6"
                   strokeLinejoin="round"
                 />

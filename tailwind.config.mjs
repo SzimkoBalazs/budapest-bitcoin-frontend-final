@@ -63,7 +63,7 @@ export default {
         marquee: "marquee 15s linear infinite",
       },
       height:{
-        'mobile-menu':'calc(100dvh - 16px)',
+        'mobile-menu':'100vh',
         'hero-section':'calc(90vh)',
         'hero-section-small':'calc(110vh)',
       },
