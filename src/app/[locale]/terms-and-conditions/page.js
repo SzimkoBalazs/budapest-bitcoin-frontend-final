@@ -3,7 +3,7 @@ import ReactMarkdown from "react-markdown";
 
 async function fetchTermsData(locale) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/terms-and-condition?locale=${locale}`
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/new-terms-and-conditon?locale=${locale}&populate=*`
   );
 
   if (!res.ok) {
@@ -14,41 +14,50 @@ async function fetchTermsData(locale) {
   return data.data || [];
 }
 
+export const metadata = {
+  title: "Terms and Conditions",
+  description: "Our Terms and Conditions and Privacy Policy. ",
+};
+
 const page = async ({ params }) => {
   const { locale } = await params;
   const termsSectionData = await fetchTermsData(locale);
+  const aszfPdfUrl = termsSectionData.ASZF.url;
+  const adatvedelemPdfUrl = termsSectionData.Privacy.url;
+
   return (
-    <div className="container max-w-[720px] mx-auto px-4 py-8 mt-[100px] rounded-md">
-      <ReactMarkdown
-        components={{
-          h1: ({ node, ...props }) => (
-            <h1
-              className="text-4xl font-extrabold text-center text-primary-500 mt-6"
-              {...props}
-            />
-          ),
-          h2: ({ node, ...props }) => (
-            <h2
-              className="text-3xl font-bold text-secondary-600 mt-4"
-              {...props}
-            />
-          ),
-          p: ({ node, ...props }) => (
-            <p className="text-neutral-300 leading-relaxed mb-4" {...props} />
-          ),
-          a: ({ node, ...props }) => (
-            <a
-              className="text-blue-500 underline hover:text-blue-700"
-              {...props}
-            />
-          ),
-          li: ({ node, ...props }) => (
-            <li className="list-disc list-inside text-white" {...props} />
-          ),
-        }}
-      >
-        {termsSectionData.Content}
-      </ReactMarkdown>
+    <div className="container max-w-[820px] mx-auto px-4 py-8 mt-[100px] rounded-md">
+      <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-extrabold text-primary-500 text-center mb-8">
+        Általános Szerződési Feltételek és Adatkezelési Tájékoztató
+      </h1>
+
+      {/* ÁSZF megjelenítése */}
+      {aszfPdfUrl ? (
+        <div className="mb-12">
+          <iframe
+            src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${aszfPdfUrl}`}
+            className="w-full h-[900px] border rounded-md"
+          />
+        </div>
+      ) : (
+        <p className="text-red-500">
+          Az Általános Szerződési Feltételek nem elérhetők.
+        </p>
+      )}
+
+      {/* Adatkezelési Tájékoztató megjelenítése */}
+      {adatvedelemPdfUrl ? (
+        <div>
+          <iframe
+            src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${adatvedelemPdfUrl}`}
+            className="w-full h-[800px] border rounded-md"
+          />
+        </div>
+      ) : (
+        <p className="text-red-500">
+          Az Adatkezelési Tájékoztató nem elérhető.
+        </p>
+      )}
     </div>
   );
 };

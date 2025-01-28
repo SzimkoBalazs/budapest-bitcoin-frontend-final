@@ -16,8 +16,20 @@ const exo = Exo({
 });
 
 export const metadata = {
-  title: "Budapest Bitcoin",
+  metadataBase: new URL("https://www.budapestbitcoin.com/"),
+
+  title: {
+    default: "Budapest Bitcoin",
+    template: "%s | Budapest Bitcoin",
+  },
   description: "The Bitcoin Conference with a bit of difference",
+  openGraph: {
+    title: "Budapest Bitcoin",
+    description: "The Bitcoin Conference with a bit of difference",
+    type: "website",
+    url: "https://www.budapestbitcoin.com/",
+    sitename: "Budapest Bitcoin",
+  },
   icons: {
     icon: "/bpconflogo.svg",
     shortcut: "/bpconflogo.svg",

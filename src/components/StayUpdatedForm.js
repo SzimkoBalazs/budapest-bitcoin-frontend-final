@@ -43,9 +43,9 @@ const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
       setSubmitted(true);
       setIsFirstChecked(false);
       setIsSecondChecked(false);
-      setTimeout(()=>{
-        setSubmitted(false)
-      },2000)
+      setTimeout(() => {
+        setSubmitted(false);
+      }, 2000);
     } else {
       setMessage(result.message || "Something went wrong. Please try again.");
     }
@@ -113,6 +113,8 @@ const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
           <div className="flex h-[50px] px-[24px] py-[9px] items-center gap-[10px] self-stretch rounded-[43px] border-2 border-secondary-600 bg-neutral-950">
             <input
               type="email"
+              name="email"
+              autoComplete="email"
               placeholder={
                 comingSoonFormData
                   ? comingSoonFormData.EmailFormPlaceholderText
@@ -176,19 +178,36 @@ const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
           )}
         </div>
         <div className="flex items-center mx-auto">
-          {comingSoonFormData ? <GetYourPassCTAButton buttonStyle={{opacity:isFirstChecked && isSecondChecked && email ? 1 : 0.65}} buttonText={isSubmitting ? submittingText : submitted ? buttonSuccessText : buttonText } anchorOrButton={"button"} type={"submit"} isSubmitting={isSubmitting}/>
-            : <SecondaryCTAButton
-            text={
-              submitted
-                ? buttonSuccessText
-                : isSubmitting
-                ? submittingText
-                : buttonText
-            }
-            type="submit"
-            isChecked={isFirstChecked && isSecondChecked && email}
-            submitted={submitted}
-          />}
+          {comingSoonFormData ? (
+            <GetYourPassCTAButton
+              buttonStyle={{
+                opacity: isFirstChecked && isSecondChecked && email ? 1 : 0.65,
+              }}
+              buttonText={
+                isSubmitting
+                  ? submittingText
+                  : submitted
+                  ? buttonSuccessText
+                  : buttonText
+              }
+              anchorOrButton={"button"}
+              type={"submit"}
+              isSubmitting={isSubmitting}
+            />
+          ) : (
+            <SecondaryCTAButton
+              text={
+                submitted
+                  ? buttonSuccessText
+                  : isSubmitting
+                  ? submittingText
+                  : buttonText
+              }
+              type="submit"
+              isChecked={isFirstChecked && isSecondChecked && email}
+              submitted={submitted}
+            />
+          )}
         </div>
       </form>
     </div>
