@@ -29,6 +29,14 @@ export const metadata = {
     type: "website",
     url: "https://www.budapestbitcoin.com/",
     sitename: "Budapest Bitcoin",
+    images: [
+      {
+        url: "https://www.budapestbitcoin.com/opengraph-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Budapest Bitcoin Conference",
+      },
+    ],
   },
   icons: {
     icon: "/bpconflogo.svg",
