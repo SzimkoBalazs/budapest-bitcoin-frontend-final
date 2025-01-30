@@ -22,7 +22,7 @@ const ComingSoonForm = async({locale}) => {
   //   TODO: comingSoonForm
   const comingSoonFormData = await fetchComingSoonFormData(locale);
   return (
-      <ContentWrapper insideClassName={'px-0 pr-2'}>
+      <ContentWrapper className={'px-0 pr-2'} maxWidth={'max-w-[1440px]'}>
           <div
       className="flex w-fit mx-auto bg-black max-w-[840px] py-[24px] px-[24px] xs:px-[40px] sm:py-[32px] sm:px-[64px] mt-[160px] md:mt-0 mb-[100px] sm:mb-[240px]"
       style={{

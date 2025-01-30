@@ -23,7 +23,7 @@ const ThereIsMore = async ({ locale }) => {
   const thereIsMoreSectionData = await fetchThereIsMoreSectionData(locale);
   return (
     <div>
-      <ContentWrapper className="pt-[56px] md:pt-[156px] mb-[220px] flex-col max-w-[1128] mx-auto">
+      <ContentWrapper className="pt-[56px] md:pt-[156px] mb-[160px] sm:mb-[220px] flex-col">
         <FirstConference data={thereIsMoreSectionData} />
       </ContentWrapper>
       <ThereIsMoreSectionDividerText
@@ -31,7 +31,7 @@ const ThereIsMore = async ({ locale }) => {
         secondText={thereIsMoreSectionData.SectionDividerSecondText}
         locale={locale}
       />
-      <ContentWrapper className="mt-[220px] flex flex-col max-w-[1128] mx-auto">
+      <ContentWrapper className="mt-[160px] sm:mt-[220px] flex flex-col">
         <ProofOfPalinka data={thereIsMoreSectionData} />
       </ContentWrapper>
     </div>

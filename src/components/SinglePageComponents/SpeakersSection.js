@@ -59,7 +59,7 @@ const SpeakersSection = async ({ locale }) => {
           <SpeakersBigTextOutline />
         </div>
       </div>
-      <ContentWrapper className="pt-[80px] relative max-w-[1128px] mx-auto">
+      <ContentWrapper className="pt-[80px]">
         <div className="relative z-10 mx-auto">
           <div className="flex flex-col gap-[16px] sm:gap-[24px] md:pt-[80px]">
             <SectionMainTitle

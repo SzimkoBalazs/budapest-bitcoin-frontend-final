@@ -35,7 +35,7 @@ const GallerySection = async ({ locale }) => {
   const gallerySectionData = await fetchGallerySectionData(locale);
   const galleryCardsData = await fetchGalleryCardData(locale);
   return (
-    <ContentWrapper>
+    <ContentWrapper maxWidth={'max-w-[1440px]'}>
       <div className="flex flex-col gap-[156px]">
         <BudapestCultureGallery
           title={gallerySectionData.TitleText}

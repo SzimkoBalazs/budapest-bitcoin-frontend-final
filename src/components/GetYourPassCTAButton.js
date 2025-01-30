@@ -60,7 +60,7 @@ const GetYourPassCTAButton = ({
           color: isActive ? "white" : "rgba(0,0,0,0.80)",
           backgroundColor: isActive ? "rgba(0,0,0,0)" : "white",
         }}
-        className="transition-all duration-0 sm:duration-600 text-nowrap font-exo leading-normal z-10"
+        className="transition-all duration-0 sm:duration-700 text-nowrap font-exo leading-normal z-10"
       >
         {buttonText}
       </p>

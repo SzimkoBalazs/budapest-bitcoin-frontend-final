@@ -62,7 +62,7 @@ const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
     : "w-[97%] md:w-[65%] footerTitle:w-[95%]";
 
   return (
-    <div className="flex flex-1 max-w-[554px] flex-col items-center justify-center lg:items-start gap-[40px]">
+    <div className="flex flex-1 gl:min-w-[480px] max-w-[554px] flex-col items-center justify-center lg:items-start gap-[40px]">
       <div className="flex flex-col items-start gap-[24px] self-stretch">
         <div
           className={cln(
@@ -107,7 +107,7 @@ const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
       </div>
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col xs:items-start xs:flex-row gap-[16px] self-stretch"
+        className="flex flex-col sm:items-start sm:flex-row gap-[16px] self-stretch"
       >
         <div className="flex flex-col items-start gap-[8px] flex-[1_0_0]">
           <div className="flex h-[50px] px-[24px] py-[9px] items-center gap-[10px] self-stretch rounded-[43px] border-2 border-secondary-600 bg-neutral-950">
@@ -178,7 +178,6 @@ const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
           )}
         </div>
         <div className="flex items-center mx-auto">
-          {comingSoonFormData ? (
             <GetYourPassCTAButton
               buttonStyle={{
                 opacity: isFirstChecked && isSecondChecked && email ? 1 : 0.65,
@@ -194,20 +193,6 @@ const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
               type={"submit"}
               isSubmitting={isSubmitting}
             />
-          ) : (
-            <SecondaryCTAButton
-              text={
-                submitted
-                  ? buttonSuccessText
-                  : isSubmitting
-                  ? submittingText
-                  : buttonText
-              }
-              type="submit"
-              isChecked={isFirstChecked && isSecondChecked && email}
-              submitted={submitted}
-            />
-          )}
         </div>
       </form>
     </div>

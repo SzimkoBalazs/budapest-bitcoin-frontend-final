@@ -24,7 +24,7 @@ const WhatToExpectSection = async ({ locale }) => {
       id="what-to-expect"
       className="flex py-[56px] flex-col items-center bg-neutral-950 scroll-mt-[40px] sm:scroll-mt-[60px]"
     >
-      <ContentWrapper className={"max-w-[1128]"}>
+      <ContentWrapper>
         <div className="flex flex-col whatToExpectBreak:flex-row mx-auto justify-between items-center gap-[40px] self-stretch">
           <div className="flex w-full max-w-[560px] whatToExpectBreak:max-w-full  whatToExpectBreak:w-[50%] flex-col items-start gap-[24px]">
             <div className="flex flex-col items-start gap-[64px] self-stretch">
@@ -34,7 +34,7 @@ const WhatToExpectSection = async ({ locale }) => {
                   textBottom={whatToExpectSectionData.BottomTitleText}
                   color="bg-neutral-700"
                   widthClass={locale === 'hu' ? "w-[97%]" : "w-[80%]"}
-                  textSize={locale === 'hu' && 'text-[32px] xs:text-[36px] sm:text-[52px]'}
+                  textSize={locale === 'hu' && 'text-[30px] xxs:text-[34px] sm:text-[52px]'}
                 />
               </div>
             </div>
