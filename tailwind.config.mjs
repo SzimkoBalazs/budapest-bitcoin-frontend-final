@@ -9,7 +9,7 @@ export default {
   theme: {
     screens: {
       fullhd: "1536px",
-      lx: "1120px",
+      lx: "1135px",
       lg: "1060px",
       pop: "1246px",
       ticket: "1275px",
@@ -64,7 +64,7 @@ export default {
       },
       height:{
         'mobile-menu':'calc( 100dvh - 58px)',
-        'hero-section':'90vh',
+        'hero-section':'95vh',
         'hero-section-small':'110vh',
       },
       minHeight:{
@@ -81,15 +81,15 @@ export default {
           "-webkit-text-stroke-color": "#1F1F1F",
         },
         ".hero-bg":{
-          "backgroundSize":'110%',
+          "backgroundSize":'180vh',
           "backgroundPosition":'50% 0%',
         },
         ".hero-bg-middle":{
-          "backgroundSize":'140%',
+          "backgroundSize":'160vh',
           "backgroundPosition":'50% 0%',
         },
         ".hero-bg-mobile":{
-          "backgroundSize":"220%",
+          "backgroundSize":"160vh",
           "backgroundPosition":"50% 0%",
         },
         ".big-title":{

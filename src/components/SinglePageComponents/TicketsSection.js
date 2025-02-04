@@ -40,7 +40,7 @@ const TicketsSection = async ({ locale }) => {
       className="relative mb-[80px] md:mb-[200px] scroll-mt-[100px] z-40"
     >
       {/* Title Section */}
-      <ContentWrapper className="max-w-[1128] mx-auto">
+      <ContentWrapper>
         <SectionMainTitle
           text={ticketSectionData.TitleText}
           color="bg-primary-600"

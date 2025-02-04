@@ -12,7 +12,7 @@ const HeroSectionContent = ({ heroSectionData }) => {
             {heroSectionData.TextAboveMainTitle}
           </h4>
           <h2
-            className="big-title-mobile md:big-title w-fit inline-flex text-[48px] md:text-[72px] lg:text-[94px] tracking-[6.24px] speaker:tracking-[12.48px]"
+            className="big-title-mobile md:big-title w-fit inline-flex text-[48px] md:text-[72px] lg:text-[92px] tracking-[6.24px] speaker:tracking-[12.48px]"
             style={{
               color: "#FFF",
               textAlign: "center",

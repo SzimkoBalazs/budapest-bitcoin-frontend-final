@@ -30,7 +30,7 @@ const Footer = async ({ locale }) => {
         backgroundColor: "black",
       }}
     >
-      <div className="flex flex-col gl:flex-row items-center gl:justify-between gl:items-start w-full max-w-[1128px] px-4 sm:px-10 gap-[56px] gl:gap-20">
+      <div className="flex flex-col gl:flex-row items-center gl:justify-between gl:items-start w-full max-w-[1128px] px-4 sm:px-10 gap-[56px]">
         <StayUpdatedForm data={partnerUsSectionData} locale={locale} />
         <GetInTouch data={partnerUsSectionData} locale={locale} />
       </div>
