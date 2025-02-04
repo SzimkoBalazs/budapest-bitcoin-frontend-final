@@ -45,7 +45,7 @@ const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
       setIsSecondChecked(false);
       setTimeout(() => {
         setSubmitted(false);
-      }, 2000);
+      }, 5000);
     } else {
       setMessage(result.message || "Something went wrong. Please try again.");
     }
@@ -178,21 +178,21 @@ const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
           )}
         </div>
         <div className="flex items-center mx-auto">
-            <GetYourPassCTAButton
-              buttonStyle={{
-                opacity: isFirstChecked && isSecondChecked && email ? 1 : 0.65,
-              }}
-              buttonText={
-                isSubmitting
-                  ? submittingText
-                  : submitted
-                  ? buttonSuccessText
-                  : buttonText
-              }
-              anchorOrButton={"button"}
-              type={"submit"}
-              isSubmitting={isSubmitting}
-            />
+          <GetYourPassCTAButton
+            buttonStyle={{
+              opacity: isFirstChecked && isSecondChecked && email ? 1 : 0.65,
+            }}
+            buttonText={
+              isSubmitting
+                ? submittingText
+                : submitted
+                ? buttonSuccessText
+                : buttonText
+            }
+            anchorOrButton={"button"}
+            type={"submit"}
+            isSubmitting={isSubmitting}
+          />
         </div>
       </form>
     </div>
