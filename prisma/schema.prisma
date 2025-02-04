@@ -29,13 +29,18 @@ model Ticket {
 model Order {
   id              Int      @id @default(autoincrement())
   email           String   // Felhasználótól csak az email cím kell
-  totalAmountInCents     Int      // Végösszeg centben
+  totalAmountInCents  Int      // Végösszeg centben
+  discountInCents     Int?     // Mennyi kedvezményt vontunk le
+  finalAmountInCents  Int  @default(0)     // Végösszeg a kedvezmény levonása után
   currency        String   @default("EUR")
   status          OrderStatus @default(PENDING)
   paymentProvider PaymentProvider
   createdAt       DateTime @default(now())
   items           OrderItem[]
   payments        Payment[]
+  couponId          Int?     //  Az alkalmazott kupon ID-ja (opcionális)
+  coupon            Coupon?  @relation(fields: [couponId], references: [id]) // Kapcsolat a Coupon modellel
+  
 }
 
 enum OrderStatus {
@@ -78,4 +83,32 @@ enum PaymentStatus {
   SUCCESS
   FAILED
 }
+
+model Coupon {
+  id           Int      @id @default(autoincrement())
+  code         String   @unique // Egyedi kuponkód
+  discountType DiscountType // FIXED (fix összegű) vagy PERCENTAGE (százalékos)
+  discountValue Int      // Ha fix összegű, akkor centben; ha százalékos, akkor 1-100 közötti érték
+  maxRedemptions Int?    // Hányszor lehet használni (opcionális)
+  usedRedemptions Int    @default(0) // Hányszor használták
+  validFrom    DateTime? // Mikortól érvényes
+  validUntil   DateTime? // Meddig érvényes
+  createdAt    DateTime  @default(now())
+  orders Order[]
+  
+}
+
+enum DiscountType {
+  FIXED
+  PERCENTAGE
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  email         String  @unique
+  password      String
+}
+
+
+
 

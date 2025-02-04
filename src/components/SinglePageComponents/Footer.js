@@ -10,7 +10,7 @@ async function fetchFooterData(locale) {
   );
 
   if (!res.ok) {
-    throw new Error("Failed to fetch gallery section's data");
+    throw new Error("Failed to fetch footer section's data");
   }
 
   const data = await res.json();
@@ -18,7 +18,8 @@ async function fetchFooterData(locale) {
 }
 
 const Footer = async ({ locale }) => {
-  const partnerUsSectionData = await fetchFooterData(locale);
+  const actualLocale = locale ? locale : "en";
+  const partnerUsSectionData = await fetchFooterData(actualLocale);
   return (
     <div
       id="contact"
@@ -40,7 +41,9 @@ const Footer = async ({ locale }) => {
         <div className="w-[156px]">
           <BTCBudapestLogo />
         </div>
-        <p className="text-neutral-300 font-exo text-[12px] font-medium leading-normal">{partnerUsSectionData.FooterBrandName}</p>
+        <p className="text-neutral-300 font-exo text-[12px] font-medium leading-normal">
+          {partnerUsSectionData.FooterBrandName}
+        </p>
       </div>
     </div>
   );

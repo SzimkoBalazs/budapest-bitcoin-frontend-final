@@ -1,16 +1,9 @@
 import React from "react";
 import TicketBarcodeSVG from "./TicketBarcodeSVG";
-import {cln} from "@/utilities/classnames";
+import { cln } from "@/utilities/classnames";
+import Link from "next/link";
 
-const grayBars = [
-  "All benefits of the Conference Pass.",
-  "Exclusive access to the VIP Whale Lounge with premium food and drinks.",
-  "Entry to the private Whale Night VIP event.",
-  "Priority access and premium seating at all stages.",
-  "Network with speakers, industry leaders, and VIP guests in the Whale area.",
-];
-
-const TicketCard = ({ ticketCardContent, borderColor }) => {
+const TicketCard = ({ ticketCardContent, ticketInfo, borderColor }) => {
   return (
     //   OUTSIDE CONTAINER
     <div
@@ -22,11 +15,12 @@ const TicketCard = ({ ticketCardContent, borderColor }) => {
       {/*INSIDE CONTAINER FOR BOTH TEXTS*/}
       <div className="flex px-[12px] lg:px-[24px] flex-col items-start gap-[12px] lg:gap-[20px] self-stretch">
         {/*CONTAINER FOR TITLE*/}
-          <div className="flex px-[10px] py-[16px] lg:py-[24px] justify-center items-center gap-[10px] self-stretch">
-            <h3 className="flex-[1_0_0] text-white text-center font-exo text-[28px] lg:text-[44px] font-extrabold leading-[100%] tracking-[2.2px]">
-              {ticketCardContent.PassTitle}
-            </h3>
-          </div>
+        <div className="flex px-[10px] py-[16px] lg:py-[24px] justify-center items-center gap-[10px] self-stretch">
+          <h3 className="flex-[1_0_0] text-white text-center font-exo text-[28px] lg:text-[44px] font-extrabold leading-[100%] tracking-[2.2px]">
+            {ticketCardContent.PassTitle}
+          </h3>
+          <p className="text-white">{ticketInfo.price / 100}</p>
+        </div>
         {/*container for title*/}
         {/*CONTAINER FOR BULLETPOINTS*/}
         <div className="flex flex-col items-start gap-[8px] self-stretch">
@@ -43,19 +37,29 @@ const TicketCard = ({ ticketCardContent, borderColor }) => {
                   : "w-[220px] max-w-[100%]"
               }`}
             >
-              <p className="text-white font-exo text-[14px] leading-[125%] lg:leading-[130%] flex-1" style={{fontWeight:600}}>
+              <p
+                className="text-white font-exo text-[14px] leading-[125%] lg:leading-[130%] flex-1"
+                style={{ fontWeight: 600 }}
+              >
                 {text}
               </p>
             </div>
           ))}
         </div>
-      {/*  container for bulletpoints */}
+        {/*  container for bulletpoints */}
+        <Link href="/checkout">
+          <button className="bg-blue-500 text-white px-4 py-2 mt-2 rounded">
+            Get Your Ticket
+          </button>
+        </Link>
       </div>
       {/*inside container for both texts*/}
       {/*CONTAINER FOR BARCODE*/}
-            <div className={cln("w-full py-4 border-t-4", `"border-t-${borderColor}"` )}>
-              <TicketBarcodeSVG />
-            </div>
+      <div
+        className={cln("w-full py-4 border-t-4", `"border-t-${borderColor}"`)}
+      >
+        <TicketBarcodeSVG />
+      </div>
     </div>
   );
 };
