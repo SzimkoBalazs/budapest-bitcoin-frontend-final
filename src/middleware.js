@@ -13,7 +13,7 @@ export default async function middleware(req) {
   console.log("Middleware fut path:", path);
 
   // 1️⃣ LOKALIZÁCIÓS MIDDLEWARE → Csak akkor fusson, ha NEM az `/info` route-on vagyunk
-  if (!path.startsWith("/info")) {
+  if (!path.startsWith("/info") && !path.startsWith("/webhooks")) {
     console.log("Lokalizációs middleware fut");
     return i18nRouter(req, i18nConfig);
   }
@@ -51,7 +51,9 @@ export default async function middleware(req) {
 
 export const config = {
   matcher: [
-    "/((?!info|api|static|.*\\..*|_next).*)", // Lokalizációs middleware: mindenhol, kivéve az /info és egyéb kizárt útvonalak
+    "/((?!info|webhooks|api|static|.*\\..*|_next).*)", // Lokalizációs middleware: mindenhol, kivéve az /info és egyéb kizárt útvonalak
     "/info/:path*", // Autentikációs middleware: csak az /info alatti útvonalakon
+    "/payment/:path*",
+    "/webhooks/:path*",
   ],
 };
