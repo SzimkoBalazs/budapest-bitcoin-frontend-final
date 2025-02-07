@@ -28,7 +28,7 @@ const page = async ({ params }) => {
   return (
     <div className="container max-w-[820px] mx-auto px-4 py-8 mt-[100px] rounded-md">
       <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-extrabold text-primary-500 text-center mb-8">
-        Általános Szerződési Feltételek és Adatkezelési Tájékoztató
+        {termsSectionData.TitleText}
       </h1>
 
       {/* ÁSZF megjelenítése */}
