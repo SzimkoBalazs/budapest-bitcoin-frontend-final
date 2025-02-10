@@ -33,6 +33,7 @@ export async function createOrder(data) {
     }
 
     const now = new Date();
+    console.log("now", now)
 
     //  4. Ellenőrizzük a jegyek elérhetőségét, dátumát és mennyiségét
     let totalAmountInCents = 0;

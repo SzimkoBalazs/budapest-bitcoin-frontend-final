@@ -1,7 +1,8 @@
 import { getTickets } from "@/app/actions/ticket";
 import CheckoutPage from "./checkoutPage";
 
-export default async function Checkout() {
+export default async function Checkout({params}) {
   const tickets = await getTickets();
-  return <CheckoutPage tickets={tickets} />;
+  const { locale } = await params;
+  return <CheckoutPage tickets={tickets} locale={locale}/>;
 }

@@ -61,9 +61,9 @@ const SecondaryCTAButton = ({
         type={type}
         className="flex h-[54px] flex-col items-start cursor-pointer transition-all duration-500"
       >
-        <div className="flex h-[50px] flex-col items-start gap-[10px] self-stretch">
+        <div className="flex h-[46px] flex-col items-start gap-[10px] self-stretch">
           <div
-            className={`flex h-[50px] min-w-[136px] px-[16px] py-[10px] justify-center items-center gap-[4px] 
+            className={`flex h-[46px] min-w-[136px] px-[16px] py-[10px] justify-center items-center gap-[4px] 
               rounded-[40px] border-2 bg-neutral-900 hover:bg-neutral-700 active:bg-secondary-600 
               active:bg-none active:shadow-none active:translate-y-[6px] shadow-[0px_6px_0px_0px_#000] transition-all duration-200 
               ${
@@ -88,9 +88,9 @@ const SecondaryCTAButton = ({
       className="flex h-[54px] flex-col items-start cursor-pointer"
       style={{ opacity: isChecked && isChecked ? 1 : 0.4 }}
     >
-      <div className="flex h-[50px] flex-col items-start gap-[10px] self-stretch">
+      <div className="flex h-[46px] flex-col items-start gap-[10px] self-stretch">
         <div
-          className={`flex h-[50px] min-w-[136px] px-[16px] py-[10px] justify-center items-center gap-[4px] 
+          className={`flex h-[46px] min-w-[136px] px-[16px] py-[10px] justify-center items-center gap-[4px] 
               rounded-[40px] border-2 bg-neutral-900 hover:bg-neutral-700 active:bg-secondary-600 
               active:bg-none active:shadow-none active:translate-y-[6px] shadow-[0px_6px_0px_0px_#000] transition-all duration-200 
               ${

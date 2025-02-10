@@ -2,15 +2,17 @@ import React from "react";
 import TicketCard from "./TicketCard";
 import { getTickets } from "@/app/actions/ticket";
 
-const TicketCardComponent = async ({ ticketCardContent }) => {
+const TicketCardComponent = async ({ ticketCardContent, locale }) => {
   const tickets = await getTickets();
 
   return (
-    <div className="scrollbar-container px-[16px] md:px-[40px] mt-10 flex mx-auto gl:mx-0 gl:justify-center items-center content-center gap-x-[32px] md:gap-x-[40px] pb-[24px] overflow-x-scroll flex-nowrap">
+    <div className="scrollbar-container px-[16px] md:px-[40px] mt-10 flex mx-auto gl:mx-0 gl:justify-center items-center content-center gap-x-[24px] lg:gap-x-[40px] pb-[24px] overflow-x-scroll flex-nowrap">
       <TicketCard
         ticketCardContent={ticketCardContent[0]}
         ticketInfo={tickets[0]}
         borderColor="white"
+        beforePrice={2000}
+        locale={locale}
       />
 
       <div className="flex flex-col gap-y-[56px]">
@@ -18,6 +20,8 @@ const TicketCardComponent = async ({ ticketCardContent }) => {
           ticketCardContent={ticketCardContent[1]}
           ticketInfo={tickets[1]}
           borderColor="primary-500"
+          beforePrice={80000}
+          locale={locale}
         />
         <span
           style={{
@@ -31,6 +35,8 @@ const TicketCardComponent = async ({ ticketCardContent }) => {
         ticketCardContent={ticketCardContent[2]}
         ticketInfo={tickets[2]}
         borderColor="white"
+        beforePrice={360000}
+        locale={locale}
       />
     </div>
   );

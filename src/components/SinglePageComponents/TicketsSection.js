@@ -57,7 +57,7 @@ const TicketsSection = async ({ locale }) => {
 
       {/* Space for Ticket Cards */}
       {/* Ticket Cards Section */}
-      <TicketCardComponent ticketCardContent={ticketCardContent} />
+      <TicketCardComponent ticketCardContent={ticketCardContent} locale={locale} />
     </div>
   );
 };

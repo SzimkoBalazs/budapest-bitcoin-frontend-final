@@ -94,3 +94,23 @@ body {
     animation-timing-function: linear; /* Smooth return */
   }
 }
+
+@keyframes bounceUp {
+  0%{transform:translateY(0px);}
+  50%{transform:translateY(-8px);}
+  100%{transform:translateY(0px);}
+}
+
+@keyframes bounceDown {
+  0%{transform:translateY(0px);}
+  50%{transform:translateY(8px);}
+  100%{transform:translateY(0px);}
+}
+
+.animate-bounceUp{
+  animation:bounceUp 0.2s ease-in-out;
+}
+
+.animate-bounceDown{
+  animation:bounceDown 0.2s ease-in-out;
+}

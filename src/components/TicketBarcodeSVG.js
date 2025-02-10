@@ -1,12 +1,12 @@
 import React from "react";
 
-const TicketBarcodeSVG = () => {
+const TicketBarcodeSVG = ({height}) => {
   return (
     <div className="flex justify-between">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="6"
-        height="56"
+        height={height ? height : "52"}
         viewBox="0 0 6 56"
         fill="none"
       >
@@ -19,7 +19,7 @@ const TicketBarcodeSVG = () => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="7"
-        height="56"
+        height={height ? height : "52"}
         viewBox="0 0 7 56"
         fill="none"
       >
@@ -32,7 +32,7 @@ const TicketBarcodeSVG = () => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="12"
-        height="56"
+        height={height ? height : "52"}
         viewBox="0 0 12 56"
         fill="none"
       >
@@ -45,7 +45,7 @@ const TicketBarcodeSVG = () => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="11"
-        height="56"
+        height={height ? height : "52"}
         viewBox="0 0 11 56"
         fill="none"
       >
@@ -58,7 +58,7 @@ const TicketBarcodeSVG = () => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="7"
-        height="56"
+        height={height ? height : "52"}
         viewBox="0 0 7 56"
         fill="none"
       >
@@ -71,7 +71,7 @@ const TicketBarcodeSVG = () => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="7"
-        height="56"
+        height={height ? height : "52"}
         viewBox="0 0 7 56"
         fill="none"
       >
@@ -84,7 +84,7 @@ const TicketBarcodeSVG = () => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="6"
-        height="56"
+        height={height ? height : "52"}
         viewBox="0 0 6 56"
         fill="none"
       >
@@ -97,7 +97,7 @@ const TicketBarcodeSVG = () => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="6"
-        height="56"
+        height={height ? height : "52"}
         viewBox="0 0 6 56"
         fill="none"
       >
@@ -110,7 +110,7 @@ const TicketBarcodeSVG = () => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="7"
-        height="56"
+        height={height ? height : "52"}
         viewBox="0 0 7 56"
         fill="none"
       >
@@ -123,7 +123,7 @@ const TicketBarcodeSVG = () => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="12"
-        height="56"
+       height={height ? height : "52"}
         viewBox="0 0 12 56"
         fill="none"
       >
@@ -136,7 +136,7 @@ const TicketBarcodeSVG = () => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="12"
-        height="56"
+        height={height ? height : "52"}
         viewBox="0 0 12 56"
         fill="none"
       >
@@ -149,7 +149,7 @@ const TicketBarcodeSVG = () => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="12"
-        height="56"
+        height={height ? height : "52"}
         viewBox="0 0 12 56"
         fill="none"
       >
@@ -162,7 +162,7 @@ const TicketBarcodeSVG = () => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="12"
-        height="56"
+        height={height ? height : "52"}
         viewBox="0 0 12 56"
         fill="none"
       >
@@ -175,7 +175,7 @@ const TicketBarcodeSVG = () => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="25"
-        height="56"
+        height={height ? height : "52"}
         viewBox="0 0 25 56"
         fill="none"
       >
@@ -188,7 +188,7 @@ const TicketBarcodeSVG = () => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="2"
-        height="56"
+        height={height ? height : "52"}
         viewBox="0 0 2 56"
         fill="none"
       >
@@ -201,7 +201,7 @@ const TicketBarcodeSVG = () => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="3"
-        height="56"
+        height={height ? height : "52"}
         viewBox="0 0 3 56"
         fill="none"
       >
@@ -214,7 +214,7 @@ const TicketBarcodeSVG = () => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="3"
-        height="56"
+        height={height ? height : "52"}
         viewBox="0 0 3 56"
         fill="none"
       >
@@ -227,7 +227,7 @@ const TicketBarcodeSVG = () => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="3"
-        height="56"
+        height={height ? height : "52"}
         viewBox="0 0 3 56"
         fill="none"
       >
@@ -240,7 +240,7 @@ const TicketBarcodeSVG = () => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="2"
-        height="56"
+        height={height ? height : "52"}
         viewBox="0 0 2 56"
         fill="none"
       >
@@ -253,7 +253,7 @@ const TicketBarcodeSVG = () => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="7"
-        height="56"
+        height={height ? height : "52"}
         viewBox="0 0 7 56"
         fill="none"
       >
@@ -266,7 +266,7 @@ const TicketBarcodeSVG = () => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="6"
-        height="56"
+        height={height ? height : "52"}
         viewBox="0 0 6 56"
         fill="none"
       >
@@ -279,7 +279,7 @@ const TicketBarcodeSVG = () => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="2"
-        height="56"
+        height={height ? height : "52"}
         viewBox="0 0 2 56"
         fill="none"
       >

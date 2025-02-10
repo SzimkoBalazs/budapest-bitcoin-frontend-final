@@ -4,15 +4,15 @@ import prisma from "../../../utils/db";
 // Összes elérhető jegy lekérése
 export async function getTickets() {
   const tickets = await prisma.ticket.findMany({
-    where: {
-      saleStart: { lte: new Date() }, // Csak azokat a jegyeket listázzuk, amik már elérhetőek
-      saleEnd: { gte: new Date() }, // És még nem járt le az értékesítésük
-    },
+    // where: {
+    //   saleStart: { lte: new Date() }, // Csak azokat a jegyeket listázzuk, amik már elérhetőek
+    //   saleEnd: { gte: new Date() }, // És még nem járt le az értékesítésük
+    // },
     orderBy: {
       price: "asc", // Legolcsóbb jegyek előre
     },
   });
-
+  console.log("get Tickets", tickets);
   return tickets;
 }
 
