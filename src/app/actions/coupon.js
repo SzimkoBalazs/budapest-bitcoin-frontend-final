@@ -44,3 +44,25 @@ export async function validateCoupon(code) {
     return { success: false, error: error.message };
   }
 }
+
+export async function getCouponById(id) {
+  try {
+    const coupon = await prisma.coupon.findUnique({
+      where: { id: parseInt(id, 10) },
+    });
+    return coupon;
+  } catch (error) {
+    console.error("Hiba a kupon lekérdezése közben:", error);
+    return null;
+  }
+}
+
+export async function getAllCoupons() {
+  try {
+    const coupons = await prisma.coupon.findMany();
+    return coupons;
+  } catch (error) {
+    console.error("Hiba a kuponok lekérdezése közben:", error);
+    return [];
+  }
+}

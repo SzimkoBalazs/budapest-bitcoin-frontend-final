@@ -13,10 +13,22 @@ export default async function middleware(req) {
   console.log("Middleware fut path:", path);
 
   // 1️⃣ LOKALIZÁCIÓS MIDDLEWARE → Csak akkor fusson, ha NEM az `/info` route-on vagyunk
-  if (!path.startsWith("/info") && !path.startsWith("/webhooks")) {
+  if (
+    !path.startsWith("/info") &&
+    !path.startsWith("/webhooks") &&
+    !path.startsWith("/authorized-ticket-verification")
+  ) {
     console.log("Lokalizációs middleware fut");
     return i18nRouter(req, i18nConfig);
   }
+
+  // if (path.startsWith("/authorized-ticket-verification")) {
+  //   const authCookie = req.cookies.get("auth")?.value;
+  //   if (!authCookie) {
+  //     console.log("Nincs auth cookie, átirányítás a főoldalra");
+  //     return NextResponse.redirect(new URL("/", req.nextUrl));
+  //   }
+  // }
 
   // 2️⃣ AUTENTIKÁCIÓS MIDDLEWARE → Csak akkor fusson, ha az `/info` route-on vagyunk
   if (path.startsWith("/info")) {

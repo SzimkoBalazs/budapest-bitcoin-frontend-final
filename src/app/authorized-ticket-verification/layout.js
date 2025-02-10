@@ -1,6 +1,5 @@
 import { Fredoka, Exo } from "next/font/google";
 import "./globals.css";
-import AdminNavigation from "../components/AdminNavigation";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -15,8 +14,8 @@ const exo = Exo({
 });
 
 export const metadata = {
-  title: "Budapest Bitcoin Admin",
-  description: "Budapest Bitcoin Admin panel",
+  title: "Budapest Bitcoin Ticket Verification",
+  description: "Budapest Bitcoin Ticket Verification",
   icons: {
     icon: "/bpconflogo.svg",
     shortcut: "/bpconflogo.svg",
@@ -24,14 +23,13 @@ export const metadata = {
   },
 };
 
-export default async function AdminLayout({ children }) {
+export default async function TicketVerificationLayout({ children }) {
   return (
     <html lang="en">
       <body
         className={`${fredoka.variable} ${exo.variable} antialiased bg-neutral-300`}
       >
-        <AdminNavigation />
-        <main className="pt-16 px-6">{children}</main>
+        <main className="pt-8 px-6">{children}</main>
       </body>
     </html>
   );

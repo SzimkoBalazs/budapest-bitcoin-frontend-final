@@ -3,6 +3,7 @@ import Stripe from "stripe";
 import prisma from "../../../../../utils/db";
 import { getOrder } from "@/app/actions/orders";
 import { PaymentStatus, OrderStatus } from "@prisma/client";
+import { generateOrderQrCodes } from "../../../../../utils/generateOrderQrCodes";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -52,6 +53,9 @@ export async function POST(req) {
         status: OrderStatus.PAID,
       },
     });
+
+    const qrCodes = await generateOrderQrCodes(order);
+    console.log("QRCODES: ", qrCodes);
   }
   return NextResponse.json({ received: true });
 }

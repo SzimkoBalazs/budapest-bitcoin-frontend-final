@@ -54,13 +54,13 @@ export default async function RootLayout({ children, params }) {
     <html lang={actualLocale}>
       <head>
         {/*COOKIEBOT*/}
-        <Script
+        {/* <Script
           id="Cookiebot"
           src="https://consent.cookiebot.com/uc.js"
           data-cbid={process.env.COKKIEBOT_DOMAIN_GROUPID}
           data-blockingmode="auto"
           type="text/javascript"
-        ></Script>
+        ></Script> */}
 
         {/* Google Tag Manager */}
         <Script id="google-tag-manager" strategy="afterInteractive">

@@ -14,16 +14,16 @@ export default {
       pop: "1246px",
       ticket: "1275px",
       speaker: "655px",
-      md:'768px',
-      sm:'640px',
-      xs:'500px',
-      xxs:'390px',
+      md: "768px",
+      sm: "640px",
+      xs: "500px",
+      xxs: "390px",
       gl: "900px",
-      footerTitle:'800px',
-      navbarBreak:'1200px',
-      whatToExpectBreak:'1000px',
-      whaleTextXs:'410px',
-      whaleTextXsHu:'373px',
+      footerTitle: "800px",
+      navbarBreak: "1200px",
+      whatToExpectBreak: "1000px",
+      whaleTextXs: "410px",
+      whaleTextXsHu: "373px",
     },
     extend: {
       fontFamily: {
@@ -62,15 +62,15 @@ export default {
       animation: {
         marquee: "marquee 15s linear infinite",
       },
-      height:{
-        'mobile-menu':'calc( 100dvh - 58px)',
-        'hero-section':'90vh',
-        'hero-section-small':'110vh',
+      height: {
+        "mobile-menu": "calc( 100dvh - 58px)",
+        "hero-section": "90vh",
+        "hero-section-small": "110vh",
       },
-      minHeight:{
-        'mobile-menu':'500px',
-        'mobile-menu-auto':'auto',
-      }
+      minHeight: {
+        "mobile-menu": "500px",
+        "mobile-menu-auto": "auto",
+      },
     },
   },
   plugins: [
@@ -80,30 +80,32 @@ export default {
           "-webkit-text-stroke-width": "2px",
           "-webkit-text-stroke-color": "#1F1F1F",
         },
-        ".hero-bg":{
-          "backgroundSize":'110%',
-          "backgroundPosition":'50% 0%',
+        ".hero-bg": {
+          backgroundSize: "110%",
+          backgroundPosition: "50% 0%",
         },
-        ".hero-bg-middle":{
-          "backgroundSize":'140%',
-          "backgroundPosition":'50% 0%',
+        ".hero-bg-middle": {
+          backgroundSize: "140%",
+          backgroundPosition: "50% 0%",
         },
-        ".hero-bg-mobile":{
-          "backgroundSize":"220%",
-          "backgroundPosition":"50% 0%",
+        ".hero-bg-mobile": {
+          backgroundSize: "220%",
+          backgroundPosition: "50% 0%",
         },
-        ".big-title":{
-          "textShadow": "0px 0px 3px #000,  -1px 1px 0px #FFAE0B, -2px 2px 0px #FFAE0B, -3px 3px 0px #FFAE0B, -4px 4px 0px #FFAE0B, -5px 5px 0px #FFAE0B, -6px 6px 0px #FFAE0B, -7px 7px 0px #FFAE0B, -9px 9px 8px rgba(247, 147, 26, 0.20)",
+        ".big-title": {
+          textShadow:
+            "0px 0px 3px #000,  -1px 1px 0px #FFAE0B, -2px 2px 0px #FFAE0B, -3px 3px 0px #FFAE0B, -4px 4px 0px #FFAE0B, -5px 5px 0px #FFAE0B, -6px 6px 0px #FFAE0B, -7px 7px 0px #FFAE0B, -9px 9px 8px rgba(247, 147, 26, 0.20)",
         },
-        ".big-title-mobile":{
-          "textShadow": "0px 0px 3px #000,  -1px 1px 0px #FFAE0B, -2px 2px 0px #FFAE0B, -3px 3px 0px #FFAE0B, -4px 4px 0px #FFAE0B, -5px 5px 0px #FFAE0B,  -7px 7px 6px rgba(247, 147, 26, 0.20)",
+        ".big-title-mobile": {
+          textShadow:
+            "0px 0px 3px #000,  -1px 1px 0px #FFAE0B, -2px 2px 0px #FFAE0B, -3px 3px 0px #FFAE0B, -4px 4px 0px #FFAE0B, -5px 5px 0px #FFAE0B,  -7px 7px 6px rgba(247, 147, 26, 0.20)",
         },
-        ".mobile-menu-container":{
-          "height":"100dvh",
+        ".mobile-menu-container": {
+          height: "100dvh",
         },
-        ".no-scroll":{
-          "overflow":"hidden"
-        }
+        ".no-scroll": {
+          overflow: "hidden",
+        },
       });
     },
   ],
