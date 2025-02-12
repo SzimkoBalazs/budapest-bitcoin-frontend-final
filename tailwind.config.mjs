@@ -38,6 +38,7 @@ export default {
           700: "#F57F18",
         },
         neutral: {
+          950:"#0f0f0f",
           900: "#1F1F1F",
           700: "#4D4D4D",
           300:"#B2B2B2",

@@ -1,29 +1,28 @@
-import React from "react";
-import TicketBarcodeSVG from "./TicketBarcodeSVG";
-import { cln } from "@/utilities/classnames";
-import Link from "next/link";
-import GetYourPassCTAButton from "@/components/GetYourPassCTAButton";
+import React from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 import TicketSvg from '../../public/ticket.svg';
-import Image from 'next/image'
+import TicketBarcodeSVG from './TicketBarcodeSVG';
+import { cln } from '@/utilities/classnames';
+import GetYourPassCTAButton from '@/components/GetYourPassCTAButton';
 
 const TicketCard = ({ ticketCardContent, ticketInfo, borderColor, beforePrice, locale }) => {
+  const priceWithSpace = (number) => {
+    const bigPrice = number / 100;
+    const bigPriceString = bigPrice.toString();
 
-const priceWithSpace = (number) => {
-  const bigPrice = number / 100;
-  const bigPriceString = bigPrice.toString();
-
-  if (bigPriceString.length < 3) {
-    return bigPriceString;
-  }
-  return bigPriceString.slice(0, -3) + ' ' + bigPriceString.slice(-3);
-};
+    if (bigPriceString.length < 3) {
+      return bigPriceString;
+    }
+    return bigPriceString.slice(0, -3) + ' ' + bigPriceString.slice(-3);
+  };
 
   return (
     //   OUTSIDE CONTAINER
     <div
       className="flex w-[260px] lg:w-[344px] h-[512px] lg:h-[584px] pt-[14px] lg:pt-[26px] flex-col items-center justify-between rounded-[20px] border-[4px]  bg-black shadow-[1px_1px_0px_0px_#FFF,_2px_2px_0px_0px_#FFF,_3px_3px_0px_0px_#FFF,_4px_4px_0px_0px_#FFF,_5px_5px_0px_0px_#FFF,_6px_6px_0px_0px_#FFF,_7px_7px_0px_0px_#FFF,_8px_8px_0px_0px_#FFF]"
       style={{
-        borderColor: borderColor === "primary-500" ? "#F7931A" : "#FFF",
+        borderColor: borderColor === 'primary-500' ? '#F7931A' : '#FFF',
       }}
     >
       {/*INSIDE CONTAINER FOR BOTH TEXTS*/}
@@ -36,15 +35,38 @@ const priceWithSpace = (number) => {
           <div className="flex flex-col items-center gap-y-1">
             {/*BEFORE PRICE*/}
             <div className="relative flex items-end justify-center">
-              <h5 className="text-neutral-700 text-[22px] lg:text-[28px] left-[-40%]" style={{fontWeight:800, lineHeight:'100%'}}>{priceWithSpace(beforePrice)}</h5>
-              <h3 className="text-neutral-700 absolute right-[-30px] lg:right-[-42px] text-[12px] lg:text-[18px] mb-[1px] lg:mb-[2px] tracking-[1px]" style={{ fontWeight:400, lineHeight:'100%'}}>{locale === 'hu' ? 'HUF' : 'EUR'}</h3>
-              <span className="flex absolute w-full h-[1px] lg:h-[2px] bg-primary-600 top-[11px]" style={{transform:`rotate(${beforePrice < 9999 ? '-22deg' : '-7deg' })`}}/>
+              <h5
+                className="text-neutral-700 text-[22px] lg:text-[28px] left-[-40%]"
+                style={{ fontWeight: 800, lineHeight: '100%' }}
+              >
+                {priceWithSpace(beforePrice)}
+              </h5>
+              <h3
+                className="text-neutral-700 absolute right-[-30px] lg:right-[-42px] text-[12px] lg:text-[18px] mb-[1px] lg:mb-[2px] tracking-[1px]"
+                style={{ fontWeight: 400, lineHeight: '100%' }}
+              >
+                {locale === 'hu' ? 'HUF' : 'EUR'}
+              </h3>
+              <span
+                className="flex absolute w-full h-[1px] lg:h-[2px] bg-primary-600 top-[11px]"
+                style={{ transform: `rotate(${beforePrice < 9999 ? '-22deg' : '-7deg'})` }}
+              />
             </div>
 
             {/*ACTUAL PRICE*/}
             <div className="flex relative items-end justify-center gap-x-1">
-              <h3 className="text-white text-[28px] lg:text-[38px] tracking-[2.4px]" style={{ fontWeight:800, lineHeight:'100%'}}>{priceWithSpace(ticketInfo.price)}</h3>
-              <h3 className="text-white absolute right-[-36px] lg:right-[-50px] text-[16px] lg:text-[22px] tracking-[1px] mb-[2px] lg:mb-[4px]" style={{ fontWeight:400, lineHeight:'100%'}}>{locale === 'hu' ? 'HUF' : 'EUR'}</h3>
+              <h3
+                className="text-white text-[28px] lg:text-[38px] tracking-[2.4px]"
+                style={{ fontWeight: 800, lineHeight: '100%' }}
+              >
+                {priceWithSpace(ticketInfo.price)}
+              </h3>
+              <h3
+                className="text-white absolute right-[-36px] lg:right-[-50px] text-[16px] lg:text-[22px] tracking-[1px] mb-[2px] lg:mb-[4px]"
+                style={{ fontWeight: 400, lineHeight: '100%' }}
+              >
+                {locale === 'hu' ? 'HUF' : 'EUR'}
+              </h3>
             </div>
           </div>
         </div>
@@ -56,12 +78,12 @@ const priceWithSpace = (number) => {
               key={index}
               className={`flex items-center gap-[10px] px-[6px] lg:px-[8px] py-[2px] lg:py-[4px] bg-[#4D4D4D] ${
                 index === 0
-                  ? "w-[260px] max-w-[100%]"
+                  ? 'w-[260px] max-w-[100%]'
                   : text.length > 60
-                  ? "w-[260px] max-w-[100%]"
+                  ? 'w-[260px] max-w-[100%]'
                   : text.length > 40
-                  ? "w-[240px] max-w-[100%]"
-                  : "w-[220px] max-w-[100%]"
+                  ? 'w-[240px] max-w-[100%]'
+                  : 'w-[220px] max-w-[100%]'
               }`}
             >
               <p
@@ -77,15 +99,17 @@ const priceWithSpace = (number) => {
       </div>
       <div className="flex flex-col w-full items-center gap-y-3 lg:gap-y-4">
         {/*TODO: Forditas strapibol?*/}
-        <GetYourPassCTAButton buttonText={'Grab yours'} anchorOrButton={'anchor'} href={"/checkout"} image={TicketSvg}/>
-      {/*CONTAINER FOR BARCODE*/}
-      <div
-        className={cln("w-full py-1 sm:py-2 px-2 border-t-4", `border-t-${borderColor}`)}
-      >
-        <TicketBarcodeSVG height={'50'}/>
+        <GetYourPassCTAButton
+          buttonText={'Grab yours'}
+          anchorOrButton={'anchor'}
+          href={'/checkout'}
+          image={TicketSvg}
+        />
+        {/*CONTAINER FOR BARCODE*/}
+        <div className={cln('w-full py-1 sm:py-2 px-2 border-t-4', `border-t-${borderColor}`)}>
+          <TicketBarcodeSVG height={'50'} />
+        </div>
       </div>
-      </div>
-
     </div>
   );
 };

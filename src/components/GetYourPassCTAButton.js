@@ -1,20 +1,20 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import Image from 'next/image'
-import BitcoinIcon from "../../public/bitcoin-icon.svg";
+'use client';
+import React, { useState, useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import Image from 'next/image';
+import BitcoinIcon from '../../public/bitcoin-icon.svg';
 
 const GetYourPassCTAButton = ({
   locale,
   buttonText,
   setIsClicked,
   href,
-  anchorOrButton = "anchor",
+  anchorOrButton = 'anchor',
   type,
   handleButtonClick,
   isSubmitting,
   buttonStyle,
-    image,
+  image,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isTouched, setIsTouched] = useState(false);
@@ -24,11 +24,11 @@ const GetYourPassCTAButton = ({
 
   const pathname = usePathname();
   const router = useRouter();
-  const path = "/tickets";
+  const path = '/tickets';
   const newpath = path.slice(1);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       setIsMobile(window.innerWidth < 560);
     }
   }, []);
@@ -37,16 +37,16 @@ const GetYourPassCTAButton = ({
     e.preventDefault();
 
     // Ellenőrizzük, hogy a homepage-en vagyunk-e
-    if (pathname === "/" || pathname === "/en" || pathname === "/hu") {
+    if (pathname === '/' || pathname === '/en' || pathname === '/hu') {
       const section = document.getElementById(path.slice(1));
       if (section) {
-        section.scrollIntoView({ behavior: "smooth" });
+        section.scrollIntoView({ behavior: 'smooth' });
       }
     } else {
       // Navigálás a home oldalra, majd hash érték hozzáadása a görgetéshez
-      router.push(`/${locale || "en"}#${newpath}`);
+      router.push(`/${locale || 'en'}#${newpath}`);
     }
-    document.body.classList.remove("no-scroll");
+    document.body.classList.remove('no-scroll');
     setIsClicked && setIsClicked(false);
   };
 
@@ -54,15 +54,15 @@ const GetYourPassCTAButton = ({
     <>
       <p
         style={{
-          textTransform: "uppercase",
-          textAlign: "center",
+          textTransform: 'uppercase',
+          textAlign: 'center',
           fontSize: 14,
           fontWeight: 800,
-            lineHeight:'100%',
-          padding: "6px 6px",
+          lineHeight: '100%',
+          padding: '6px 6px',
           borderRadius: 40,
-          color: isActive ? "white" : "rgba(0,0,0,0.80)",
-          backgroundColor: isActive ? "rgba(0,0,0,0)" : "white",
+          color: isActive ? 'white' : 'rgba(0,0,0,0.80)',
+          backgroundColor: isActive ? 'rgba(0,0,0,0)' : 'white',
         }}
         className="transition-all duration-0 sm:duration-700 text-nowrap font-exo leading-normal z-10"
       >
@@ -71,28 +71,34 @@ const GetYourPassCTAButton = ({
       <div
         className="transition-all duration-0 sm:duration-500"
         style={{
-          display: "flex",
-          height: "100%",
-          width: isActive ? "100%" : "50%",
+          display: 'flex',
+          height: '100%',
+          width: isActive ? '100%' : '50%',
           //transition: "all 0.4s ease-in-out",
-          position: "absolute",
+          position: 'absolute',
           right: 0,
-          backgroundColor: "#F7931A",
+          backgroundColor: '#F7931A',
           borderTopLeftRadius: isActive ? 20 : 0,
           borderBottomLeftRadius: isActive ? 20 : 0,
           borderTopRightRadius: 20,
           borderBottomRightRadius: 20,
         }}
       />
-        <div className="z-0 items-center ml-1">
-          <Image alt={'bitcoin'} src={image ? image : BitcoinIcon} width={24} height={24} style={{opacity: isActive ? 1 : 0.6, transition:'opacity 0.3s ease-in-out'}}/>
-        </div>
+      <div className="z-0 items-center ml-1">
+        <Image
+          alt={'bitcoin'}
+          src={image ? image : BitcoinIcon}
+          width={24}
+          height={24}
+          style={{ opacity: isActive ? 1 : 0.6, transition: 'opacity 0.3s ease-in-out' }}
+        />
+      </div>
     </>
   );
 
-  return anchorOrButton === "anchor" ? (
+  return anchorOrButton === 'anchor' ? (
     <a
-      href={href ? href : "#tickets"}
+      href={href ? href : '#tickets'}
       onClick={!href ? handleClick : null}
       onMouseEnter={() => !isMobile && setIsHovered(true)}
       onMouseLeave={() => !isMobile && setIsHovered(false)}
