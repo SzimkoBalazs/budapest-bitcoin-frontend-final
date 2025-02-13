@@ -30,13 +30,12 @@ export async function GET(request) {
       status: 400,
     });
   }
-  console.log("VoucherId from token:", voucherId, typeof voucherId);
 
   // Lekérdezzük a voucher rekordot az adatbázisból
   const voucher = await prisma.voucher.findUnique({
     where: { id: BigInt(voucherId) },
   });
-  console.log("Voucher from DB:", voucher);
+
   if (!voucher) {
     return new Response(JSON.stringify({ error: "Voucher nem található" }), {
       status: 404,
