@@ -16,19 +16,23 @@ export default async function middleware(req) {
   if (
     !path.startsWith("/info") &&
     !path.startsWith("/webhooks") &&
-    !path.startsWith("/authorized-ticket-verification")
+    !path.startsWith("/authorized-ticket-verification") &&
+    !path.startsWith("/api/validate-ticket")
   ) {
     console.log("Lokalizációs middleware fut");
     return i18nRouter(req, i18nConfig);
   }
 
-  // if (path.startsWith("/authorized-ticket-verification")) {
-  //   const authCookie = req.cookies.get("auth")?.value;
-  //   if (!authCookie) {
-  //     console.log("Nincs auth cookie, átirányítás a főoldalra");
-  //     return NextResponse.redirect(new URL("/", req.nextUrl));
-  //   }
-  // }
+  if (
+    path.startsWith("/authorized-ticket-verification") ||
+    path.startsWith("/api/validate-ticket")
+  ) {
+    const authCookie = req.cookies.get("auth")?.value;
+    if (!authCookie) {
+      console.log("Nincs auth cookie, átirányítás a főoldalra");
+      return NextResponse.redirect(new URL("/", req.nextUrl));
+    }
+  }
 
   // 2️⃣ AUTENTIKÁCIÓS MIDDLEWARE → Csak akkor fusson, ha az `/info` route-on vagyunk
   if (path.startsWith("/info")) {
@@ -67,5 +71,6 @@ export const config = {
     "/info/:path*", // Autentikációs middleware: csak az /info alatti útvonalakon
     "/payment/:path*",
     "/webhooks/:path*",
+    "/api/validate-ticket/:path*",
   ],
 };

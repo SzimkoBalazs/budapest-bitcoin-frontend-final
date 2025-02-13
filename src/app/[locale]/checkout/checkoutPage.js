@@ -19,6 +19,11 @@ export default function CheckoutPage({ tickets }) {
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [error, setError] = useState(null);
 
+  const totalQuantity = selectedTickets.reduce(
+    (sum, ticket) => sum + ticket.quantity,
+    0
+  );
+
   const handlePaymentRedirect = async (order) => {
     if (order.paymentProvider === PaymentProvider.BTCPAY) {
       router.push(`/payment/btcpay/${order.id}`);
@@ -59,7 +64,7 @@ export default function CheckoutPage({ tickets }) {
     setError(null);
 
     try {
-      const couponData = await validateCoupon(coupon);
+      const couponData = await validateCoupon(coupon, selectedTickets);
       if (!couponData || couponData.error) {
         throw new Error(couponData?.error || "Invalid coupon");
       }
@@ -170,7 +175,12 @@ export default function CheckoutPage({ tickets }) {
           />
           <button
             onClick={handleApplyCoupon}
-            className="bg-green-500 text-white px-4 py-2 rounded"
+            className={`px-4 py-2 rounded ${
+              totalQuantity > 0
+                ? "bg-green-500 text-white"
+                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+            }`}
+            disabled={totalQuantity === 0}
           >
             Apply
           </button>

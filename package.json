@@ -23,6 +23,7 @@
     "next": "15.1.4",
     "next-i18n-router": "^5.5.1",
     "next-intl": "^3.26.3",
+    "pdf-lib": "^1.17.1",
     "primeicons": "^7.0.0",
     "primereact": "^10.9.2",
     "qrcode": "^1.5.4",

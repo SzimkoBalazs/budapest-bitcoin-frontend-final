@@ -17,8 +17,10 @@ export default function Dashboard() {
   return (
     <div className="p-6 pt-20">
       <AdminNavigation onLogout={handleLogout} />
-      <h1 className="text-3xl font-bold mb-4 text-white">Admin Dashboard</h1>
-      <p className="text-gray-400">Manage everything from here.</p>
+      <h1 className="text-3xl font-bold mb-4 text-gray-700">Admin Dashboard</h1>
+      <p className="text-gray-400">
+        Manage everything from here. Under construction
+      </p>
     </div>
   );
 }

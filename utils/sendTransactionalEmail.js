@@ -1,51 +1,40 @@
 "use server";
 
-export async function sendTransactionalEmail(order, qrCodes) {
+export async function sendTransactionalEmail(order, downloadUrl) {
   const BREVO_API_KEY = process.env.BREVO_API_KEY;
-  const BREVO_TRANSACTIONAL_TEMPLATE_ID = "your_template_id_here";
+  const BREVO_TRANSACTIONAL_TEMPLATE_ID =
+    process.env.BREVO_TRANSACTIONAL_TEMPLATE_ID;
 
-  if (!BREVO_API_KEY) {
-    throw new Error("Brevo API key is missing.");
+  if (!BREVO_API_KEY || !BREVO_TRANSACTIONAL_TEMPLATE_ID) {
+    throw new Error("Brevo API key vagy Template ID hiányzik.");
   }
 
-  const ticketDetails = order.items
-    .map(
-      (item) =>
-        `- ${item.quantity}x Ticket (ID: ${item.ticketId}), Price: ${
-          item.priceAtPurchase / 100
-        } EUR`
-    )
-    .join("\n");
-
-  const qrCodeHtml = qrCodes
-    .map((qr) => `<img src="${qr}" alt="Ticket QR Code" width="150"/>`)
-    .join("<br>");
-
   const emailPayload = {
-    sender: { email: "info@bitcoinconf.com", name: "Bitcoin Conference" },
     to: [{ email: order.email }],
     templateId: parseInt(BREVO_TRANSACTIONAL_TEMPLATE_ID, 10),
     params: {
       email: order.email,
-      ticket_details: ticketDetails,
-      qr_codes: qrCodeHtml,
-      total_amount: (order.finalAmountInCents / 100).toFixed(2) + " EUR",
+      download_url: downloadUrl,
+      // Egyéb sablon paraméterek, például fizetési összeg, jegy adatok stb.
     },
   };
 
-  const response = await fetch(`${process.env.BREVO_API_URL}/smtp/email`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "api-key": BREVO_API_KEY,
-    },
-    body: JSON.stringify(emailPayload),
-  });
-
-  if (!response.ok) {
-    console.error("❌ Email sending failed:", await response.json());
-    throw new Error("Failed to send email.");
+  try {
+    const response = await fetch(`${process.env.BREVO_API_URL}/smtp/email`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "api-key": BREVO_API_KEY,
+      },
+      body: JSON.stringify(emailPayload),
+    });
+    if (!response.ok) {
+      const errorResponse = await response.json();
+      console.error("❌ Email küldés sikertelen:", errorResponse);
+      throw new Error("Nem sikerült elküldeni az e-mailt.");
+    }
+    console.log("✅ Email sikeresen elküldve!");
+  } catch (error) {
+    console.error("Hiba történt az e-mail küldés során:", error);
   }
-
-  console.log("✅ Email sent successfully!");
 }

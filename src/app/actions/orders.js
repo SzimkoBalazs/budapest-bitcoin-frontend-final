@@ -148,13 +148,27 @@ export async function createOrder(data) {
         });
       }
 
+      for (const orderItem of newOrder.items) {
+        const instancesData = Array.from(
+          { length: orderItem.quantity },
+          () => ({
+            orderItemId: orderItem.id,
+            validated: false,
+          })
+        );
+        // Használhatod a createMany függvényt:
+        await prisma.ticketInstance.createMany({
+          data: instancesData,
+        });
+      }
+
       console.log("✅ Order created successfully:", newOrder);
       return newOrder;
     });
 
     return order;
   } catch (error) {
-    console.error("❌ Error creating order:", error);
+    console.error("Hiba az order létrehozásakor:", error.stack);
     throw new Error(error.message || "Internal server error.");
   }
 }
@@ -174,4 +188,14 @@ export async function getOrder(orderId) {
   if (!order) throw new Error("Order not found");
 
   return order;
+}
+
+export async function getOrdersForAdmin() {
+  try {
+    const orders = await prisma.order.findMany();
+    return orders;
+  } catch (error) {
+    console.error("Hiba az orderek lekérdezése közben:", error);
+    return [];
+  }
 }
