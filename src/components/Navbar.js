@@ -1,19 +1,19 @@
-import React from "react";
-import LanguageSwitch from "./LanguageSwitch";
-import BTCBudapestLogo from "./BTCBudapestLogo";
-import NavbarWebComponent from "./NavbarWebComponent";
-import GetYourPassCTAButton from "./GetYourPassCTAButton";
-import Link from "next/link";
-import BudapestMainLogo from "./BudapestMainLogo";
-import NavHamburgerIcon from "./NavHamburgerIcon";
+import React from 'react';
+import Link from 'next/link';
+import LanguageSwitch from './LanguageSwitch';
+import BTCBudapestLogo from './BTCBudapestLogo';
+import NavbarWebComponent from './NavbarWebComponent';
+import GetYourPassCTAButton from './GetYourPassCTAButton';
+import BudapestMainLogo from './BudapestMainLogo';
+import NavHamburgerIcon from './NavHamburgerIcon';
 
 async function fetchNavLinks(locale) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/navbar-menu-items?locale=${locale}&sort=order`
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/navbar-menu-items?locale=${locale}&sort=order`,
   );
 
   if (!res.ok) {
-    throw new Error("Failed to fetch navbar links");
+    throw new Error('Failed to fetch navbar links');
   }
 
   const data = await res.json();
@@ -22,11 +22,11 @@ async function fetchNavLinks(locale) {
 
 async function fetchGYPButton(locale) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/get-your-pass-button?locale=${locale}`
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/get-your-pass-button?locale=${locale}`,
   );
 
   if (!res.ok) {
-    throw new Error("Failed to fetch navbar links");
+    throw new Error('Failed to fetch navbar links');
   }
 
   const data = await res.json();
@@ -41,7 +41,7 @@ const Navbar = async ({ locale, params }) => {
   return (
     <div
       className="fixed top-0 left-0 w-full flex justify-center items-center bg-neutral-900 z-50 h-[60px] navbarBreak:h-[80px]"
-      style={{ borderBottom: "2px solid black" }}
+      style={{ borderBottom: '2px solid black' }}
     >
       <header className="flex flex-row w-full max-w-[1400px] justify-between items-center px-4 sm:px-10">
         <div className="w-[156px]">
@@ -50,19 +50,16 @@ const Navbar = async ({ locale, params }) => {
         <div
           className="hidden navbarBreak:flex"
           style={{
-            position: "absolute",
-            left: "50%",
-            transform: "translateX(-50%)",
+            position: 'absolute',
+            left: '50%',
+            transform: 'translateX(-50%)',
           }}
         >
           <NavbarWebComponent navLinks={navLinks} locale={locale} />
         </div>
         <div className="hidden navbarBreak:flex justify-end items-center   gap-4 xl:gap-8">
           <LanguageSwitch currentLocale={locale} />
-          <GetYourPassCTAButton
-            buttonText={buttonText.ButtonText}
-            locale={locale}
-          />
+          <GetYourPassCTAButton buttonText={buttonText.ButtonText} locale={locale} />
         </div>
         <div className="flex navbarBreak:hidden">
           <NavHamburgerIcon

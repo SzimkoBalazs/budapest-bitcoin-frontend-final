@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { PaymentProvider } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Input } from 'postcss';
+import { any } from 'zod';
 import ChevronDown from '../../../../public/chevron-down.svg';
 import { createOrder } from '@/app/actions/orders';
 import { validateCoupon } from '@/app/actions/coupon';
@@ -88,6 +90,12 @@ export default function CheckoutPage({ tickets, locale }) {
     });
   }
 
+  const [isCardPayment, setIsCardPayment] = useState(null);
+  const [needsInvoice, setNeedsInvoice] = useState(false);
+  const [billingMatchesData, setBillingMatchesData] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [anyTicketsAdded, setAnyTicketsAddded] = useState(false);
+
   useEffect(() => {
     localStorage.setItem('formData', JSON.stringify(formData));
   }, [formData]);
@@ -96,7 +104,20 @@ export default function CheckoutPage({ tickets, locale }) {
     localStorage.setItem('invoiceData', JSON.stringify(invoiceData));
   }, [invoiceData]);
 
-  console.log('invoice data', invoiceData);
+  useEffect(() => {
+    if (billingMatchesData) {
+      setInvoiceData((prev) => {
+        return {
+          ...prev,
+          invoiceName: `${formData.firstName} ${formData.lastName}`,
+          invoicePostalCode: formData.postalCode,
+          invoiceCity: formData.city,
+          invoiceStreet: formData.street,
+          invoiceCountry: formData.country,
+        };
+      });
+    }
+  }, [billingMatchesData]);
 
   // IF FORM INPUTS ARE VALID
   const [formValid, setFormValid] = useState({
@@ -105,17 +126,22 @@ export default function CheckoutPage({ tickets, locale }) {
     emailsMatch: null,
   });
 
-  const [isCardPayment, setIsCardPayment] = useState(null);
-  const [needsInvoice, setNeedsInvoice] = useState(false);
-  const [billingMatchesData, setBillingMatchesData] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const isFormFilled = Object.values(formData).every((value) => value);
+  const isInvoiceFormFilled =
+    Object.entries(invoiceData).every(([key, value]) => {
+      if (key === 'vat' || key === 'euVat') return true; // Skip for now
+      return Boolean(value); // Check all other fields are filled
+    }) &&
+    (invoiceData.invoiceType !== 'company' || invoiceData.vat || invoiceData.euVat);
 
-  const isFormFilled = Object.values(formData).every((value) => value.trim() !== '');
+  const areFormsFilled = needsInvoice ? isFormFilled && isInvoiceFormFilled : isFormFilled;
+
   const areEmailsValid =
     formValid.emailValid && formValid.emailRepeatValid && formValid.emailsMatch;
 
-  // TODO: Ticket also has to be added to make it valid
-  const canSubmit = isCardPayment ? isFormFilled && areEmailsValid : areEmailsValid;
+  const canSubmit = isCardPayment
+    ? areFormsFilled && areEmailsValid && anyTicketsAdded
+    : areEmailsValid && formData.termsAccepted && formData.marketingAccepted && anyTicketsAdded;
 
   // Fetching Strapi data
   useEffect(() => {
@@ -172,6 +198,12 @@ export default function CheckoutPage({ tickets, locale }) {
   useEffect(() => {
     const filteredTickets = selectedTickets.map(({ id, quantity }) => ({ id, quantity }));
     localStorage.setItem('selectedTickets', JSON.stringify(filteredTickets));
+
+    setAnyTicketsAddded(
+      selectedTickets?.some((ticket) => {
+        return ticket.quantity > 0;
+      }),
+    );
   }, [selectedTickets]);
 
   // EMAIL VALIDATION CHECK
@@ -202,6 +234,7 @@ export default function CheckoutPage({ tickets, locale }) {
     });
   }
 
+  // INVOICE FORM FILL FUNCTION
   function handleInvoiceChange(e) {
     setInvoiceData((prevData) => {
       return {
@@ -211,10 +244,10 @@ export default function CheckoutPage({ tickets, locale }) {
     });
   }
 
-  const [email, setEmail] = useState('');
   const [coupon, setCoupon] = useState('');
   const [appliedCoupon, setAppliedCoupon] = useState(null);
-  const [error, setError] = useState(null);
+  const [couponError, setCouponError] = useState(null);
+  const [generalError, setGeneralError] = useState(null);
 
   const handlePaymentRedirect = async (order) => {
     if (order.paymentProvider === PaymentProvider.BTCPAY) {
@@ -250,7 +283,7 @@ export default function CheckoutPage({ tickets, locale }) {
 
   // ✅ Kupon ellenőrzése és alkalmazása (server action)
   const handleApplyCoupon = async () => {
-    setError(null);
+    setCouponError(null);
 
     try {
       const couponData = await validateCoupon(coupon);
@@ -260,14 +293,14 @@ export default function CheckoutPage({ tickets, locale }) {
 
       setAppliedCoupon(couponData);
     } catch (err) {
-      setError(err.message);
+      setCouponError(err.message);
       setAppliedCoupon(null);
     }
   };
 
   // ✅ Rendelés létrehozása
   const handleOrder = async (paymentProvider) => {
-    setError(null);
+    setGeneralError(null);
 
     console.log('🎟 Applied Coupon before sending order:', appliedCoupon);
 
@@ -280,12 +313,6 @@ export default function CheckoutPage({ tickets, locale }) {
         }));
 
       if (items.length === 0) throw new Error('Please select at least one ticket.');
-      if (!email.trim()) throw new Error('Email is required.');
-
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        throw new Error('Invalid email format.');
-      }
 
       // TODO: Ezt at irtam, jo igy is?
       const orderData = {
@@ -307,7 +334,7 @@ export default function CheckoutPage({ tickets, locale }) {
 
       handlePaymentRedirect(order);
     } catch (err) {
-      setError(err.message);
+      setGeneralError(err.message);
     }
   };
 
@@ -393,7 +420,9 @@ export default function CheckoutPage({ tickets, locale }) {
               {(subtotal - discountAmount) / 100} EUR
             </h3>
           </div>
-          {error && <p className="font-exo font-medium text-[14px] text-red-500">{error}</p>}
+          {generalError && (
+            <p className="font-exo font-medium text-[14px] text-red-500">{generalError}</p>
+          )}
         </div>
 
         {/*SCROLLING CONTAINER */}
@@ -420,8 +449,12 @@ export default function CheckoutPage({ tickets, locale }) {
                   text={'APPLY'}
                   onClick={handleApplyCoupon}
                   style={{ opacity: coupon.length > 0 ? 1 : 0.5 }}
+                  disabled={coupon.length === 0}
                 />
               </div>
+              {couponError && coupon.length > 0 && (
+                <span className="relative left-4 text-[12px] text-red-500">{couponError}</span>
+              )}
             </div>
             {appliedCoupon && (
               <p className="text-green-600 mt-2">
@@ -440,65 +473,30 @@ export default function CheckoutPage({ tickets, locale }) {
                 ticket:
               </h4>
               <div className="flex flex-col sm:flex-row w-full justify-between gap-y-4">
-                <div className="flex relative w-full sm:w-[calc(50%-4px)]">
-                  <input
-                    id="email"
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={(e) => handleChange(e)}
-                    className={cln(
-                      formData.email.length === 0
-                        ? 'border-neutral-300'
-                        : !formValid.emailValid || !formValid.emailsMatch
-                        ? 'border-red-500'
-                        : 'border-green-600',
-                      'peer border h-[50px] focus:border-2 flex items-center justify-center px-4 py-2 rounded-[44] focus:border-secondary-600 w-full bg-black placeholder:text-[14px] placeholder:text-neutral-300 text-white focus:outline-none',
-                    )}
-                    autoComplete="email"
-                    placeholder=" "
-                    required
-                    pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
-                  />
-                  <label
-                    htmlFor={'email'}
-                    className="absolute w-fit h-fit text-[14px] font-exo font-normal text-neutral-300 top-[-14px] left-4 bg-black py-[2px] px-2 rounded-[6px] peer-placeholder-shown:translate-y-[26px] peer-focus:translate-y-0 transition-transform duration-200 ease-in-out"
-                  >
-                    *Email address
-                  </label>
-                </div>
-                <div className="flex relative w-full sm:w-[calc(50%-4px)]">
-                  <input
-                    id="emailRepeat"
-                    type="email"
-                    name="emailRepeat"
-                    value={formData.emailRepeat}
-                    onChange={(e) => handleChange(e)}
-                    className={cln(
-                      formData.emailRepeat.length === 0
-                        ? 'border-neutral-300'
-                        : !formValid.emailRepeatValid || !formValid.emailsMatch
-                        ? 'border-red-500'
-                        : 'border-green-600',
-                      'peer border h-[50px] focus:border-2 flex items-center justify-center px-6 py-2 rounded-[44] focus:border-secondary-600 w-full bg-black placeholder:text-[14px] placeholder:text-neutral-300 text-white focus:outline-none',
-                    )}
-                    autoComplete="email"
-                    required
-                    placeholder=" "
-                    pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
-                  />
-                  <label
-                    htmlFor={'emailRepeat'}
-                    className="absolute w-fit h-fit text-[14px] font-exo font-normal text-neutral-300 top-[-14px] left-4 bg-black py-[2px] px-2 rounded-[6px] peer-placeholder-shown:translate-y-[26px] peer-focus:translate-y-0 transition-transform duration-200 ease-in-out"
-                  >
-                    *Email address again
-                  </label>
-                </div>
+                <InputLabel
+                  name={'email'}
+                  dataSource={formData}
+                  onChange={handleChange}
+                  formValid={formValid}
+                  type={'email'}
+                >
+                  Email address
+                </InputLabel>
+                <InputLabel
+                  name={'emailRepeat'}
+                  dataSource={formData}
+                  onChange={handleChange}
+                  formValid={formValid}
+                  type={'email'}
+                >
+                  Email address again
+                </InputLabel>
               </div>
               {!formValid.emailsMatch && (
                 <span className="relative left-4 text-[12px] text-red-500">Emails don't match</span>
               )}
             </div>
+            {/*SELECT PAYMENT METHOD*/}
             <div className="flex-col flex mx-auto gap-y-4">
               <h4
                 className="text-[14px] text-center font-exo text-white"
@@ -531,7 +529,7 @@ export default function CheckoutPage({ tickets, locale }) {
                   dataSource={formData}
                   onChange={handleChange}
                 >
-                  *First Name
+                  First Name
                 </InputLabel>
                 <InputLabel
                   name={'lastName'}
@@ -539,7 +537,7 @@ export default function CheckoutPage({ tickets, locale }) {
                   dataSource={formData}
                   onChange={handleChange}
                 >
-                  *Last name
+                  Last name
                 </InputLabel>
                 <InputLabel
                   name={'country'}
@@ -547,7 +545,7 @@ export default function CheckoutPage({ tickets, locale }) {
                   dataSource={formData}
                   onChange={handleChange}
                 >
-                  *Country
+                  Country
                 </InputLabel>
                 <InputLabel
                   name={'postalCode'}
@@ -555,7 +553,7 @@ export default function CheckoutPage({ tickets, locale }) {
                   dataSource={formData}
                   onChange={handleChange}
                 >
-                  *Postal Code
+                  Postal Code
                 </InputLabel>
                 <InputLabel
                   name={'city'}
@@ -563,7 +561,7 @@ export default function CheckoutPage({ tickets, locale }) {
                   dataSource={formData}
                   onChange={handleChange}
                 >
-                  *City
+                  City
                 </InputLabel>
                 <InputLabel
                   name={'street'}
@@ -571,29 +569,48 @@ export default function CheckoutPage({ tickets, locale }) {
                   dataSource={formData}
                   onChange={handleChange}
                 >
-                  *Street
+                  Street
                 </InputLabel>
-                <div className="flex w-full items-start gap-[10px] mt-2 sm:mt-0 py-[4px] pl-[12px] pr-0">
-                  <input
-                    id={'needsInvoice'}
-                    type="checkbox"
-                    name="needsInvoice"
-                    checked={needsInvoice}
-                    onChange={(e) => setNeedsInvoice(e.target.checked)}
-                    className="max-w-[18px] max-h-[18px] mt-1"
-                  />
-                  <label
-                    className="text-neutral-300 font-exo text-[14px] pb-2 sm:pb-0 font-medium leading-normal"
-                    htmlFor={'needsInvoice'}
-                  >
-                    I need an invoice
-                  </label>
+                <div className="flex w-full gap-y-2 flex-col">
+                  <div className="flex w-full items-start gap-[10px] mt-2 sm:mt-0 py-[4px] pl-[12px] pr-0">
+                    <input
+                      id={'needsInvoice'}
+                      type="checkbox"
+                      name="needsInvoice"
+                      checked={needsInvoice}
+                      onChange={(e) => setNeedsInvoice(e.target.checked)}
+                      className="max-w-[18px] max-h-[18px] mt-1"
+                    />
+                    <label
+                      className="text-neutral-300 font-exo text-[14px] pb-2 sm:pb-0 font-medium leading-normal"
+                      htmlFor={'needsInvoice'}
+                    >
+                      I need an invoice
+                    </label>
+                  </div>
+                  <div className="flex w-full items-start gap-[10px] sm:mt-0 py-[4px] pl-[12px] pr-0">
+                    <input
+                      id={'billingMatchesData'}
+                      type="checkbox"
+                      name="billingMatchesData"
+                      checked={billingMatchesData}
+                      onChange={(e) => setBillingMatchesData(e.target.checked)}
+                      className="max-w-[18px] max-h-[18px] mt-1"
+                    />
+                    <label
+                      className="text-neutral-300 font-exo text-[14px] pb-2 sm:pb-0 font-medium leading-normal"
+                      htmlFor={'billingMatchesData'}
+                    >
+                      Billing matches data above
+                    </label>
+                  </div>
                 </div>
                 {needsInvoice === true && (
                   <>
                     <div className="flex flex-col gap-y-2 w-[calc(35%-8px)]">
                       <label className="text-neutral-300 font-exo text-[14px] pl-2 pb-2 sm:pb-0 font-medium leading-normal">
-                        I need the invoice for:
+                        <span className="text-red-500 text-[16px] font-exo font-bold">* </span>I
+                        need the invoice for:
                       </label>
                       <select
                         value={invoiceData.invoiceType}
@@ -611,174 +628,70 @@ export default function CheckoutPage({ tickets, locale }) {
                         <option value="company">Company</option>
                       </select>
                     </div>
-                    <div className="flex relative w-[calc(65%-8px)] mt-7">
-                      <input
-                        id="invoiceName"
-                        type="text"
-                        name="invoiceName"
-                        value={invoiceData.invoiceName}
-                        onChange={handleInvoiceChange}
-                        className={cln(
-                          invoiceData.invoiceName.length === 0
-                            ? 'border-neutral-300'
-                            : 'border-green-600',
-                          'peer border h-[50px] focus:border-2 flex items-center justify-center px-6 py-2 rounded-[44] focus:border-secondary-600 w-full bg-black placeholder:text-[14px] placeholder:text-neutral-300 text-white focus:outline-none',
-                        )}
-                        required
-                        placeholder=" "
-                      />
-                      <label
-                        htmlFor={'invoiceName'}
-                        className="absolute w-fit h-fit text-[14px] font-exo font-normal text-neutral-300 top-[-14px] left-4 bg-black py-[2px] px-2 rounded-[6px] peer-placeholder-shown:translate-y-[26px] peer-focus:translate-y-0 transition-transform duration-200 ease-in-out"
-                      >
-                        *Name
-                      </label>
-                    </div>
-                    <div className="flex relative w-full sm:w-[calc(50%-8px)]">
-                      <input
-                        id="invoiceCountry"
-                        type="text"
-                        name="invoiceCountry"
-                        value={invoiceData.invoiceCountry}
-                        onChange={handleInvoiceChange}
-                        className={cln(
-                          invoiceData.invoiceCountry.length === 0
-                            ? 'border-neutral-300'
-                            : 'border-green-600',
-                          'peer border h-[50px] focus:border-2 flex items-center justify-center px-6 py-2 rounded-[44] focus:border-secondary-600 w-full bg-black placeholder:text-[14px] placeholder:text-neutral-300 text-white focus:outline-none',
-                        )}
-                        required
-                        placeholder=" "
-                      />
-                      <label
-                        htmlFor={'invoiceCountry'}
-                        className="absolute w-fit h-fit text-[14px] font-exo font-normal text-neutral-300 top-[-14px] left-4 bg-black py-[2px] px-2 rounded-[6px] peer-placeholder-shown:translate-y-[26px] peer-focus:translate-y-0 transition-transform duration-200 ease-in-out"
-                      >
-                        *Country
-                      </label>
-                    </div>
-                    <div className="flex relative w-full sm:w-[calc(50%-8px)]">
-                      <input
-                        id="invoicePostalCode"
-                        type="text"
-                        name="invoicePostalCode"
-                        value={invoiceData.invoicePostalCode}
-                        onChange={handleInvoiceChange}
-                        className={cln(
-                          invoiceData.invoicePostalCode?.length === 0
-                            ? 'border-neutral-300'
-                            : 'border-green-600',
-                          'peer border h-[50px] focus:border-2 flex items-center justify-center px-6 py-2 rounded-[44] focus:border-secondary-600 w-full bg-black placeholder:text-[14px] placeholder:text-neutral-300 text-white focus:outline-none',
-                        )}
-                        required
-                        placeholder=" "
-                      />
-                      <label
-                        htmlFor={'invoicePostalCode'}
-                        className="absolute w-fit h-fit text-[14px] font-exo font-normal text-neutral-300 top-[-14px] left-4 bg-black py-[2px] px-2 rounded-[6px] peer-placeholder-shown:translate-y-[26px] peer-focus:translate-y-0 transition-transform duration-200 ease-in-out"
-                      >
-                        *Postal code
-                      </label>
-                    </div>
-                    <div className="flex relative w-full sm:w-[calc(50%-8px)]">
-                      <input
-                        id="invoiceCity"
-                        type="text"
-                        name="invoiceCity"
-                        value={invoiceData.invoiceCity}
-                        onChange={handleInvoiceChange}
-                        className={cln(
-                          invoiceData.invoiceCity?.length === 0
-                            ? 'border-neutral-300'
-                            : 'border-green-600',
-                          'peer border h-[50px] focus:border-2 flex items-center justify-center px-6 py-2 rounded-[44] focus:border-secondary-600 w-full bg-black placeholder:text-[14px] placeholder:text-neutral-300 text-white focus:outline-none',
-                        )}
-                        required
-                        placeholder=" "
-                      />
-                      <label
-                        htmlFor={'invoiceCity'}
-                        className="absolute w-fit h-fit text-[14px] font-exo font-normal text-neutral-300 top-[-14px] left-4 bg-black py-[2px] px-2 rounded-[6px] peer-placeholder-shown:translate-y-[26px] peer-focus:translate-y-0 transition-transform duration-200 ease-in-out"
-                      >
-                        *City
-                      </label>
-                    </div>
-                    <div className="flex relative w-full sm:w-[calc(50%-8px)]">
-                      <input
-                        id="invoiceStreet"
-                        type="text"
-                        name="invoiceStreet"
-                        value={invoiceData.invoiceStreet}
-                        onChange={handleInvoiceChange}
-                        className={cln(
-                          invoiceData.invoiceStreet?.length === 0
-                            ? 'border-neutral-300'
-                            : 'border-green-600',
-                          'peer border h-[50px] focus:border-2 flex items-center justify-center px-6 py-2 rounded-[44] focus:border-secondary-600 w-full bg-black placeholder:text-[14px] placeholder:text-neutral-300 text-white focus:outline-none',
-                        )}
-                        required
-                        placeholder=" "
-                      />
-                      <label
-                        htmlFor={'invoiceStreet'}
-                        className="absolute w-fit h-fit text-[14px] font-exo font-normal text-neutral-300 top-[-14px] left-4 bg-black py-[2px] px-2 rounded-[6px] peer-placeholder-shown:translate-y-[26px] peer-focus:translate-y-0 transition-transform duration-200 ease-in-out"
-                      >
-                        *Street
-                      </label>
-                    </div>
+                    <InputLabel
+                      name={'invoiceName'}
+                      dataSource={invoiceData}
+                      onChange={handleInvoiceChange}
+                      widthClass={'sm:w-[calc(65%-8px)] mt-7'}
+                    >
+                      Name
+                    </InputLabel>
+                    <InputLabel
+                      name={'invoiceCountry'}
+                      dataSource={invoiceData}
+                      onChange={handleInvoiceChange}
+                    >
+                      Country
+                    </InputLabel>
+                    <InputLabel
+                      name={'invoicePostalCode'}
+                      dataSource={invoiceData}
+                      onChange={handleInvoiceChange}
+                    >
+                      Postal code
+                    </InputLabel>
+                    <InputLabel
+                      name={'invoiceCity'}
+                      dataSource={invoiceData}
+                      onChange={handleInvoiceChange}
+                    >
+                      City
+                    </InputLabel>
+                    <InputLabel
+                      name={'invoiceStreet'}
+                      dataSource={invoiceData}
+                      onChange={handleInvoiceChange}
+                    >
+                      Street
+                    </InputLabel>
                     {invoiceData.invoiceType === 'company' && (
                       <>
-                        <div className="flex relative w-full sm:w-[calc(50%-8px)]">
-                          <input
-                            id="vat"
-                            type="text"
-                            name="vat"
-                            value={invoiceData.vat}
+                        <h4
+                          className="ml-2 mt-3 text-[14px] font-exo text-white"
+                          style={{ lineHeight: '130%' }}
+                        >
+                          Fill out at least one of the VAT numbers
+                        </h4>
+                        <div className="flex sm:flex-row w-full justify-between">
+                          <InputLabel
+                            name={'vat'}
+                            dataSource={invoiceData}
                             onChange={handleInvoiceChange}
-                            className={cln(
-                              invoiceData.vat.length === 0
-                                ? 'border-neutral-300'
-                                : 'border-green-600',
-                              'peer border h-[50px] focus:border-2 flex items-center justify-center px-6 py-2 rounded-[44] focus:border-secondary-600 w-full bg-black placeholder:text-[14px] placeholder:text-neutral-300 text-white focus:outline-none',
-                            )}
-                            required
-                            placeholder=" "
-                          />
-                          <label
-                            htmlFor={'vat'}
-                            className="absolute w-fit h-fit text-[14px] font-exo font-normal text-neutral-300 top-[-14px] left-4 bg-black py-[2px] px-2 rounded-[6px] peer-placeholder-shown:translate-y-[26px] peer-focus:translate-y-0 transition-transform duration-200 ease-in-out"
                           >
-                            *Vat
-                          </label>
-                        </div>
-                        <div className="flex relative w-full sm:w-[calc(50%-8px)]">
-                          <input
-                            id="euVat"
-                            type="text"
-                            name="euVat"
-                            value={invoiceData.euVat}
+                            Vat
+                          </InputLabel>
+                          <InputLabel
+                            name={'euVat'}
+                            dataSource={invoiceData}
                             onChange={handleInvoiceChange}
-                            className={cln(
-                              invoiceData.euVat.length === 0
-                                ? 'border-neutral-300'
-                                : 'border-green-600',
-                              'peer border h-[50px] focus:border-2 flex items-center justify-center px-6 py-2 rounded-[44] focus:border-secondary-600 w-full bg-black placeholder:text-[14px] placeholder:text-neutral-300 text-white focus:outline-none',
-                            )}
-                            required
-                            placeholder=" "
-                          />
-                          <label
-                            htmlFor={'euVat'}
-                            className="absolute w-fit h-fit text-[14px] font-exo font-normal text-neutral-300 top-[-14px] left-4 bg-black py-[2px] px-2 rounded-[6px] peer-placeholder-shown:translate-y-[26px] peer-focus:translate-y-0 transition-transform duration-200 ease-in-out"
                           >
-                            *EU VAT
-                          </label>
+                            EU Vat
+                          </InputLabel>
                         </div>
                       </>
                     )}
                   </>
                 )}
-                )
               </>
             )}
             <div className="flex flex-col gap-y-2">
@@ -796,7 +709,7 @@ export default function CheckoutPage({ tickets, locale }) {
                   className="text-neutral-300 font-exo text-[14px] pb-2 sm:pb-0 font-medium leading-normal"
                   htmlFor={'termsAccepted'}
                 >
-                  {comingSoonData?.AcceptConditionsFirstText}{' '}
+                  *{comingSoonData?.AcceptConditionsFirstText}{' '}
                   <Link href={`/${locale}/terms-and-conditions`}>
                     <span className="text-neutral-300 font-exo text-[14px] font-medium leading-normal underline">
                       {comingSoonData?.AcceptConditionsSecondText}
@@ -818,7 +731,7 @@ export default function CheckoutPage({ tickets, locale }) {
                   className="text-neutral-300 font-exo text-[14px] pb-2 sm:pb-0 font-medium leading-normal"
                   htmlFor={'marketingAccepted'}
                 >
-                  {comingSoonData?.NewsletterAcceptCheckboxText}
+                  *{comingSoonData?.NewsletterAcceptCheckboxText}
                 </label>
               </div>
             </div>

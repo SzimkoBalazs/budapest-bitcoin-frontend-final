@@ -12,10 +12,10 @@ const SelectButton = ({ isCardPayment, onClick, children, isSelected }) => {
       className={cln(
         isCardPayment
           ? isSelected
-            ? 'border-secondary-600 border-4'
+            ? 'border-white border-2 bg-secondary-600'
             : 'border-secondary-600 hover:bg-secondary-600/10 border-[1px]'
           : isSelected
-          ? 'border-primary-600 border-4'
+          ? 'border-white border-2 bg-primary-600'
           : 'border-primary-600 hover:bg-primary-600/10 border-[1px]',
         'group cursor-pointer w-[50%] min-w-[136px] relative flex h-[64px] px-2 items-center rounded-[10px] justify-center',
       )}
