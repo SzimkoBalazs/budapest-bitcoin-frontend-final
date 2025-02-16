@@ -249,6 +249,8 @@ export default function CheckoutPage({ tickets, locale }) {
   const [couponError, setCouponError] = useState(null);
   const [generalError, setGeneralError] = useState(null);
 
+  const totalQuantity = selectedTickets.reduce((sum, ticket) => sum + ticket.quantity, 0);
+
   const handlePaymentRedirect = async (order) => {
     if (order.paymentProvider === PaymentProvider.BTCPAY) {
       router.push(`/payment/btcpay/${order.id}`);
@@ -286,7 +288,7 @@ export default function CheckoutPage({ tickets, locale }) {
     setCouponError(null);
 
     try {
-      const couponData = await validateCoupon(coupon);
+      const couponData = await validateCoupon(coupon, selectedTickets);
       if (!couponData || couponData.error) {
         throw new Error(couponData?.error || 'Invalid coupon');
       }
@@ -379,6 +381,7 @@ export default function CheckoutPage({ tickets, locale }) {
           zIndex: isSummaryOpen ? 50 : 20,
         }}
       >
+        {/* Subtotal */}
         {/*TODO: PL-12 A COOKIES IKON MIATT, INKABB LEGYEN EGY PADDING BOTTOM HA NYITVA VAN, AMI PONT FOLOTTE VEGZODIK*/}
         <div
           className={cln(

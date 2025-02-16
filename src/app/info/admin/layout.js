@@ -1,5 +1,6 @@
 import { Fredoka, Exo } from "next/font/google";
 import "./globals.css";
+import AdminNavigation from "../components/AdminNavigation";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -26,8 +27,11 @@ export const metadata = {
 export default async function AdminLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${fredoka.variable} ${exo.variable} antialiased flex`}>
-        <main className="w-full min-h-screen bg-neutral-900">{children}</main>
+      <body
+        className={`${fredoka.variable} ${exo.variable} antialiased bg-neutral-300`}
+      >
+        <AdminNavigation />
+        <main className="pt-16 px-6">{children}</main>
       </body>
     </html>
   );

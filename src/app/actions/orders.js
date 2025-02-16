@@ -1,12 +1,12 @@
-"use server";
+'use server';
 
-import prisma from "../../../utils/db";
-import { orderSchema } from "../../../utils/validation";
-import { PaymentProvider } from "@prisma/client";
+import { PaymentProvider } from '@prisma/client';
+import prisma from '../../../utils/db';
+import { orderSchema } from '../../../utils/validation';
 
 export async function createOrder(data) {
   try {
-    console.log("🚀 Received order data:", data);
+    console.log('🚀 Received order data:', data);
 
     //  1. Validáció a Zod segítségével
     const validation = orderSchema.safeParse(data);
@@ -19,7 +19,7 @@ export async function createOrder(data) {
     //  2. Ellenőrizzük, hogy érvényes fizetési szolgáltató
     const validProviders = [PaymentProvider.BTCPAY, PaymentProvider.STRIPE];
     if (!validProviders.includes(paymentProvider)) {
-      throw new Error("Invalid payment provider.");
+      throw new Error('Invalid payment provider.');
     }
 
     //  3. Ellenőrizzük, hogy az összes kért jegy létezik
@@ -29,11 +29,11 @@ export async function createOrder(data) {
     });
 
     if (foundTickets.length !== items.length) {
-      throw new Error("One or more tickets are invalid.");
+      throw new Error('One or more tickets are invalid.');
     }
 
     const now = new Date();
-    console.log("now", now)
+    console.log('now', now);
 
     //  4. Ellenőrizzük a jegyek elérhetőségét, dátumát és mennyiségét
     let totalAmountInCents = 0;
@@ -41,7 +41,7 @@ export async function createOrder(data) {
       const foundTicket = foundTickets.find((t) => t.id === ticket.id);
 
       if (!foundTicket) {
-        throw new Error("Ticket not found.");
+        throw new Error('Ticket not found.');
       }
 
       // ⚠️ Ellenőrizzük, hogy a jegy még elérhető-e dátum szerint
@@ -54,21 +54,17 @@ export async function createOrder(data) {
 
       // ⚠️ Jegyek mennyiségi ellenőrzése (min. 1, max. 10)
       if (ticket.quantity < 1 || ticket.quantity > 10) {
-        throw new Error(
-          `Invalid quantity for "${foundTicket.name}". Must be between 1 and 10.`
-        );
+        throw new Error(`Invalid quantity for "${foundTicket.name}". Must be between 1 and 10.`);
       }
 
       if (foundTicket.quantityAvailable < ticket.quantity) {
-        throw new Error(
-          `Not enough tickets available for "${foundTicket.name}".`
-        );
+        throw new Error(`Not enough tickets available for "${foundTicket.name}".`);
       }
 
       totalAmountInCents += foundTicket.price * ticket.quantity;
     }
 
-    console.log("💰 Total before discount:", totalAmountInCents);
+    console.log('💰 Total before discount:', totalAmountInCents);
 
     //  5. Kupon érvényesítés, ha van
     let discountInCents = 0;
@@ -79,10 +75,10 @@ export async function createOrder(data) {
         where: { code: coupon },
       });
 
-      console.log("🔍 Found coupon:", validCoupon);
+      console.log('🔍 Found coupon:', validCoupon);
 
       if (!validCoupon) {
-        throw new Error("Invalid coupon code.");
+        throw new Error('Invalid coupon code.');
       }
 
       //  Ellenőrizzük a kupon lejárati dátumát és a felhasználhatóságot
@@ -90,29 +86,24 @@ export async function createOrder(data) {
         (validCoupon.validFrom && now < validCoupon.validFrom) ||
         (validCoupon.validUntil && now > validCoupon.validUntil)
       ) {
-        throw new Error("Coupon is not valid at this time.");
+        throw new Error('Coupon is not valid at this time.');
       }
 
       //  Kedvezmény levonása
       discountInCents =
-        validCoupon.discountType === "FIXED"
+        validCoupon.discountType === 'FIXED'
           ? validCoupon.discountValue
           : Math.round((totalAmountInCents * validCoupon.discountValue) / 100);
 
       appliedCoupon = validCoupon;
 
-      console.log(
-        `✅ Applied coupon: ${validCoupon.code}, Discount: ${discountInCents}`
-      );
+      console.log(`✅ Applied coupon: ${validCoupon.code}, Discount: ${discountInCents}`);
     }
 
     //  6. Végső ár számítása (nem lehet negatív)
-    const finalAmountInCents = Math.max(
-      totalAmountInCents - discountInCents,
-      0
-    );
+    const finalAmountInCents = Math.max(totalAmountInCents - discountInCents, 0);
 
-    console.log("💰 Final amount after discount:", finalAmountInCents);
+    console.log('💰 Final amount after discount:', finalAmountInCents);
 
     //  7. TRANZAKCIÓ: Order + OrderItems létrehozása és jegyszám frissítése
     const order = await prisma.$transaction(async (prisma) => {
@@ -123,16 +114,15 @@ export async function createOrder(data) {
           totalAmountInCents,
           discountInCents,
           finalAmountInCents,
-          currency: "EUR",
-          status: "PENDING",
+          currency: 'EUR',
+          status: 'PENDING',
           paymentProvider,
           couponId: appliedCoupon ? appliedCoupon.id : null,
           items: {
             create: items.map((ticket) => ({
               ticketId: ticket.id,
               quantity: ticket.quantity,
-              priceAtPurchase: foundTickets.find((t) => t.id === ticket.id)
-                .price,
+              priceAtPurchase: foundTickets.find((t) => t.id === ticket.id).price,
             })),
           },
         },
@@ -149,19 +139,30 @@ export async function createOrder(data) {
         });
       }
 
-      console.log("✅ Order created successfully:", newOrder);
+      for (const orderItem of newOrder.items) {
+        const instancesData = Array.from({ length: orderItem.quantity }, () => ({
+          orderItemId: orderItem.id,
+          validated: false,
+        }));
+        // Használhatod a createMany függvényt:
+        await prisma.ticketInstance.createMany({
+          data: instancesData,
+        });
+      }
+
+      console.log('✅ Order created successfully:', newOrder);
       return newOrder;
     });
 
     return order;
   } catch (error) {
-    console.error("❌ Error creating order:", error);
-    throw new Error(error.message || "Internal server error.");
+    console.error('Hiba az order létrehozásakor:', error.stack);
+    throw new Error(error.message || 'Internal server error.');
   }
 }
 
 export async function getOrder(orderId) {
-  if (!orderId) throw new Error("Order ID is required");
+  if (!orderId) throw new Error('Order ID is required');
 
   const order = await prisma.order.findUnique({
     where: { id: Number(orderId) },
@@ -172,7 +173,17 @@ export async function getOrder(orderId) {
     },
   });
 
-  if (!order) throw new Error("Order not found");
+  if (!order) throw new Error('Order not found');
 
   return order;
+}
+
+export async function getOrdersForAdmin() {
+  try {
+    const orders = await prisma.order.findMany();
+    return orders;
+  } catch (error) {
+    console.error('Hiba az orderek lekérdezése közben:', error);
+    return [];
+  }
 }

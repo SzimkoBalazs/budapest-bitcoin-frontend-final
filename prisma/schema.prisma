@@ -61,9 +61,19 @@ model OrderItem {
   ticketId        Int
   quantity        Int
   priceAtPurchase Int // Mennyibe került a jegy vásárláskor
-
+  instances       TicketInstance[]
+  
   order   Order   @relation(fields: [orderId], references: [id], map: "OrderItem_orderId_fkey")
   ticket  Ticket  @relation(fields: [ticketId], references: [id], map: "OrderItem_ticketId_fkey")
+}
+
+model TicketInstance {
+  id          Int       @id @default(autoincrement())
+  orderItemId Int
+  validated   Boolean   @default(false)
+  validatedAt DateTime? 
+  
+  orderItem   OrderItem @relation(fields: [orderItemId], references: [id])
 }
 
 model Payment {
@@ -91,8 +101,10 @@ model Coupon {
   discountValue Int      // Ha fix összegű, akkor centben; ha százalékos, akkor 1-100 közötti érték
   maxRedemptions Int?    // Hányszor lehet használni (opcionális)
   usedRedemptions Int    @default(0) // Hányszor használták
+  minTicketsRequired Int   @default(1)
   validFrom    DateTime? // Mikortól érvényes
   validUntil   DateTime? // Meddig érvényes
+  isActive       Boolean  @default(true)
   createdAt    DateTime  @default(now())
   orders Order[]
   
@@ -107,6 +119,14 @@ model User {
   id           Int      @id @default(autoincrement())
   email         String  @unique
   password      String
+}
+
+model Voucher {
+  id        BigInt      @id  
+  orderId   Int
+  pdfPath   String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
 }
 
 
