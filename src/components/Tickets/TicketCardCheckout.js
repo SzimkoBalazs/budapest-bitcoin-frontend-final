@@ -8,8 +8,17 @@ import { cln } from '@/utilities/classnames';
 
 import TicketInfo from '@/components/Tickets/TicketInfo';
 import ticketInfo from '@/components/Tickets/TicketInfo';
+import { priceWithSpace } from '@/components/TicketCard';
 
-const TicketCardCheckout = ({ name, price, numberOfTickets, date, details }) => {
+const TicketCardCheckout = ({
+  name,
+  price,
+  numberOfTickets,
+  date,
+  details,
+  locale,
+  beforePrice,
+}) => {
   const [animate, setAnimate] = useState(false);
   const [prevTickets, setPrevTickets] = useState(numberOfTickets);
   const ticketRef = useRef(null);
@@ -38,16 +47,6 @@ const TicketCardCheckout = ({ name, price, numberOfTickets, date, details }) => 
     console.log('ticket ref height', ticketRef.current.offsetHeight);
   }, [ticketRef.current]);
 
-  const priceWithSpace = (number) => {
-    const bigPrice = number / 100;
-    const bigPriceString = bigPrice.toString();
-
-    if (bigPriceString.length < 3) {
-      return bigPriceString;
-    }
-    return bigPriceString.slice(0, -3) + ' ' + bigPriceString.slice(-3);
-  };
-
   return (
     //   OUTSIDE CONTAINER
     <div
@@ -63,7 +62,7 @@ const TicketCardCheckout = ({ name, price, numberOfTickets, date, details }) => 
     >
       {/*INSIDE CONTAINER FOR BOTH TEXTS*/}
       <div
-        className="flex gap-y-8 flex-col h-full p-3 lg:p-4 justify-between items-end"
+        className="flex flex-col h-full p-3 lg:p-4 justify-between items-end"
         style={{ width: 'calc( 100% - 48px )' }}
       >
         {/*CONTAINER FOR NAME DATE AND INFO ICON*/}
@@ -93,13 +92,26 @@ const TicketCardCheckout = ({ name, price, numberOfTickets, date, details }) => 
             />
           )}
         </div>
-        <div className="flex flex-row items-center gap-y-1">
-          {/*/!*BEFORE PRICE*!/*/}
-          {/*<div className="relative flex items-end justify-center">*/}
-          {/*  <h5 className="text-neutral-700 text-[22px] lg:text-[28px] left-[-40%]" style={{fontWeight:800, lineHeight:'100%'}}>{priceWithSpace(beforePrice)}</h5>*/}
-          {/*  <h3 className="text-neutral-700 absolute right-[-30px] lg:right-[-42px] text-[12px] lg:text-[18px] mb-[1px] lg:mb-[2px] tracking-[1px]" style={{ fontWeight:400, lineHeight:'100%'}}>{locale === 'hu' ? 'HUF' : 'EUR'}</h3>*/}
-          {/*  <span className="flex absolute w-full h-[1px] lg:h-[2px] bg-primary-600 top-[11px]" style={{transform:`rotate(${beforePrice < 9999 ? '-22deg' : '-7deg' })`}}/>*/}
-          {/*</div>*/}
+        <div className="flex flex-col items-center gap-y-1 mt-[-8px]">
+          {/*BEFORE PRICE*/}
+          <div className="relative flex items-end justify-center">
+            <h5
+              className="text-neutral-700 text-[22px] lg:text-[28px] left-[-40%]"
+              style={{ fontWeight: 800, lineHeight: '100%' }}
+            >
+              {priceWithSpace(beforePrice, false)}
+            </h5>
+            <h3
+              className="text-neutral-700 absolute right-[-30px] lg:right-[-42px] text-[12px] lg:text-[18px] mb-[1px] lg:mb-[2px] tracking-[1px]"
+              style={{ fontWeight: 400, lineHeight: '100%' }}
+            >
+              {locale === 'hu' ? 'HUF' : 'EUR'}
+            </h3>
+            <span
+              className="flex absolute w-full h-[1px] lg:h-[2px] bg-primary-600 top-[11px]"
+              style={{ transform: `rotate(${beforePrice < 9999 ? '-22deg' : '-7deg'})` }}
+            />
+          </div>
 
           {/*ACTUAL PRICE*/}
           <div className="flex relative items-end justify-center gap-x-1">
@@ -110,10 +122,10 @@ const TicketCardCheckout = ({ name, price, numberOfTickets, date, details }) => 
               {priceWithSpace(price)}
             </h3>
             <h3
-              className="text-white right-[-36px] lg:right-[-50px] text-[16px] lg:text-[22px] mb-[2px] lg:mb-[4px]"
+              className="text-white right-[-36px] lg:right-[-50px] text-[16px] lg:text-[22px] mb-[2px]"
               style={{ fontWeight: 400, lineHeight: '100%' }}
             >
-              {'EUR'}
+              {locale === 'en' ? 'EUR' : 'HUF'}
             </h3>
           </div>
         </div>

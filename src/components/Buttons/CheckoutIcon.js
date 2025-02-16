@@ -7,7 +7,7 @@ import BasketIcon from '../../../public/basket.svg';
 
 const CheckoutIcon = () => {
   const currentPathname = usePathname();
-  const pathNameEnd = currentPathname.split('/')[2];
+  const pathNameEnd = currentPathname.split('/').pop();
   const isCheckoutPage = pathNameEnd === 'checkout';
 
   const [isCheckoutActive, setIsCheckoutActive] = useState(false);

@@ -1,21 +1,33 @@
+'use client';
+
 import React from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
 import TicketSvg from '../../public/ticket.svg';
 import TicketBarcodeSVG from './TicketBarcodeSVG';
 import { cln } from '@/utilities/classnames';
 import GetYourPassCTAButton from '@/components/GetYourPassCTAButton';
 
-const TicketCard = ({ ticketCardContent, ticketInfo, borderColor, beforePrice, locale }) => {
-  const priceWithSpace = (number) => {
-    const bigPrice = number / 100;
-    const bigPriceString = bigPrice.toString();
+export function priceWithSpace(number, divide = true) {
+  const bigPrice = divide ? number / 100 : number;
+  const bigPriceString = bigPrice?.toString();
 
-    if (bigPriceString.length < 3) {
-      return bigPriceString;
-    }
-    return bigPriceString.slice(0, -3) + ' ' + bigPriceString.slice(-3);
-  };
+  if (bigPriceString?.length < 3) {
+    return bigPriceString;
+  }
+  return bigPriceString?.slice(0, -3) + ' ' + bigPriceString?.slice(-3);
+}
+
+const TicketCard = ({ ticketCardContent, ticketInfo, borderColor, beforePrice, locale }) => {
+  function addTicket(id) {
+    let selectedTickets = JSON.parse(localStorage.getItem('selectedTickets')) || [
+      { id: 1, quantity: 0 },
+      { id: 2, quantity: 0 },
+      { id: 3, quantity: 0 },
+    ];
+    selectedTickets = selectedTickets.map((ticket) => {
+      return ticket.id === id ? { ...ticket, quantity: 1 } : ticket;
+    });
+    localStorage.setItem('selectedTickets', JSON.stringify(selectedTickets));
+  }
 
   return (
     //   OUTSIDE CONTAINER
@@ -34,24 +46,26 @@ const TicketCard = ({ ticketCardContent, ticketInfo, borderColor, beforePrice, l
           </h3>
           <div className="flex flex-col items-center gap-y-1">
             {/*BEFORE PRICE*/}
-            <div className="relative flex items-end justify-center">
-              <h5
-                className="text-neutral-700 text-[22px] lg:text-[28px] left-[-40%]"
-                style={{ fontWeight: 800, lineHeight: '100%' }}
-              >
-                {priceWithSpace(beforePrice)}
-              </h5>
-              <h3
-                className="text-neutral-700 absolute right-[-30px] lg:right-[-42px] text-[12px] lg:text-[18px] mb-[1px] lg:mb-[2px] tracking-[1px]"
-                style={{ fontWeight: 400, lineHeight: '100%' }}
-              >
-                {locale === 'hu' ? 'HUF' : 'EUR'}
-              </h3>
-              <span
-                className="flex absolute w-full h-[1px] lg:h-[2px] bg-primary-600 top-[11px]"
-                style={{ transform: `rotate(${beforePrice < 9999 ? '-22deg' : '-7deg'})` }}
-              />
-            </div>
+            {beforePrice && (
+              <div className="relative flex items-end justify-center">
+                <h5
+                  className="text-neutral-700 text-[22px] lg:text-[28px] left-[-40%]"
+                  style={{ fontWeight: 800, lineHeight: '100%' }}
+                >
+                  {priceWithSpace(beforePrice, false)}
+                </h5>
+                <h3
+                  className="text-neutral-700 absolute right-[-30px] lg:right-[-42px] text-[12px] lg:text-[18px] mb-[1px] lg:mb-[2px] tracking-[1px]"
+                  style={{ fontWeight: 400, lineHeight: '100%' }}
+                >
+                  {locale === 'hu' ? 'HUF' : 'EUR'}
+                </h3>
+                <span
+                  className="flex absolute w-full h-[1px] lg:h-[2px] bg-primary-600 top-[11px]"
+                  style={{ transform: `rotate(${beforePrice < 9999 ? '-22deg' : '-7deg'})` }}
+                />
+              </div>
+            )}
 
             {/*ACTUAL PRICE*/}
             <div className="flex relative items-end justify-center gap-x-1">
@@ -98,12 +112,12 @@ const TicketCard = ({ ticketCardContent, ticketInfo, borderColor, beforePrice, l
         {/*  container for bulletpoints */}
       </div>
       <div className="flex flex-col w-full items-center gap-y-3 lg:gap-y-4">
-        {/*TODO: Forditas strapibol?*/}
         <GetYourPassCTAButton
-          buttonText={'Grab yours'}
+          buttonText={ticketCardContent.ButtonText}
           anchorOrButton={'anchor'}
           href={'/checkout'}
           image={TicketSvg}
+          onClick={() => addTicket(ticketInfo.id)}
         />
         {/*CONTAINER FOR BARCODE*/}
         <div className={cln('w-full py-1 sm:py-2 px-2 border-t-4', `border-t-${borderColor}`)}>
