@@ -4,11 +4,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import TicketSvg from '../../../public/ticket.svg';
 import BarCodeUp from '../../../public/barcode_up.svg';
+import { priceWithSpace } from '../../../utils/priceWithSpace';
 import { cln } from '@/utilities/classnames';
 
 import TicketInfo from '@/components/Tickets/TicketInfo';
 import ticketInfo from '@/components/Tickets/TicketInfo';
-import { priceWithSpace } from '@/components/TicketCard';
 
 const TicketCardCheckout = ({
   name,

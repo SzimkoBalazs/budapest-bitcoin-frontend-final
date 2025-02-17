@@ -2,19 +2,10 @@
 
 import React from 'react';
 import TicketSvg from '../../public/ticket.svg';
+import { priceWithSpace } from '../../utils/priceWithSpace';
 import TicketBarcodeSVG from './TicketBarcodeSVG';
 import { cln } from '@/utilities/classnames';
 import GetYourPassCTAButton from '@/components/GetYourPassCTAButton';
-
-export function priceWithSpace(number, divide = true) {
-  const bigPrice = divide ? number / 100 : number;
-  const bigPriceString = bigPrice?.toString();
-
-  if (bigPriceString?.length < 3) {
-    return bigPriceString;
-  }
-  return bigPriceString?.slice(0, -3) + ' ' + bigPriceString?.slice(-3);
-}
 
 const TicketCard = ({ ticketCardContent, ticketInfo, borderColor, beforePrice, locale }) => {
   function addTicket(id) {

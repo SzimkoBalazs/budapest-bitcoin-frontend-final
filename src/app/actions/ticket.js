@@ -1,5 +1,5 @@
-"use server";
-import prisma from "../../../utils/db";
+'use server';
+import prisma from '../../../utils/db';
 
 // Összes elérhető jegy lekérése
 export async function getTickets() {
@@ -9,10 +9,10 @@ export async function getTickets() {
     //   saleEnd: { gte: new Date() }, // És még nem járt le az értékesítésük
     // },
     orderBy: {
-      price: "asc", // Legolcsóbb jegyek előre
+      price: 'asc', // Legolcsóbb jegyek előre
     },
   });
-  console.log("get Tickets", tickets);
+  console.log('get Tickets', tickets);
   return tickets;
 }
 
@@ -21,19 +21,19 @@ export async function getTicketsForAdmin() {
     const tickets = await prisma.ticket.findMany();
     return tickets;
   } catch (error) {
-    console.error("Hiba a jegyek lekérdezése közben:", error);
+    console.error('Hiba a jegyek lekérdezése közben:', error);
     return [];
   }
 }
 
 export async function getTicket(ticketId) {
-  if (!ticketId) throw new Error("Ticket ID is required");
+  if (!ticketId) throw new Error('Ticket ID is required');
 
   const ticket = await prisma.ticket.findUnique({
     where: { id: parseInt(ticketId) },
   });
 
-  if (!ticket) throw new Error("Ticket not found");
+  if (!ticket) throw new Error('Ticket not found');
 
   return ticket;
 }
@@ -50,7 +50,7 @@ export async function createTicket(data) {
       !data.saleStart ||
       !data.saleEnd
     ) {
-      throw new Error("All fields are required.");
+      throw new Error('All fields are required.');
     }
 
     // Létrehozzuk az új jegyet az adatbázisban
@@ -69,7 +69,7 @@ export async function createTicket(data) {
 
     return { success: true, ticket: newTicket };
   } catch (error) {
-    console.error("Error creating ticket:", error);
+    console.error('Error creating ticket:', error);
     return { success: false, error: error.message };
   }
 }
@@ -83,9 +83,7 @@ export async function updateTicket(data) {
         description: data.description,
         price: parseInt(data.price, 10),
         currency: data.currency,
-        quantityAvailable: data.quantityAvailable
-          ? parseInt(data.quantityAvailable, 10)
-          : null,
+        quantityAvailable: data.quantityAvailable ? parseInt(data.quantityAvailable, 10) : null,
         maxPerUser: parseInt(data.maxPerUser, 10),
         saleStart: data.saleStart ? new Date(data.saleStart) : null,
         saleEnd: data.saleEnd ? new Date(data.saleEnd) : null,
@@ -94,7 +92,7 @@ export async function updateTicket(data) {
 
     return { success: true, ticket: updatedTicket };
   } catch (error) {
-    console.error("Hiba a jegy frissítése közben:", error);
-    return { success: false, message: "Nem sikerült frissíteni a jegyet." };
+    console.error('Hiba a jegy frissítése közben:', error);
+    return { success: false, message: 'Nem sikerült frissíteni a jegyet.' };
   }
 }

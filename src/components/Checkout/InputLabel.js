@@ -10,9 +10,10 @@ export default function InputLabel({
   widthClass,
   formValid,
 }) {
-  const regularCheck = dataSource[name].length === 0 ? 'border-neutral-300' : 'border-green-600';
+  const regularCheck =
+    (dataSource[name] ?? '').length === 0 ? 'border-neutral-300' : 'border-green-600';
   const emailCheck =
-    dataSource[name].length === 0
+    (dataSource[name] ?? '').length === 0
       ? 'border-neutral-300'
       : !formValid?.emailValid || !formValid?.emailsMatch
       ? 'border-red-500'
@@ -24,7 +25,7 @@ export default function InputLabel({
         id={name}
         type={type}
         name={name}
-        value={dataSource[name]}
+        value={dataSource[name] ?? ''}
         onChange={onChange}
         className={cln(
           type === 'email' ? emailCheck : regularCheck,

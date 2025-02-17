@@ -6,6 +6,7 @@ import { PaymentProvider } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 import ChevronDown from '../../../../public/chevron-down.svg';
+import { priceWithSpace } from '../../../../utils/priceWithSpace';
 import { createOrder } from '@/app/actions/orders';
 import { validateCoupon } from '@/app/actions/coupon';
 import PlusMinusBtn from '@/components/Buttons/PlusMinusBtn';
@@ -15,7 +16,6 @@ import { cln } from '@/utilities/classnames';
 import SelectButton from '@/components/Buttons/SelectButton';
 import PayButton from '@/components/Buttons/PayButton';
 import InputLabel from '@/components/Checkout/InputLabel';
-import { priceWithSpace } from '@/components/TicketCard';
 
 export default function CheckoutPage({
   tickets,
@@ -38,12 +38,12 @@ export default function CheckoutPage({
       JSON.parse(localStorage.getItem('formData')) || {
         email: '',
         emailRepeat: '',
-        formFirstName: '',
-        formLastName: '',
-        formPostalCode: '',
-        formCity: '',
-        formStreet: '',
-        formCountry: '',
+        firstName: '',
+        lastName: '',
+        postalCode: '',
+        city: '',
+        street: '',
+        country: '',
         termsAccepted: false,
         marketingAccepted: false,
       }
@@ -284,8 +284,6 @@ export default function CheckoutPage({
   // ✅ Rendelés létrehozása
   const handleOrder = async (paymentProvider) => {
     setGeneralError(null);
-
-    console.log('🎟 Applied Coupon before sending order:', appliedCoupon);
 
     try {
       const items = selectedTickets
@@ -738,7 +736,6 @@ export default function CheckoutPage({
           {isCardPayment !== null && (
             <div className="flex w-full items-center justify-center mt-2">
               <PayButton
-                text={isCardPayment ? 'Pay with card' : 'Pay with Bitcoin'}
                 onClick={() => {
                   isCardPayment
                     ? handleOrder(PaymentProvider.STRIPE)
@@ -746,7 +743,10 @@ export default function CheckoutPage({
                 }}
                 isCardPayment={isCardPayment}
                 disabled={!canSubmit}
-              />
+              >
+                {' '}
+                {isCardPayment ? 'Pay with card' : 'Pay with Bitcoin'}
+              </PayButton>
             </div>
           )}
           {/*TODO: Jobban kinezo clearbutton, mobilon is ne legyen eldugva*/}

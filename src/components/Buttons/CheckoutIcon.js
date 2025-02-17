@@ -8,7 +8,7 @@ import BasketIcon from '../../../public/basket.svg';
 const CheckoutIcon = () => {
   const currentPathname = usePathname();
   const pathNameEnd = currentPathname.split('/').pop();
-  const isCheckoutPage = pathNameEnd === 'checkout';
+  const isCheckoutPage = pathNameEnd === 'checkout' || currentPathname.includes('payment');
 
   const [isCheckoutActive, setIsCheckoutActive] = useState(false);
   const [totalTicketNumber, setTotalTicketNumber] = useState(0);
@@ -23,7 +23,7 @@ const CheckoutIcon = () => {
 
   return (
     <a
-      className="cursor-pointer items-center bg-primary-600 justify-center fixed right-[100px] bottom-[100px] rounded-[40px] shadow-[0_3px_0_0_#000]"
+      className="cursor-pointer items-center bg-primary-600 justify-center fixed right-[40px] bottom-[40px] sm:right-[100px] sm:bottom-[100px] rounded-[40px] shadow-[0_3px_0_0_#000]"
       style={{
         display: isCheckoutActive && !isCheckoutPage ? 'flex' : 'none',
         width: 52,

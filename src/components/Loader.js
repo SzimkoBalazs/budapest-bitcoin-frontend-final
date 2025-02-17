@@ -1,4 +1,7 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import SectionMainTitle from '@/components/SectionMainTitle';
 
 export default function Loader() {

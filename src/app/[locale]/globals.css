@@ -128,3 +128,62 @@ select:-webkit-autofill:focus {
 .animate-bounceDown{
   animation:bounceDown 0.2s ease-in-out;
 }
+
+
+/* From Uiverse.io by AbanoubMagdy1 */
+.loader {
+  width: 16px;
+  height: 16px;
+  position: relative;
+  animation: spin988 2s linear infinite;
+}
+
+.loader .circle {
+  width: 6px;
+  height: 6px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+}
+
+.loader .circle:nth-child(1) {
+  top: 0;
+  left: 0;
+}
+
+.loader .circle:nth-child(2) {
+  top: 0;
+  right: 0;
+}
+
+.loader .circle:nth-child(3) {
+  bottom: 0;
+  left: 0;
+}
+
+.loader .circle:nth-child(4) {
+  bottom: 0;
+  right: 0;
+}
+
+@keyframes spin988 {
+  0% {
+    transform: scale(1) rotate(0);
+  }
+
+ 25% {
+    transform: scale(1.2) rotate(90deg);
+  }
+
+ 50% {
+    transform: scale(1) rotate(180deg);
+  }
+
+  75% {
+    transform: scale(1.2) rotate(270deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(360deg);
+  }
+}

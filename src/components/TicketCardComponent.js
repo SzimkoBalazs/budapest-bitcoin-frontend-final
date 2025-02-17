@@ -10,6 +10,7 @@ const TicketCardComponent = async ({ ticketCardContent, locale }) => {
       {tickets.map((ticket, index) => {
         return index !== 1 ? (
           <TicketCard
+            key={index}
             ticketCardContent={ticketCardContent[index]}
             ticketInfo={ticket}
             beforePrice={ticketCardContent[index].OldPrice}
@@ -18,6 +19,7 @@ const TicketCardComponent = async ({ ticketCardContent, locale }) => {
         ) : (
           <div className="flex flex-col gap-y-[56px]">
             <TicketCard
+              key={index}
               ticketCardContent={ticketCardContent[index]}
               ticketInfo={ticket}
               borderColor="primary-500"
