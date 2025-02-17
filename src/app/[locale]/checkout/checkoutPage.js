@@ -1,13 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { createOrder } from "@/app/actions/orders";
 import { validateCoupon } from "@/app/actions/coupon";
 import { PaymentProvider } from "@prisma/client";
+import { getTicketPrice } from "../../../../utils/getTicketPrice";
 
 export default function CheckoutPage({ tickets }) {
   const router = useRouter();
+  const { locale } = useParams();
 
   // ✅ Jegyek állapotának kezelése
   const [selectedTickets, setSelectedTickets] = useState(
@@ -17,6 +19,9 @@ export default function CheckoutPage({ tickets }) {
   const [email, setEmail] = useState("");
   const [coupon, setCoupon] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [paymentProvider, setPaymentProvider] = useState(
+    PaymentProvider.STRIPE
+  );
   const [error, setError] = useState(null);
 
   const totalQuantity = selectedTickets.reduce(
@@ -33,10 +38,10 @@ export default function CheckoutPage({ tickets }) {
   };
 
   // ✅ Subtotal számítás (összes jegy ára)
-  const subtotal = selectedTickets.reduce(
-    (sum, ticket) => sum + ticket.price * ticket.quantity,
-    0
-  );
+  const subtotal = selectedTickets.reduce((sum, ticket) => {
+    const price = getTicketPrice(ticket, locale);
+    return sum + price * ticket.quantity;
+  }, 0);
 
   // ✅ Kedvezmény levonása, ha van érvényes kupon
   const discountAmount = appliedCoupon?.discountValue
@@ -77,7 +82,7 @@ export default function CheckoutPage({ tickets }) {
   };
 
   // ✅ Rendelés létrehozása
-  const handleOrder = async (paymentProvider) => {
+  const handleOrder = async () => {
     setError(null);
 
     console.log("🎟 Applied Coupon before sending order:", appliedCoupon);
@@ -106,6 +111,7 @@ export default function CheckoutPage({ tickets }) {
         coupon: appliedCoupon ? appliedCoupon.code : null,
         discountInCents: discountAmount,
         finalAmountInCents: finalTotal,
+        locale: locale,
       };
 
       console.log("🚀 Sending order data:", orderData);
@@ -140,7 +146,10 @@ export default function CheckoutPage({ tickets }) {
       {tickets.map((ticket) => (
         <div key={ticket.id} className="mt-4">
           <h2 className="text-lg font-semibold">
-            {ticket.name} - {ticket.price / 100} EUR
+            {ticket.name} -{" "}
+            {locale == "en"
+              ? `${getTicketPrice(ticket, locale) / 100} EUR`
+              : `${getTicketPrice(ticket, locale)} FT`}
           </h2>
           <div className="flex gap-2">
             <button
@@ -187,15 +196,21 @@ export default function CheckoutPage({ tickets }) {
         </div>
         {appliedCoupon && (
           <p className="text-green-600 mt-2">
-            ✅ Coupon applied: {appliedCoupon.code} (-{discountAmount / 100}{" "}
-            EUR)
+            ✅ Coupon applied: {appliedCoupon.code} (-
+            {locale === "hu"
+              ? `${discountAmount} FT`
+              : `${(discountAmount / 100).toFixed(2)} EUR`}
+            )
           </p>
         )}
       </div>
 
       {/* Subtotal */}
       <h2 className="text-lg font-semibold mt-4">
-        Subtotal: {(subtotal - discountAmount) / 100} EUR
+        Subtotal:{" "}
+        {locale === "en"
+          ? `${(subtotal - discountAmount) / 100} EUR`
+          : `${subtotal - discountAmount} FT`}
       </h2>
 
       {/* Fizetési lehetőségek */}
@@ -203,16 +218,24 @@ export default function CheckoutPage({ tickets }) {
         <h2 className="text-lg font-semibold">Select Payment Method</h2>
         <div className="flex gap-4 mt-2">
           <button
-            onClick={() => handleOrder(PaymentProvider.BTCPAY)}
+            onClick={() => setPaymentProvider(PaymentProvider.BTCPAY)}
             className="bg-yellow-500 text-white px-4 py-2 rounded"
           >
             Pay with Bitcoin (BTCPay)
           </button>
           <button
-            onClick={() => handleOrder(PaymentProvider.STRIPE)}
+            onClick={() => setPaymentProvider(PaymentProvider.STRIPE)}
             className="bg-blue-500 text-white px-4 py-2 rounded"
           >
             Pay with Card (Stripe)
+          </button>
+        </div>
+        <div className="flex justify-center">
+          <button
+            className="flex mt-5 justify-center border-2 border-red-400 text-black px-6 py-2"
+            onClick={handleOrder}
+          >
+            Pay
           </button>
         </div>
       </div>

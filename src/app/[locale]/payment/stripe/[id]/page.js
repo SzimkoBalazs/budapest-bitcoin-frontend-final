@@ -20,9 +20,12 @@ export default async function PaymentPage({ params }) {
     return <div className="text-red-500">❌ Error: {err.message}</div>;
   }
 
+  console.log("stripe final amount", order.finalAmountInCents);
+  console.log("orders currency: ", order.currency);
   const paymentIntent = await stripe.paymentIntents.create({
     amount: order.finalAmountInCents,
-    currency: order.currency,
+    currency: order.currency.toLowerCase(),
+
     metadata: { orderId: order.id },
   });
 
@@ -47,7 +50,10 @@ export default async function PaymentPage({ params }) {
             <li key={item.id} className="flex justify-between border-b pb-2">
               <span>Ticket ID: {item.ticketId}</span>
               <span>
-                {item.quantity} × {(item.priceAtPurchase / 100).toFixed(2)} EUR
+                {item.quantity} ×{" "}
+                {locale === "en"
+                  ? `${(item.priceAtPurchase / 100).toFixed(2)} EUR`
+                  : `${item.priceAtPurchase} Ft`}
               </span>
             </li>
           ))}
@@ -74,18 +80,24 @@ export default async function PaymentPage({ params }) {
       <div className="mt-6 border-t pt-4">
         <h2 className="text-lg font-semibold">Payment Details</h2>
         <p>
-          <strong>Total:</strong> {(order.totalAmountInCents / 100).toFixed(2)}{" "}
-          EUR
+          <strong>Total:</strong>{" "}
+          {locale === "en"
+            ? `${(order.totalAmountInCents / 100).toFixed(2)} EUR`
+            : `${order.totalAmountInCents} Ft`}
         </p>
         {order.discountInCents > 0 && (
           <p className="text-red-600">
             <strong>Discount:</strong> -
-            {(order.discountInCents / 100).toFixed(2)} EUR
+            {locale === "en"
+              ? `${(order.discountInCents / 100).toFixed(2)} EUR`
+              : `${order.discountInCents} Ft`}
           </p>
         )}
         <p className="text-xl font-bold">
           <strong>Final Amount:</strong>{" "}
-          {(order.finalAmountInCents / 100).toFixed(2)} EUR
+          {locale === "en"
+            ? `${(order.finalAmountInCents / 100).toFixed(2)} EUR`
+            : `${order.finalAmountInCents} Ft`}
         </p>
         <p>
           <strong>Payment Provider:</strong> {order.paymentProvider}

@@ -2,7 +2,7 @@
 
 import prisma from "../../../utils/db";
 import { orderSchema } from "../../../utils/validation";
-import { PaymentProvider } from "@prisma/client";
+import { PaymentProvider, Currency } from "@prisma/client";
 
 export async function createOrder(data) {
   try {
@@ -14,7 +14,7 @@ export async function createOrder(data) {
       throw new Error(validation.error.errors[0].message);
     }
 
-    const { items, paymentProvider, email, coupon } = data;
+    const { items, paymentProvider, email, coupon, locale } = data;
 
     //  2. Ellenőrizzük, hogy érvényes fizetési szolgáltató
     const validProviders = [PaymentProvider.BTCPAY, PaymentProvider.STRIPE];
@@ -64,7 +64,13 @@ export async function createOrder(data) {
         );
       }
 
-      totalAmountInCents += foundTicket.price * ticket.quantity;
+      console.log(foundTicket);
+
+      if (locale === "en") {
+        totalAmountInCents += foundTicket.priceInEur * ticket.quantity;
+      } else {
+        totalAmountInCents += foundTicket.priceInHuf * ticket.quantity;
+      }
     }
 
     console.log("💰 Total before discount:", totalAmountInCents);
@@ -111,6 +117,13 @@ export async function createOrder(data) {
       0
     );
 
+    const finalCurrency =
+      paymentProvider === PaymentProvider.STRIPE
+        ? locale === "en"
+          ? Currency.EUR
+          : Currency.HUF
+        : Currency.EUR;
+
     console.log("💰 Final amount after discount:", finalAmountInCents);
 
     //  7. TRANZAKCIÓ: Order + OrderItems létrehozása és jegyszám frissítése
@@ -122,17 +135,22 @@ export async function createOrder(data) {
           totalAmountInCents,
           discountInCents,
           finalAmountInCents,
-          currency: "EUR",
+          currency: finalCurrency,
           status: "PENDING",
           paymentProvider,
           couponId: appliedCoupon ? appliedCoupon.id : null,
           items: {
-            create: items.map((ticket) => ({
-              ticketId: ticket.id,
-              quantity: ticket.quantity,
-              priceAtPurchase: foundTickets.find((t) => t.id === ticket.id)
-                .price,
-            })),
+            create: items.map((ticket) => {
+              const foundTicket = foundTickets.find((t) => t.id === ticket.id);
+              return {
+                ticketId: ticket.id,
+                quantity: ticket.quantity,
+                priceAtPurchase:
+                  locale === "en"
+                    ? foundTicket.priceInEur
+                    : foundTicket.priceInHuf,
+              };
+            }),
           },
         },
         include: {

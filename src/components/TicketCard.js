@@ -2,8 +2,17 @@ import React from "react";
 import TicketBarcodeSVG from "./TicketBarcodeSVG";
 import { cln } from "@/utilities/classnames";
 import Link from "next/link";
+import { getTicketPrice } from "../../utils/getTicketPrice";
 
-const TicketCard = ({ ticketCardContent, ticketInfo, borderColor }) => {
+const TicketCard = async ({
+  ticketCardContent,
+  ticketInfo,
+  locale,
+  borderColor,
+}) => {
+  console.log(ticketInfo);
+  console.log("Locale:", locale);
+
   return (
     //   OUTSIDE CONTAINER
     <div
@@ -19,7 +28,11 @@ const TicketCard = ({ ticketCardContent, ticketInfo, borderColor }) => {
           <h3 className="flex-[1_0_0] text-white text-center font-exo text-[28px] lg:text-[44px] font-extrabold leading-[100%] tracking-[2.2px]">
             {ticketCardContent.PassTitle}
           </h3>
-          <p className="text-white">{ticketInfo.price / 100}</p>
+          <p className="text-white">
+            {locale == "en"
+              ? `${getTicketPrice(ticketInfo, locale) / 100} EUR`
+              : `${getTicketPrice(ticketInfo, locale)} FT`}
+          </p>
         </div>
         {/*container for title*/}
         {/*CONTAINER FOR BULLETPOINTS*/}

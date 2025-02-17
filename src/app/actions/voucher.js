@@ -13,7 +13,6 @@ import prisma from "../../../utils/db";
 // }
 
 export async function createVoucher(voucherId, orderId, pdfPath, expiresAt) {
-  console.log("Data:", voucherId, orderId, pdfPath, expiresAt);
   try {
     const newVoucher = await prisma.voucher.create({
       data: {
@@ -25,7 +24,7 @@ export async function createVoucher(voucherId, orderId, pdfPath, expiresAt) {
     });
     return { success: true, voucher: newVoucher };
   } catch (error) {
-    console.error("Hiba a voucher létrehozásakor:", error.stack); // Itt írjuk ki a stack-et
+    console.error("Hiba a voucher létrehozásakor:", error.stack);
     return { success: false, message: "Nem sikerült létrehozni a vouchert." };
   }
 }

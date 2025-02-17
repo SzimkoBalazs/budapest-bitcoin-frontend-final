@@ -2,7 +2,7 @@ import React from "react";
 import TicketCard from "./TicketCard";
 import { getTickets } from "@/app/actions/ticket";
 
-const TicketCardComponent = async ({ ticketCardContent }) => {
+const TicketCardComponent = async ({ ticketCardContent, locale }) => {
   const tickets = await getTickets();
 
   return (
@@ -10,6 +10,7 @@ const TicketCardComponent = async ({ ticketCardContent }) => {
       <TicketCard
         ticketCardContent={ticketCardContent[0]}
         ticketInfo={tickets[0]}
+        locale={locale}
         borderColor="white"
       />
 
@@ -17,6 +18,7 @@ const TicketCardComponent = async ({ ticketCardContent }) => {
         <TicketCard
           ticketCardContent={ticketCardContent[1]}
           ticketInfo={tickets[1]}
+          locale={locale}
           borderColor="primary-500"
         />
         <span
@@ -30,6 +32,7 @@ const TicketCardComponent = async ({ ticketCardContent }) => {
       <TicketCard
         ticketCardContent={ticketCardContent[2]}
         ticketInfo={tickets[2]}
+        locale={locale}
         borderColor="white"
       />
     </div>
