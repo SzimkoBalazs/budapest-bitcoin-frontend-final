@@ -52,6 +52,7 @@ export async function validateCoupon(code, selectedTickets) {
       code: coupon.code,
       discountType: coupon.discountType,
       discountValue: coupon.discountValue,
+      minTicketsRequired: coupon.minTicketsRequired,
     };
   } catch (error) {
     console.error("Coupon validation error:", error.message);

@@ -40,6 +40,8 @@ function Form({ priceInCents, locale, buttonText, currency, order }) {
   const [isPaymentElementLoaded, setIsPaymentElementLoaded] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const [clientSecret, setClientSecret] = useState(null);
+
   useEffect(() => {
     if (!elements) return;
     const interval = setInterval(() => {

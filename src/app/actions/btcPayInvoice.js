@@ -1,5 +1,7 @@
 "use server";
 
+import { metadata } from "../[locale]/layout";
+
 export async function createBtcpayInvoice(order, locale) {
   const btcpayConfig = {
     apiUrl: process.env.BTCPAY_API_URL,
@@ -18,6 +20,10 @@ export async function createBtcpayInvoice(order, locale) {
     redirectURL: `${process.env.NEXT_PUBLIC_BASE_URL}/${locale}/payment/btcpay/${order.id}/success`,
     // A webhook URL, ahol a BTCPay visszaértesíti a fizetés állapotáról
     notificationURL: `${process.env.NEXT_PUBLIC_BASE_URL}/api/webhooks/btcpay`,
+    metadata: {
+      orderId: order.id.toString(),
+      email: order.email,
+    },
   };
 
   // Az invoice létrehozásához szükséges URL

@@ -30,18 +30,18 @@ export async function POST(req) {
   }
 
   // Ellenőrizzük, hogy az esemény már feldolgozásra került-e
-  const existingEvent = await prisma.stripeWebhookEvent.findUnique({
-    where: { eventId: event.id },
-  });
-  if (existingEvent) {
-    console.log(`Event ${event.id} already processed.`);
-    return NextResponse.json({ received: true });
-  }
+  // const existingEvent = await prisma.stripeWebhookEvent.findUnique({
+  //   where: { eventId: event.id },
+  // });
+  // if (existingEvent) {
+  //   console.log(`Event ${event.id} already processed.`);
+  //   return NextResponse.json({ received: true });
+  // }
 
-  // Ha még nem, akkor rögzíjük az esemény ID-t
-  await prisma.stripeWebhookEvent.create({
-    data: { eventId: event.id },
-  });
+  // // Ha még nem, akkor rögzíjük az esemény ID-t
+  // await prisma.stripeWebhookEvent.create({
+  //   data: { eventId: event.id },
+  // });
 
   if (event.type === "payment_intent.succeeded") {
     const charge = event.data.object;
@@ -94,65 +94,65 @@ export async function POST(req) {
     // const qrCodes = await generateOrderQrCodes(order);
     // console.log("QRCODES: ", qrCodes);
 
-    // const qrCodesByItem = await generateOrderQrCodes(order);
-    // console.log("QR Codes: ", qrCodesByItem);
+    const qrCodesByItem = await generateOrderQrCodes(order);
+    console.log("QR Codes: ", qrCodesByItem);
 
-    // const ticketData = {
-    //   orderId: order.id,
-    //   email: order.email,
-    //   // Az items tömb tartalmazza az egyes jegyek adatait:
-    //   items: await Promise.all(
-    //     qrCodesByItem.map(async (item) => {
-    //       // Itt lehet egy függvény, ami lekéri a ticket nevét a ticketId alapján
-    //       const ticket = await getTicket(item.ticketId);
-    //       const ticketName = await ticket.name;
-    //       return {
-    //         ticketId: item.ticketId,
-    //         ticketName,
-    //         quantity: item.quantity,
-    //         qrCodes: item.codes,
-    //       };
-    //     })
-    //   ),
-    // };
+    const ticketData = {
+      orderId: order.id,
+      email: order.email,
+      // Az items tömb tartalmazza az egyes jegyek adatait:
+      items: await Promise.all(
+        qrCodesByItem.map(async (item) => {
+          // Itt lehet egy függvény, ami lekéri a ticket nevét a ticketId alapján
+          const ticket = await getTicket(item.ticketId);
+          const ticketName = await ticket.name;
+          return {
+            ticketId: item.ticketId,
+            ticketName,
+            quantity: item.quantity,
+            qrCodes: item.codes,
+          };
+        })
+      ),
+    };
 
-    // //Legeneráljuk a PDF-et a ticketData alapján
-    // const result = await generateTicketPdf(ticketData);
-    // console.log("generateTicketPdf result:", result);
-    // const { voucherId, pdfPath, expiresAt } = result;
-    // await createVoucher(voucherId, order.id, pdfPath, expiresAt);
+    //Legeneráljuk a PDF-et a ticketData alapján
+    const result = await generateTicketPdf(ticketData);
+    console.log("generateTicketPdf result:", result);
+    const { voucherId, pdfPath, expiresAt } = result;
+    await createVoucher(voucherId, order.id, pdfPath, expiresAt);
 
-    // // Generálunk egy JWT-t a voucherId alapján
-    // let token;
-    // try {
-    //   token = await generateDownloadToken(voucherId, expiresAt);
-    //   console.log("JWT token:", token);
-    // } catch (error) {
-    //   console.error("Error generating token:", error);
-    // }
-    // // Összeállítjuk a letöltési URL-t
-    // const downloadUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/download-ticket?token=${token}`;
+    // Generálunk egy JWT-t a voucherId alapján
+    let token;
+    try {
+      token = await generateDownloadToken(voucherId, expiresAt);
+      console.log("JWT token:", token);
+    } catch (error) {
+      console.error("Error generating token:", error);
+    }
+    // Összeállítjuk a letöltési URL-t
+    const downloadUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/download-ticket?token=${token}`;
 
-    // const invoiceData = {
-    //   buyerName: "Pisti",
-    //   email: order.email,
-    //   zip: "7274234",
-    //   city: "Maribor",
-    //   address: "pontott",
-    //   taxNumber: "minekaz",
-    //   items: order.items.map((item) => ({
-    //     label: "Konferencia jegy",
-    //     quantity: item.quantity,
-    //     vat: 27,
-    //     netUnitPrice: item.priceAtPurchase / 100,
-    //     unit: "db",
-    //   })),
-    // };
+    const invoiceData = {
+      buyerName: "Pisti",
+      email: order.email,
+      zip: "7274234",
+      city: "Maribor",
+      address: "pontott",
+      taxNumber: "minekaz",
+      items: order.items.map((item) => ({
+        label: "Konferencia jegy",
+        quantity: item.quantity,
+        vat: 27,
+        netUnitPrice: item.priceAtPurchase / 100,
+        unit: "db",
+      })),
+    };
 
-    // const invoiceResult = await createInvoice(invoiceData);
-    // console.log("Invoice result:", invoiceResult);
+    const invoiceResult = await createInvoice(invoiceData);
+    console.log("Invoice result:", invoiceResult);
 
-    // await sendTransactionalEmail(order, downloadUrl, invoiceResult.pdf);
+    await sendTransactionalEmail(order, downloadUrl, invoiceResult.pdf);
   } else if (event.type === "payment_intent.payment_failed") {
     const paymentIntent = event.data.object;
     const orderId = paymentIntent.metadata.orderId;

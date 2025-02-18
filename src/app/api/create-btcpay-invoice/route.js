@@ -1,4 +1,3 @@
-// app/api/create-btcpay-invoice/route.js
 import { NextResponse } from "next/server";
 import { createBtcpayInvoice } from "@/app/actions/btcPayInvoice";
 import { getOrder } from "@/app/actions/orders";

@@ -236,6 +236,21 @@ export default function CheckoutPage({
 
   const totalQuantity = selectedTickets.reduce((sum, ticket) => sum + ticket.quantity, 0);
 
+  useEffect(() => {
+    if (appliedCoupon) {
+      const totalTickets = selectedTickets.reduce(
+        (sum, ticket) => sum + ticket.quantity,
+        0
+      );
+      if (totalTickets < appliedCoupon.minTicketsRequired) {
+        setAppliedCoupon(null);
+        setError(
+          `A kuponhoz minimum ${appliedCoupon.minTicketsRequired} jegy szükséges.`
+        );
+      }
+    }
+  }, [selectedTickets, appliedCoupon]);
+
   const handlePaymentRedirect = async (order) => {
     if (order.paymentProvider === PaymentProvider.BTCPAY) {
       router.push(`/payment/btcpay/${order.id}`);
