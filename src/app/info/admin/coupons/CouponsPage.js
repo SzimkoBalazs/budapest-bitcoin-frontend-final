@@ -79,6 +79,8 @@ export default function CouponsPage({ coupons }) {
               icon="pi pi-pencil"
               className="p-button-rounded p-button-text"
               onClick={() => openEditModal(rowData)}
+              tooltip="Edit"
+              tooltipOptions={{ position: "top" }}
             />
           )}
         />

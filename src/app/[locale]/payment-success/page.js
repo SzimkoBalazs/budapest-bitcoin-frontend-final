@@ -23,12 +23,25 @@ export default async function SuccessPage({ searchParams }) {
   if (order == null) return notFound();
 
   const isSuccess = paymentIntent.status === "succeeded";
+  const isPaid = order.status === "PAID";
 
   return (
-    <div className="mt-[100px] w-full max-w-4xl mx-auto flex p-10 justify-center items-center">
-      <h1 className="text-white font-bold text-2xl">
-        {isSuccess ? "Success" : "Error"}
-      </h1>
+    <div className="mt-[100px] w-full max-w-4xl mx-auto flex flex-col items-center p-10">
+      {isSuccess && isPaid ? (
+        <>
+          <h1 className="text-green-600 font-bold text-2xl">
+            Fizetés sikeres!
+          </h1>
+          {/* Itt megjeleníthetsz további információkat a rendelésről */}
+        </>
+      ) : (
+        <>
+          <h1 className="text-yellow-600 font-bold text-2xl">
+            Fizetés feldolgozása folyamatban…
+          </h1>
+          {/* Itt esetleg egy polling komponens is elhelyezhető, hogy frissítse a státuszt */}
+        </>
+      )}
     </div>
   );
 }

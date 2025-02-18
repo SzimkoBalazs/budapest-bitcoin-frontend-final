@@ -1,6 +1,6 @@
 "use server";
 
-export async function sendTransactionalEmail(order, downloadUrl) {
+export async function sendTransactionalEmail(order, downloadUrl, pdf) {
   const BREVO_API_KEY = process.env.BREVO_API_KEY;
   const BREVO_TRANSACTIONAL_TEMPLATE_ID =
     process.env.BREVO_TRANSACTIONAL_TEMPLATE_ID;
@@ -8,6 +8,8 @@ export async function sendTransactionalEmail(order, downloadUrl) {
   if (!BREVO_API_KEY || !BREVO_TRANSACTIONAL_TEMPLATE_ID) {
     throw new Error("Brevo API key vagy Template ID hiányzik.");
   }
+
+  const base64Pdf = pdf.toString("base64");
 
   const emailPayload = {
     to: [{ email: order.email }],
@@ -17,6 +19,12 @@ export async function sendTransactionalEmail(order, downloadUrl) {
       download_url: downloadUrl,
       // Egyéb sablon paraméterek, például fizetési összeg, jegy adatok stb.
     },
+    attachment: [
+      {
+        name: "invoice.pdf",
+        content: base64Pdf,
+      },
+    ],
   };
 
   try {

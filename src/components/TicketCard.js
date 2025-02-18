@@ -1,4 +1,5 @@
-'use client';
+import Link from "next/link";
+import { getTicketPrice } from "../../utils/getTicketPrice";
 
 import React from 'react';
 import TicketSvg from '../../public/ticket.svg';
@@ -64,7 +65,7 @@ const TicketCard = ({ ticketCardContent, ticketInfo, borderColor, beforePrice, l
                 className="text-white text-[28px] lg:text-[38px] tracking-[2.4px]"
                 style={{ fontWeight: 800, lineHeight: '100%' }}
               >
-                {priceWithSpace(ticketInfo.price)}
+                {locale === 'en' ? `${getTicketPrice(ticketInfo, locale) / 100}` : `${getTicketPrice(ticketInfo, locale)}`}
               </h3>
               <h3
                 className="text-white absolute right-[-36px] lg:right-[-50px] text-[16px] lg:text-[22px] tracking-[1px] mb-[2px] lg:mb-[4px]"

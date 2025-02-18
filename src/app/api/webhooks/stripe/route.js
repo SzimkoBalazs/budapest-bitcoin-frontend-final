@@ -9,6 +9,7 @@ import { generateOrderQrCodes } from "../../../../../utils/generateOrderQrCodes"
 import { sendTransactionalEmail } from "../../../../../utils/sendTransactionalEmail";
 import { generateTicketPdf } from "@/app/actions/generateTicketPdf";
 import { generateDownloadToken } from "@/app/actions/generateDownloadToken";
+import { createInvoice } from "@/app/actions/szamlazzInvoice";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -28,6 +29,20 @@ export async function POST(req) {
     return NextResponse.json({ error: err.message }, { status: 400 });
   }
 
+  // Ellenőrizzük, hogy az esemény már feldolgozásra került-e
+  const existingEvent = await prisma.stripeWebhookEvent.findUnique({
+    where: { eventId: event.id },
+  });
+  if (existingEvent) {
+    console.log(`Event ${event.id} already processed.`);
+    return NextResponse.json({ received: true });
+  }
+
+  // Ha még nem, akkor rögzíjük az esemény ID-t
+  await prisma.stripeWebhookEvent.create({
+    data: { eventId: event.id },
+  });
+
   if (event.type === "payment_intent.succeeded") {
     const charge = event.data.object;
     const orderId = charge.metadata.orderId;
@@ -39,85 +54,176 @@ export async function POST(req) {
       return new NextResponse("Bad request", { status: 400 });
     }
 
-    const payment = await prisma.payment.create({
-      data: {
-        orderId: order.id,
-        providerId: charge.id,
-        amountInCents: pricePaidInCents,
-        currency: charge.currency,
-        status: PaymentStatus.SUCCESS,
-        errorMessage: charge.last_payment_error
-          ? charge.last_payment_error.message
-          : null,
-      },
-    });
-
-    await prisma.order.update({
-      where: { id: order.id },
-      data: {
-        status: OrderStatus.PAID,
-      },
-    });
-
-    if (order.couponId) {
-      await prisma.$transaction([
-        prisma.coupon.update({
-          where: {
-            id: order.coupon.id,
-            usedRedemptions: { lt: order.coupon.maxRedemptions },
-          },
+    if (order.status === OrderStatus.PAID) {
+      console.log(`Order ${order.id} already paid.`);
+      return new NextResponse("Order already paid", { status: 400 });
+    }
+    try {
+      // Az adatbázis módosítások atomikus módon történnek egy tranzakcióban.
+      await prisma.$transaction(async (tx) => {
+        await tx.payment.create({
           data: {
-            usedRedemptions: { increment: 1 },
+            orderId: order.id,
+            providerId: charge.id,
+            amountInCents: pricePaidInCents,
+            currency: charge.currency.toUpperCase(),
+            status: PaymentStatus.SUCCESS,
+            errorMessage: charge.last_payment_error
+              ? charge.last_payment_error.message
+              : null,
           },
-        }),
-      ]);
+        });
+
+        await tx.order.update({
+          where: { id: order.id },
+          data: { status: OrderStatus.PAID },
+        });
+
+        if (order.couponId && order.coupon) {
+          await tx.coupon.update({
+            where: { id: order.coupon.id },
+            data: { usedRedemptions: { increment: 1 } },
+          });
+        }
+      });
+    } catch (error) {
+      console.error("Error processing payment transaction:", error.stack);
+      return new NextResponse("Internal server error", { status: 500 });
     }
 
     // const qrCodes = await generateOrderQrCodes(order);
     // console.log("QRCODES: ", qrCodes);
 
-    const qrCodesByItem = await generateOrderQrCodes(order);
-    console.log("QR Codes: ", qrCodesByItem);
+    // const qrCodesByItem = await generateOrderQrCodes(order);
+    // console.log("QR Codes: ", qrCodesByItem);
 
-    const ticketData = {
-      orderId: order.id,
-      email: order.email,
-      // Az items tömb tartalmazza az egyes jegyek adatait:
-      items: await Promise.all(
-        qrCodesByItem.map(async (item) => {
-          // Itt lehet egy függvény, ami lekéri a ticket nevét a ticketId alapján
-          const ticket = await getTicket(item.ticketId);
-          const ticketName = await ticket.name;
-          return {
-            ticketId: item.ticketId,
-            ticketName,
-            quantity: item.quantity,
-            qrCodes: item.codes,
-          };
-        })
-      ),
-    };
+    // const ticketData = {
+    //   orderId: order.id,
+    //   email: order.email,
+    //   // Az items tömb tartalmazza az egyes jegyek adatait:
+    //   items: await Promise.all(
+    //     qrCodesByItem.map(async (item) => {
+    //       // Itt lehet egy függvény, ami lekéri a ticket nevét a ticketId alapján
+    //       const ticket = await getTicket(item.ticketId);
+    //       const ticketName = await ticket.name;
+    //       return {
+    //         ticketId: item.ticketId,
+    //         ticketName,
+    //         quantity: item.quantity,
+    //         qrCodes: item.codes,
+    //       };
+    //     })
+    //   ),
+    // };
 
-    // Legeneráljuk a PDF-et a ticketData alapján
-    const result = await generateTicketPdf(ticketData);
-    console.log("generateTicketPdf result:", result);
-    const { voucherId, pdfPath, expiresAt } = result;
-    await createVoucher(voucherId, order.id, pdfPath, expiresAt);
+    // //Legeneráljuk a PDF-et a ticketData alapján
+    // const result = await generateTicketPdf(ticketData);
+    // console.log("generateTicketPdf result:", result);
+    // const { voucherId, pdfPath, expiresAt } = result;
+    // await createVoucher(voucherId, order.id, pdfPath, expiresAt);
 
-    // Generálunk egy JWT-t a voucherId alapján
-    let token;
-    try {
-      token = await generateDownloadToken(voucherId, expiresAt);
-      console.log("JWT token:", token);
-    } catch (error) {
-      console.error("Error generating token:", error);
+    // // Generálunk egy JWT-t a voucherId alapján
+    // let token;
+    // try {
+    //   token = await generateDownloadToken(voucherId, expiresAt);
+    //   console.log("JWT token:", token);
+    // } catch (error) {
+    //   console.error("Error generating token:", error);
+    // }
+    // // Összeállítjuk a letöltési URL-t
+    // const downloadUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/download-ticket?token=${token}`;
+
+    // const invoiceData = {
+    //   buyerName: "Pisti",
+    //   email: order.email,
+    //   zip: "7274234",
+    //   city: "Maribor",
+    //   address: "pontott",
+    //   taxNumber: "minekaz",
+    //   items: order.items.map((item) => ({
+    //     label: "Konferencia jegy",
+    //     quantity: item.quantity,
+    //     vat: 27,
+    //     netUnitPrice: item.priceAtPurchase / 100,
+    //     unit: "db",
+    //   })),
+    // };
+
+    // const invoiceResult = await createInvoice(invoiceData);
+    // console.log("Invoice result:", invoiceResult);
+
+    // await sendTransactionalEmail(order, downloadUrl, invoiceResult.pdf);
+  } else if (event.type === "payment_intent.payment_failed") {
+    const paymentIntent = event.data.object;
+    const orderId = paymentIntent.metadata.orderId;
+    const order = await getOrder(parseInt(orderId, 10));
+    if (order == null) {
+      return new NextResponse("Bad request", { status: 400 });
     }
-    // Összeállítjuk a letöltési URL-t (a JWT-t nem dekódolható formában látja majd a kliens)
-    const downloadUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/download-ticket?token=${token}`;
-
-    await sendTransactionalEmail(order, downloadUrl);
-
-    // await sendTransactionalEmail(order, qrCodes);
+    try {
+      await prisma.$transaction(async (tx) => {
+        // Létrehozunk egy Payment rekordot FAILED státusszal
+        await tx.payment.create({
+          data: {
+            orderId: order.id,
+            providerId: paymentIntent.id,
+            amountInCents: paymentIntent.amount,
+            currency: paymentIntent.currency.toUpperCase(),
+            status: PaymentStatus.FAILED,
+            errorMessage: paymentIntent.last_payment_error
+              ? paymentIntent.last_payment_error.message
+              : "Payment failed",
+          },
+        });
+        // Frissítjük az order státuszát FAILED-re
+        await tx.order.update({
+          where: { id: order.id },
+          data: { status: OrderStatus.FAILED },
+        });
+      });
+    } catch (error) {
+      console.error(
+        "Error processing failed payment transaction:",
+        error.stack
+      );
+    }
+    console.error(`Payment failed for Order ID ${order.id}`);
+  } else if (event.type === "payment_intent.canceled") {
+    const paymentIntent = event.data.object;
+    const orderId = paymentIntent.metadata.orderId;
+    const order = await getOrder(parseInt(orderId, 10));
+    if (order == null) {
+      return new NextResponse("Bad request", { status: 400 });
+    }
+    try {
+      await prisma.$transaction(async (tx) => {
+        // Létrehozunk egy Payment rekordot CANCELLED státusszal
+        await tx.payment.create({
+          data: {
+            orderId: order.id,
+            providerId: paymentIntent.id,
+            amountInCents: paymentIntent.amount,
+            currency: paymentIntent.currency.toUpperCase(),
+            status: PaymentStatus.CANCELLED,
+            errorMessage: paymentIntent.last_payment_error
+              ? paymentIntent.last_payment_error.message
+              : "Payment Cancelled",
+          },
+        });
+        // Frissítjük az order státuszát CANCELLED-re
+        await tx.order.update({
+          where: { id: order.id },
+          data: { status: OrderStatus.CANCELLED },
+        });
+      });
+    } catch (error) {
+      console.error(
+        "Error processing cancelled payment transaction:",
+        error.stack
+      );
+    }
+    console.error(`Payment cancelled for Order ID ${order.id}`);
   }
+
   return NextResponse.json({ received: true });
 }

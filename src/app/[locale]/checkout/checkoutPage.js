@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { PaymentProvider } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -16,6 +16,7 @@ import { cln } from '@/utilities/classnames';
 import SelectButton from '@/components/Buttons/SelectButton';
 import PayButton from '@/components/Buttons/PayButton';
 import InputLabel from '@/components/Checkout/InputLabel';
+import { getTicketPrice } from "../../../../utils/getTicketPrice";
 
 export default function CheckoutPage({
   tickets,
@@ -157,6 +158,7 @@ export default function CheckoutPage({
   }, []);
 
   const router = useRouter();
+  const { locale } = useParams();
 
   // ✅ Jegyek állapotának kezelése
   const [selectedTickets, setSelectedTickets] = useState(function () {
@@ -227,8 +229,10 @@ export default function CheckoutPage({
 
   const [coupon, setCoupon] = useState('');
   const [appliedCoupon, setAppliedCoupon] = useState(null);
-  const [couponError, setCouponError] = useState(null);
-  const [generalError, setGeneralError] = useState(null);
+  const [paymentProvider, setPaymentProvider] = useState(
+    PaymentProvider.STRIPE
+  );
+  const [error, setError] = useState(null);
 
   const totalQuantity = selectedTickets.reduce((sum, ticket) => sum + ticket.quantity, 0);
 
@@ -303,6 +307,7 @@ export default function CheckoutPage({
         coupon: appliedCoupon ? appliedCoupon.code : null,
         discountInCents: discountAmount,
         finalAmountInCents: finalTotal,
+        locale: locale,
       };
 
       console.log('🚀 Sending order data:', orderData);
@@ -761,6 +766,14 @@ export default function CheckoutPage({
               {checkoutPageData.clearForm}
             </button>
           </div>
+        </div>
+        <div className="flex justify-center">
+          <button
+            className="flex mt-5 justify-center border-2 border-red-400 text-black px-6 py-2"
+            onClick={handleOrder}
+          >
+            Pay
+          </button>
         </div>
       </div>
     </div>

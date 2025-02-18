@@ -92,7 +92,7 @@ export default function OrdersPage({ orders }) {
               field={col}
               header={formatHeader(col)}
               sortable
-              body={(rowData) => formatValue(col, rowData[col])}
+              body={(rowData) => formatValue(col, rowData[col], rowData)}
             />
           ) : null
         )}
@@ -119,8 +119,17 @@ function formatHeader(header) {
 }
 
 // Dátumok és egyéb értékek formázása
-function formatValue(col, value) {
+function formatValue(col, value, rowData) {
   if (!value) return "-";
+
+  const priceFields = [
+    "totalAmountInCents",
+    "discountInCents",
+    "finalAmountInCents",
+  ];
+  if (priceFields.includes(col) && rowData.currency === "EUR") {
+    return value / 100;
+  }
 
   if (col === "createdAt") {
     return new Date(value).toLocaleDateString("hu-HU");

@@ -17,13 +17,19 @@ model Ticket {
   id                Int      @id @default(autoincrement())
   name              String
   description       String?  // Opcionális leírás
-  price             Int      // Az ár centben/fillérben tárolva
-  currency          String   @default("EUR") // Ha több pénznem is lehet
+  priceInEur             Int  @default(10)    // Az ár centben/fillérben tárolva
+  priceInHuf             Int  @default(10)
+  currency          Currency   @default(EUR) // Ha több pénznem is lehet
   quantityAvailable Int      // Összesen ennyi jegy elérhető
   maxPerUser        Int      // Egy felhasználó max ennyit vehet
   saleStart         DateTime // Mikor kezdődik az eladás
   saleEnd           DateTime // Mikor zárul le az eladás
   orders            OrderItem[] // Kapcsolat az OrderItem modellel
+}
+
+enum Currency {
+  EUR
+  HUF
 }
 
 model Order {
@@ -32,7 +38,7 @@ model Order {
   totalAmountInCents  Int      // Végösszeg centben
   discountInCents     Int?     // Mennyi kedvezményt vontunk le
   finalAmountInCents  Int  @default(0)     // Végösszeg a kedvezmény levonása után
-  currency        String   @default("EUR")
+  currency        Currency   @default(EUR)
   status          OrderStatus @default(PENDING)
   paymentProvider PaymentProvider
   createdAt       DateTime @default(now())
@@ -62,7 +68,7 @@ model OrderItem {
   quantity        Int
   priceAtPurchase Int // Mennyibe került a jegy vásárláskor
   instances       TicketInstance[]
-  
+
   order   Order   @relation(fields: [orderId], references: [id], map: "OrderItem_orderId_fkey")
   ticket  Ticket  @relation(fields: [ticketId], references: [id], map: "OrderItem_ticketId_fkey")
 }
@@ -81,7 +87,7 @@ model Payment {
   orderId         Int
   providerId      String   // BTCPay invoice ID vagy Stripe charge ID
   amountInCents          Int      // Mennyit fizettek centben
-  currency        String   @default("EUR")
+  currency        Currency   @default(EUR)
   status          PaymentStatus @default(PENDING)
   errorMessage    String?
   createdAt       DateTime @default(now())
@@ -92,6 +98,7 @@ enum PaymentStatus {
   PENDING
   SUCCESS
   FAILED
+  CANCELLED
 }
 
 model Coupon {
@@ -128,6 +135,13 @@ model Voucher {
   expiresAt DateTime
   createdAt DateTime @default(now())
 }
+
+model StripeWebhookEvent {
+  id        Int      @id @default(autoincrement())
+  eventId   String   @unique
+  processedAt DateTime @default(now())
+}
+
 
 
 

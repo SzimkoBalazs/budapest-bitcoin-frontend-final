@@ -9,7 +9,7 @@ export async function getTickets() {
     //   saleEnd: { gte: new Date() }, // És még nem járt le az értékesítésük
     // },
     orderBy: {
-      price: 'asc', // Legolcsóbb jegyek előre
+      priceInEur: "asc", // Legolcsóbb jegyek előre
     },
   });
   console.log('get Tickets', tickets);
@@ -43,7 +43,8 @@ export async function createTicket(data) {
     // Ellenőrizzük, hogy minden szükséges adat megvan-e
     if (
       !data.name ||
-      !data.price ||
+      !data.priceInEur ||
+      !data.priceInHuf ||
       !data.currency ||
       !data.quantityAvailable ||
       !data.maxPerUser ||
@@ -58,7 +59,8 @@ export async function createTicket(data) {
       data: {
         name: data.name,
         description: data.description || null,
-        price: parseInt(data.price, 10),
+        priceInEur: parseInt(data.priceInEur * 100, 10),
+        priceInHuf: parseInt(data.priceInHuf, 10),
         currency: data.currency,
         quantityAvailable: parseInt(data.quantityAvailable, 10),
         maxPerUser: parseInt(data.maxPerUser, 10),
@@ -81,7 +83,8 @@ export async function updateTicket(data) {
       data: {
         name: data.name,
         description: data.description,
-        price: parseInt(data.price, 10),
+        priceInEur: parseInt(data.priceInEur * 100, 10),
+        priceInHuf: parseInt(data.priceInHuf, 10),
         currency: data.currency,
         quantityAvailable: data.quantityAvailable ? parseInt(data.quantityAvailable, 10) : null,
         maxPerUser: parseInt(data.maxPerUser, 10),

@@ -5,13 +5,14 @@ import { DataTable } from "primereact/datatable";
 import { SelectButton } from "primereact/selectbutton";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
+import { Tooltip } from "primereact/tooltip";
 import CreateTicketModal from "./CreateTicketModal";
 import EditTicketModal from "./EditTicketModal";
 import "primereact/resources/themes/lara-light-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 
-export default function CouponsPage({ tickets }) {
+export default function TicketsPage({ tickets }) {
   const [showDialog, setShowDialog] = useState(false);
   const [editDialog, setEditDialog] = useState(false);
   const [selectedTicket, setSelectedTicket] = useState(null);
@@ -76,6 +77,8 @@ export default function CouponsPage({ tickets }) {
               icon="pi pi-pencil"
               className="p-button-rounded p-button-text"
               onClick={() => openEditModal(rowData)}
+              tooltip="Edit"
+              tooltipOptions={{ position: "top" }}
             />
           )}
         />
@@ -100,7 +103,8 @@ function formatHeader(header) {
     id: "ID",
     name: "Ticket Name",
     description: "Description",
-    price: "Price",
+    priceInEur: "EUR Price",
+    priceInHuf: "HUF Price",
     currency: "Currency",
     quantityAvailable: "Available",
     maxPerUser: "Max per User",
@@ -119,6 +123,9 @@ function formatValue(col, value) {
 
   if (col.includes("sale") || col === "createdAt") {
     return new Date(value).toLocaleDateString("hu-HU");
+  }
+  if (col === "priceInEur") {
+    return value / 100;
   }
 
   return value;

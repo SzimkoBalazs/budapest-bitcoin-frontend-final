@@ -17,9 +17,13 @@ export default function EditTicketModal({ visible, onClose, ticket }) {
         id: ticket.id ?? "",
         name: ticket.name ?? "",
         description: ticket.description ?? "",
-        price:
-          ticket.price !== undefined && ticket.price !== null
-            ? String(ticket.price)
+        priceInEur:
+          ticket.priceInEur !== undefined && ticket.priceInEur !== null
+            ? String(ticket.priceInEur / 100)
+            : "",
+        priceInHuf:
+          ticket.priceInHuf !== undefined && ticket.priceInHuf !== null
+            ? String(ticket.priceInHuf)
             : "",
         currency: ticket.currency ?? "EUR",
         quantityAvailable:
@@ -83,11 +87,18 @@ export default function EditTicketModal({ visible, onClose, ticket }) {
           onChange={(e) => handleInputChange(e, "description")}
         />
 
-        <label>Price</label>
+        <label>EUR Price</label>
         <InputText
           className="w-full p-inputtext"
-          value={editedTicket.price}
-          onChange={(e) => handleInputChange(e, "price")}
+          value={editedTicket.priceInEur}
+          onChange={(e) => handleInputChange(e, "priceInEur")}
+        />
+
+        <label>HUF Price</label>
+        <InputText
+          className="w-full p-inputtext"
+          value={editedTicket.priceInHuf}
+          onChange={(e) => handleInputChange(e, "priceInHuf")}
         />
 
         <label>Currency</label>

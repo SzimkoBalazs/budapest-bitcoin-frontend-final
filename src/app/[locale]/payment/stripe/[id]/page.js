@@ -41,9 +41,12 @@ export default async function PaymentPage({ params }) {
     );
   }
 
+  console.log("stripe final amount", order.finalAmountInCents);
+  console.log("orders currency: ", order.currency);
   const paymentIntent = await stripe.paymentIntents.create({
     amount: order.finalAmountInCents,
-    currency: order.currency,
+    currency: order.currency.toLowerCase(),
+
     metadata: { orderId: order.id },
   });
 
@@ -76,9 +79,9 @@ export default async function PaymentPage({ params }) {
               <li key={item.id} className="flex justify-between border-b pb-2">
                 <span>{item.ticket.name}</span>
                 <span>
-                  {/*TODO: Itt kell a toFixed 2? hogy ket 00 legyen az ar mogott?*/}
+                  {/*TODO: ITT NEZZUK MEG NINCS E ORDER. CURRENCY MEGSE, MEG HOGY IGY JO E A PRICE WITH PURCHASE, MEG MASHOL IS IGY MEGCSINALNI AHOL PRICE VAN*/}
                   {/*{item.quantity} × {item.priceAtPurchase.toFixed(2)}{' '}*/}
-                  {item.quantity} × {priceWithSpace(item.priceAtPurchase)} {order.currency}
+                  {item.quantity} × {priceWithSpace(item.priceAtPurchase, locale !== 'en')} {locale === 'en' ? 'EUR' : 'Ft'}
                 </span>
               </li>
             ))}
