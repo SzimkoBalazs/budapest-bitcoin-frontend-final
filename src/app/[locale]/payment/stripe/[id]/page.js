@@ -20,14 +20,25 @@ export default async function PaymentPage({ params }) {
     return <div className="text-red-500">❌ Error: {err.message}</div>;
   }
 
+  if (
+    order.status === "PENDING" ||
+    order.status === "FAILED" ||
+    order.status === "CANCELLED"
+  ) {
+  }
+
   console.log("stripe final amount", order.finalAmountInCents);
   console.log("orders currency: ", order.currency);
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: order.finalAmountInCents,
-    currency: order.currency.toLowerCase(),
-
-    metadata: { orderId: order.id },
-  });
+  const paymentIntent = await stripe.paymentIntents.create(
+    {
+      amount: order.finalAmountInCents,
+      currency: order.currency.toLowerCase(),
+      metadata: { orderId: order.id },
+    },
+    {
+      idempotencyKey: `order_${order.id}`,
+    }
+  );
 
   if (paymentIntent.client_secret == null) {
     throw Error("Stripe failed to create payment intent");

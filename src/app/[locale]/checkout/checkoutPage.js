@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { createOrder } from "@/app/actions/orders";
 import { validateCoupon } from "@/app/actions/coupon";
@@ -28,6 +28,21 @@ export default function CheckoutPage({ tickets }) {
     (sum, ticket) => sum + ticket.quantity,
     0
   );
+
+  useEffect(() => {
+    if (appliedCoupon) {
+      const totalTickets = selectedTickets.reduce(
+        (sum, ticket) => sum + ticket.quantity,
+        0
+      );
+      if (totalTickets < appliedCoupon.minTicketsRequired) {
+        setAppliedCoupon(null);
+        setError(
+          `A kuponhoz minimum ${appliedCoupon.minTicketsRequired} jegy szükséges.`
+        );
+      }
+    }
+  }, [selectedTickets, appliedCoupon]);
 
   const handlePaymentRedirect = async (order) => {
     if (order.paymentProvider === PaymentProvider.BTCPAY) {
