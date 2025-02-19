@@ -2,13 +2,11 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import TicketSvg from '../../../public/ticket.svg';
 import BarCodeUp from '../../../public/barcode_up.svg';
 import { priceWithSpace } from '../../../utils/priceWithSpace';
 import { cln } from '@/utilities/classnames';
 
 import TicketInfo from '@/components/Tickets/TicketInfo';
-import ticketInfo from '@/components/Tickets/TicketInfo';
 
 const TicketCardCheckout = ({
   name,
@@ -51,7 +49,7 @@ const TicketCardCheckout = ({
     //   OUTSIDE CONTAINER
     <div
       ref={ticketRef}
-      className="flex relative flex-row min-w-[256px] w-full items-center justify-between rounded-[10px] border-[2px]  bg-black"
+      className="flex relative flex-row min-w-[296px] sm:min-w-[360px] w-full items-center justify-between rounded-[10px] border-[2px]  bg-black"
       style={{
         borderColor: numberOfTickets === 0 ? 'white' : '#FFAE0B',
         boxShadow:
@@ -92,9 +90,10 @@ const TicketCardCheckout = ({
             />
           )}
         </div>
-        <div className="flex flex-col items-center gap-y-1 mt-[-8px]">
+        <div className="flex flex-col items-end gap-y-1 mt-[-8px]">
           {/*BEFORE PRICE*/}
-          <div className="relative flex items-end justify-center">
+
+          <div className="relative flex items-end justify-center gap-x-1">
             <h5
               className="text-neutral-700 text-[22px] lg:text-[28px] left-[-40%]"
               style={{ fontWeight: 800, lineHeight: '100%' }}
@@ -102,14 +101,14 @@ const TicketCardCheckout = ({
               {priceWithSpace(beforePrice, false)}
             </h5>
             <h3
-              className="text-neutral-700 absolute right-[-30px] lg:right-[-42px] text-[12px] lg:text-[18px] mb-[1px] lg:mb-[2px] tracking-[1px]"
+              className="text-neutral-700 text-[12px] lg:text-[18px] mb-[1px] lg:mb-[2px] tracking-[1px]"
               style={{ fontWeight: 400, lineHeight: '100%' }}
             >
-              {locale === 'hu' ? 'HUF' : 'EUR'}
+              {locale === 'hu' ? 'Ft' : 'EUR'}
             </h3>
             <span
               className="flex absolute w-full h-[1px] lg:h-[2px] bg-primary-600 top-[11px]"
-              style={{ transform: `rotate(${beforePrice < 9999 ? '-22deg' : '-7deg'})` }}
+              style={{ transform: `rotate(${beforePrice < 9999 ? '-10deg' : '-7deg'})` }}
             />
           </div>
 
@@ -119,13 +118,13 @@ const TicketCardCheckout = ({
               className="text-white text-[24px] lg:text-[34px] tracking-[2.4px]"
               style={{ fontWeight: 800, lineHeight: '100%' }}
             >
-              {priceWithSpace(price)}
+              {priceWithSpace(price, locale !== 'hu')}
             </h3>
             <h3
-              className="text-white right-[-36px] lg:right-[-50px] text-[16px] lg:text-[22px] mb-[2px]"
+              className="text-white text-[16px] lg:text-[22px] mb-[2px]"
               style={{ fontWeight: 400, lineHeight: '100%' }}
             >
-              {locale === 'en' ? 'EUR' : 'HUF'}
+              {locale === 'en' ? 'EUR' : 'Ft'}
             </h3>
           </div>
         </div>

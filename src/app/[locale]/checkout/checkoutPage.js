@@ -7,6 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import ChevronDown from '../../../../public/chevron-down.svg';
 import { priceWithSpace } from '../../../../utils/priceWithSpace';
+import { getTicketPrice } from '../../../../utils/getTicketPrice';
 import { createOrder } from '@/app/actions/orders';
 import { validateCoupon } from '@/app/actions/coupon';
 import PlusMinusBtn from '@/components/Buttons/PlusMinusBtn';
@@ -16,22 +17,28 @@ import { cln } from '@/utilities/classnames';
 import SelectButton from '@/components/Buttons/SelectButton';
 import PayButton from '@/components/Buttons/PayButton';
 import InputLabel from '@/components/Checkout/InputLabel';
-import { getTicketPrice } from "../../../../utils/getTicketPrice";
 
 export default function CheckoutPage({
   tickets,
-  locale,
   checkoutPageData,
   cardPaymentFormData,
   ticketData,
   comingSoonData,
 }) {
+  const router = useRouter();
+  const { locale } = useParams();
   // STRAPI DATA
   // TODO: Nemkene mindenhova empty statebe default?
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
 
   // WINDOW HEIGHT FOR SUMMARY WINDOW
   const [windowHeight, setWindowHeight] = useState(400);
+  const [generalError, setGeneralError] = useState('');
+  const [couponError, setCouponError] = useState('');
+
+  const [coupon, setCoupon] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [paymentProvider, setPaymentProvider] = useState(null);
 
   // FORM DATA
   const [formData, setFormData] = useState(function () {
@@ -94,7 +101,6 @@ export default function CheckoutPage({
     });
   }
 
-  const [isCardPayment, setIsCardPayment] = useState(null);
   const [needsInvoice, setNeedsInvoice] = useState(false);
   const [billingMatchesData, setBillingMatchesData] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -146,9 +152,10 @@ export default function CheckoutPage({
   const areEmailsValid =
     formValid.emailValid && formValid.emailRepeatValid && formValid.emailsMatch;
 
-  const canSubmit = isCardPayment
-    ? areFormsFilled && areEmailsValid && anyTicketsAdded
-    : areEmailsValid && formData.termsAccepted && anyTicketsAdded;
+  const canSubmit =
+    paymentProvider === PaymentProvider.STRIPE
+      ? areFormsFilled && areEmailsValid && anyTicketsAdded
+      : areEmailsValid && formData.termsAccepted && anyTicketsAdded;
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -156,9 +163,6 @@ export default function CheckoutPage({
       setWindowHeight(window.innerHeight);
     }
   }, []);
-
-  const router = useRouter();
-  const { locale } = useParams();
 
   // ✅ Jegyek állapotának kezelése
   const [selectedTickets, setSelectedTickets] = useState(function () {
@@ -227,25 +231,13 @@ export default function CheckoutPage({
     });
   }
 
-  const [coupon, setCoupon] = useState('');
-  const [appliedCoupon, setAppliedCoupon] = useState(null);
-  const [paymentProvider, setPaymentProvider] = useState(
-    PaymentProvider.STRIPE
-  );
-  const [error, setError] = useState(null);
-
-  const totalQuantity = selectedTickets.reduce((sum, ticket) => sum + ticket.quantity, 0);
-
   useEffect(() => {
     if (appliedCoupon) {
-      const totalTickets = selectedTickets.reduce(
-        (sum, ticket) => sum + ticket.quantity,
-        0
-      );
+      const totalTickets = selectedTickets.reduce((sum, ticket) => sum + ticket.quantity, 0);
       if (totalTickets < appliedCoupon.minTicketsRequired) {
         setAppliedCoupon(null);
-        setError(
-          `A kuponhoz minimum ${appliedCoupon.minTicketsRequired} jegy szükséges.`
+        setCouponError(
+          `${checkoutPageData.atLeastCoupon} ${appliedCoupon.minTicketsRequired} ${checkoutPageData.couponTicketsNeeded}.`,
         );
       }
     }
@@ -260,7 +252,10 @@ export default function CheckoutPage({
   };
 
   // ✅ Subtotal számítás (összes jegy ára)
-  const subtotal = selectedTickets.reduce((sum, ticket) => sum + ticket.price * ticket.quantity, 0);
+  const subtotal = selectedTickets.reduce((sum, ticket) => {
+    const price = getTicketPrice(ticket, locale);
+    return sum + price * ticket.quantity;
+  }, 0);
 
   // ✅ Kedvezmény levonása, ha van érvényes kupon
   const discountAmount = appliedCoupon?.discountValue
@@ -301,8 +296,10 @@ export default function CheckoutPage({
   };
 
   // ✅ Rendelés létrehozása
-  const handleOrder = async (paymentProvider) => {
+  const handleOrder = async () => {
     setGeneralError(null);
+
+    console.log('🎟 Applied Coupon before sending order:', appliedCoupon);
 
     try {
       const items = selectedTickets
@@ -339,14 +336,16 @@ export default function CheckoutPage({
     }
   };
 
+  console.log('payment provider: ', paymentProvider);
+
   return (
     <div className="flex flex-col lg:flex-row sm:gap-x-10 w-full pb-[64px] sm:pb-[24px] pt-[60px] sm:pt-[120px] sm:max-w-[1128px] sm:px-[40px] sm:mx-auto">
       <div className="flex flex-col mx-auto w-full max-w-[400px] sm:w-[40%] p-4 sm:p-0 gap-y-6 bg-neutral-900">
         {tickets.map((ticket, index) => (
           <div key={ticket.id} className="flex flex-col gap-y-4 items-end w-full">
             <TicketCardCheckout
-              name={ticket.name}
-              price={ticket.price}
+              name={ticketData[index]?.PassTitle}
+              price={getTicketPrice(ticket, locale)}
               numberOfTickets={selectedTickets.find((t) => t.id === ticket.id)?.quantity}
               date={checkoutPageData.conferenceDate}
               details={ticketData[index]?.PassDescription}
@@ -420,7 +419,8 @@ export default function CheckoutPage({
 
             {/*TODO: Ha forint akkor talan false lesz hogy ossza e el 100al*/}
             <h3 className="text-[20px] font-exo font-black text-white">
-              {priceWithSpace(subtotal - discountAmount)} {locale === 'hu' ? 'HUF' : 'EUR'}
+              {priceWithSpace(subtotal - discountAmount, locale !== 'hu')}
+              {locale === 'hu' ? ' Ft' : ' EUR'}
             </h3>
           </div>
           {generalError && (
@@ -465,7 +465,11 @@ export default function CheckoutPage({
             </div>
             {appliedCoupon && (
               <p className="text-green-600 mt-2">
-                ✅ Coupon applied: {appliedCoupon.code} (-{discountAmount / 100} EUR)
+                ✅ Coupon applied: {appliedCoupon.code} (-
+                {locale === 'hu'
+                  ? `${priceWithSpace(discountAmount, false)} Ft`
+                  : `${priceWithSpace(discountAmount)} EUR`}
+                )
               </p>
             )}
           </div>
@@ -515,20 +519,21 @@ export default function CheckoutPage({
               <div className="flex gap-x-4 mx-auto">
                 <SelectButton
                   isCardPayment={true}
-                  isSelected={isCardPayment === true}
-                  onClick={() => setIsCardPayment(true)}
+                  isSelected={paymentProvider === PaymentProvider.STRIPE}
+                  onClick={() => setPaymentProvider(PaymentProvider.STRIPE)}
                 >
                   {checkoutPageData.paymentCard}
                 </SelectButton>
                 <SelectButton
-                  isSelected={isCardPayment === false}
-                  onClick={() => setIsCardPayment(false)}
+                  isCardPayment={false}
+                  isSelected={paymentProvider === PaymentProvider.BTCPAY}
+                  onClick={() => setPaymentProvider(PaymentProvider.BTCPAY)}
                 >
                   {checkoutPageData.paymentBitcoin}
                 </SelectButton>
               </div>
             </div>
-            {isCardPayment && (
+            {paymentProvider === PaymentProvider.STRIPE && (
               <>
                 <InputLabel
                   name={'firstName'}
@@ -753,19 +758,15 @@ export default function CheckoutPage({
               </div>
             </div>
           </form>
-          {isCardPayment !== null && (
+          {paymentProvider !== null && (
             <div className="flex w-full items-center justify-center mt-2">
               <PayButton
-                onClick={() => {
-                  isCardPayment
-                    ? handleOrder(PaymentProvider.STRIPE)
-                    : handleOrder(PaymentProvider.BTCPAY);
-                }}
-                isCardPayment={isCardPayment}
+                onClick={handleOrder}
+                isCardPayment={paymentProvider === PaymentProvider.STRIPE}
                 disabled={!canSubmit}
               >
                 {' '}
-                {isCardPayment ? 'Pay with card' : 'Pay with Bitcoin'}
+                {paymentProvider === PaymentProvider.STRIPE ? 'Pay with card' : 'Pay with Bitcoin'}
               </PayButton>
             </div>
           )}
@@ -781,14 +782,6 @@ export default function CheckoutPage({
               {checkoutPageData.clearForm}
             </button>
           </div>
-        </div>
-        <div className="flex justify-center">
-          <button
-            className="flex mt-5 justify-center border-2 border-red-400 text-black px-6 py-2"
-            onClick={handleOrder}
-          >
-            Pay
-          </button>
         </div>
       </div>
     </div>

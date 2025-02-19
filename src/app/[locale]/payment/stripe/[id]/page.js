@@ -2,7 +2,8 @@ import Stripe from 'stripe';
 import { priceWithSpace } from '../../../../../../utils/priceWithSpace';
 import PaymentClientStripe from './PaymentClientStripe';
 import { getOrder } from '@/app/actions/orders';
-import { getTicket } from '@/app/actions/ticket';
+import { getTicket, getTickets } from '@/app/actions/ticket';
+import { fetchTicketCards } from '@/components/SinglePageComponents/TicketsSection';
 import { cln } from '@/utilities/classnames';
 
 async function fetchOrderSummary(locale) {
@@ -24,6 +25,7 @@ export default async function PaymentPage({ params }) {
   const { id } = await params;
   const { locale } = await params;
   const orderSummaryData = await fetchOrderSummary(locale);
+  const ticketCards = await fetchTicketCards(locale);
 
   if (!id) {
     return <div className="text-red-500">❌ {orderSummaryData.invalidOrder}</div>;
@@ -41,15 +43,12 @@ export default async function PaymentPage({ params }) {
     );
   }
 
-  if (
-    order.status === "PENDING" ||
-    order.status === "FAILED" ||
-    order.status === "CANCELLED"
-  ) {
+  // TODO: Ez az if kell ide? mert csak kinyillik bezarodik de nincs benne semmi function
+  if (order.status === 'PENDING' || order.status === 'FAILED' || order.status === 'CANCELLED') {
   }
 
-  console.log("stripe final amount", order.finalAmountInCents);
-  console.log("orders currency: ", order.currency);
+  console.log('stripe final amount', order.finalAmountInCents);
+  console.log('orders currency: ', order.currency);
   const paymentIntent = await stripe.paymentIntents.create(
     {
       amount: order.finalAmountInCents,
@@ -58,19 +57,12 @@ export default async function PaymentPage({ params }) {
     },
     {
       idempotencyKey: `order_${order.id}`,
-    }
+    },
   );
 
   if (paymentIntent.client_secret == null) {
     throw Error('Stripe failed to create payment intent');
   }
-
-  const itemsWithTicketData = await Promise.all(
-    order.items.map(async (item) => {
-      const ticket = await getTicket(item.ticketId);
-      return { ...item, ticket }; // Attach the ticket data to the item
-    }),
-  );
 
   return (
     <div className="max-w-xl mx-auto p-6 bg-white shadow-md mt-[100px] rounded-lg">
@@ -86,16 +78,21 @@ export default async function PaymentPage({ params }) {
         <div className="flex flex-col">
           <h2 className="text-lg font-semibold">{orderSummaryData.purchasedTickets}</h2>
           <ul className="mt-2 space-y-2">
-            {itemsWithTicketData.map((item) => (
-              <li key={item.id} className="flex justify-between border-b pb-2">
-                <span>{item.ticket.name}</span>
-                <span>
-                  {/*TODO: ITT NEZZUK MEG NINCS E ORDER. CURRENCY MEGSE, MEG HOGY IGY JO E A PRICE WITH PURCHASE, MEG MASHOL IS IGY MEGCSINALNI AHOL PRICE VAN*/}
-                  {/*{item.quantity} × {item.priceAtPurchase.toFixed(2)}{' '}*/}
-                  {item.quantity} × {priceWithSpace(item.priceAtPurchase, locale !== 'en')} {locale === 'en' ? 'EUR' : 'Ft'}
-                </span>
-              </li>
-            ))}
+            {order.items.map((item) => {
+              // WE CHECK THE ORDER NUMBER OF TICKETCARDS and if they match the id of backend ticket
+              const matchedTicket = ticketCards?.find(
+                (ticketCard) => ticketCard.order === item.ticketId,
+              );
+              return (
+                <li key={item.id} className="flex justify-between border-b pb-2">
+                  {ticketCards && <span>{matchedTicket?.PassTitle}</span>}
+                  <span>
+                    {item.quantity} × {priceWithSpace(item.priceAtPurchase, locale !== 'hu')}{' '}
+                    {locale === 'en' ? 'EUR' : 'Ft'}
+                  </span>
+                </li>
+              );
+            })}
           </ul>
         </div>
 
@@ -106,7 +103,8 @@ export default async function PaymentPage({ params }) {
               <div className="flex flex-row justify-between mt-2">
                 <p className="text-[16px]">{orderSummaryData.total} </p>
                 <p className="text-[16px]">
-                  {priceWithSpace(order.totalAmountInCents)} {order.currency}
+                  {priceWithSpace(order.totalAmountInCents, locale !== 'hu')}{' '}
+                  {locale === 'hu' ? 'Ft' : 'EUR'}
                 </p>
               </div>
             )}
@@ -124,14 +122,17 @@ export default async function PaymentPage({ params }) {
                       {': '}
                       <strong>
                         {order.coupon.discountType === 'FIXED'
-                          ? `-${(order.coupon.discountValue / 100).toFixed(2)} ${order.currency}`
+                          ? `-${priceWithSpace(order.coupon.discountValue, locale !== 'hu')} ${
+                              locale === 'hu' ? 'Ft' : 'EUR'
+                            }`
                           : `-${order.coupon.discountValue}%`}
                       </strong>
                     </p>
                   </div>
 
                   <p className="text-green-700 font-bold text-[16px] ml-auto mt-auto">
-                    -{priceWithSpace(order.discountInCents)} {order.currency}
+                    -{priceWithSpace(order.discountInCents, locale !== 'hu')}{' '}
+                    {locale === 'hu' ? 'Ft' : 'EUR'}
                   </p>
                 </div>
               </div>
@@ -139,7 +140,8 @@ export default async function PaymentPage({ params }) {
             <div className="flex flex-row justify-between mt-2">
               <p className="font-bold text-[20px]">{orderSummaryData.finalAmount} </p>
               <p className="text-[20px] font-bold">
-                {priceWithSpace(order.finalAmountInCents)} {order.currency}
+                {priceWithSpace(order.finalAmountInCents, locale !== 'hu')}{' '}
+                {locale === 'hu' ? 'Ft' : 'EUR'}
               </p>
             </div>
           </div>
@@ -167,7 +169,6 @@ export default async function PaymentPage({ params }) {
             {order.status}
           </p>
         </div>
-        {/*TODO: Kell ket vegosszeg??*/}
       </div>
       <div className="mt-10">
         <PaymentClientStripe
@@ -175,7 +176,7 @@ export default async function PaymentPage({ params }) {
           clientSecret={paymentIntent.client_secret}
           locale={locale}
           buttonText={orderSummaryData.purchase}
-          currency={order.currency}
+          currency={locale === 'hu' ? 'Ft' : 'EUR'}
         />
       </div>
     </div>

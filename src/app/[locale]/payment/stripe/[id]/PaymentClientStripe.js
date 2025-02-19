@@ -3,7 +3,6 @@
 import { Elements, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import React, { useState, useEffect } from 'react';
-import { PaymentProvider } from '@prisma/client';
 import { priceWithSpace } from '../../../../../../utils/priceWithSpace';
 import SpinningLoader from '@/components/SpinningLoader';
 import PayButton from '@/components/Buttons/PayButton';
@@ -11,12 +10,14 @@ import PayButton from '@/components/Buttons/PayButton';
 const PaymentClientStripe = ({ order, clientSecret, locale, buttonText, currency }) => {
   const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
   return (
-    <Elements options={{ 
+    <Elements
+      options={{
         clientSecret,
-        appearance:{theme: "stripe"},
+        appearance: { theme: 'stripe' },
         locale: locale || 'en',
-        }} 
-        stripe={stripePromise}>
+      }}
+      stripe={stripePromise}
+    >
       <Form
         priceInCents={order.finalAmountInCents}
         locale={locale}
@@ -38,9 +39,6 @@ function Form({ priceInCents, locale, buttonText, currency, order }) {
   const [isPaid, setIsPaid] = useState(false);
 
   const [isPaymentElementLoaded, setIsPaymentElementLoaded] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const [clientSecret, setClientSecret] = useState(null);
 
   useEffect(() => {
     if (!elements) return;
@@ -55,7 +53,7 @@ function Form({ priceInCents, locale, buttonText, currency, order }) {
   }, [elements]);
 
   useEffect(() => {
-    if (order.status === "PAID") {
+    if (order.status === 'PAID') {
       setIsPaid(true);
     }
   }, []);
@@ -67,11 +65,9 @@ function Form({ priceInCents, locale, buttonText, currency, order }) {
     setIsLoading(true);
 
     if (!isPaymentElementLoaded) {
-      setErrorMessage("Payment element is still loading. Please wait.");
+      setErrorMessage('Payment element is still loading. Please wait.');
       return;
     }
-
-    setIsSubmitting(true);
 
     //Check for existing order
     console.log('Return URL:', `${process.env.NEXT_PUBLIC_SERVER_URL}/${locale}/payment-success`);
@@ -119,11 +115,11 @@ function Form({ priceInCents, locale, buttonText, currency, order }) {
           disabled={!stripe || !elements || isLoading || isPaid}
         >
           {isPaid ? (
-            "Order Paid"
+            'Order Paid'
           ) : isLoading ? (
             <SpinningLoader />
           ) : (
-            `${buttonText} - ${priceWithSpace(priceInCents)} ${currency}`
+            `${buttonText} - ${priceWithSpace(priceInCents, locale !== 'hu')} ${currency}`
           )}
         </PayButton>
       </div>

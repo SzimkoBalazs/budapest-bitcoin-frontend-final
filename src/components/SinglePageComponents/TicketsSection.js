@@ -16,7 +16,7 @@ async function fetchTicketsSectionData(locale) {
   return data.data || [];
 }
 
-async function fetchTicketCards(locale) {
+export async function fetchTicketCards(locale) {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/ticket-cards?locale=${locale}&sort=order`,
   );

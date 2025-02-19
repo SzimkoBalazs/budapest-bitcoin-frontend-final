@@ -1,7 +1,8 @@
-import Link from "next/link";
-import { getTicketPrice } from "../../utils/getTicketPrice";
+'use client';
 
 import React from 'react';
+import { getTicketPrice } from '../../utils/getTicketPrice';
+
 import TicketSvg from '../../public/ticket.svg';
 import { priceWithSpace } from '../../utils/priceWithSpace';
 import TicketBarcodeSVG from './TicketBarcodeSVG';
@@ -50,7 +51,7 @@ const TicketCard = ({ ticketCardContent, ticketInfo, borderColor, beforePrice, l
                   className="text-neutral-700 absolute right-[-30px] lg:right-[-42px] text-[12px] lg:text-[18px] mb-[1px] lg:mb-[2px] tracking-[1px]"
                   style={{ fontWeight: 400, lineHeight: '100%' }}
                 >
-                  {locale === 'hu' ? 'HUF' : 'EUR'}
+                  {locale === 'hu' ? 'Ft' : 'EUR'}
                 </h3>
                 <span
                   className="flex absolute w-full h-[1px] lg:h-[2px] bg-primary-600 top-[11px]"
@@ -65,13 +66,15 @@ const TicketCard = ({ ticketCardContent, ticketInfo, borderColor, beforePrice, l
                 className="text-white text-[28px] lg:text-[38px] tracking-[2.4px]"
                 style={{ fontWeight: 800, lineHeight: '100%' }}
               >
-                {locale === 'en' ? `${getTicketPrice(ticketInfo, locale) / 100}` : `${getTicketPrice(ticketInfo, locale)}`}
+                {locale === 'en'
+                  ? `${getTicketPrice(ticketInfo, locale) / 100}`
+                  : `${getTicketPrice(ticketInfo, locale)}`}
               </h3>
               <h3
                 className="text-white absolute right-[-36px] lg:right-[-50px] text-[16px] lg:text-[22px] tracking-[1px] mb-[2px] lg:mb-[4px]"
                 style={{ fontWeight: 400, lineHeight: '100%' }}
               >
-                {locale === 'hu' ? 'HUF' : 'EUR'}
+                {locale === 'hu' ? 'Ft' : 'EUR'}
               </h3>
             </div>
           </div>

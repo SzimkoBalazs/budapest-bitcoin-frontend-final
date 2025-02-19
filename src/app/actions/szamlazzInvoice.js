@@ -1,4 +1,4 @@
-"use server";
+'use server';
 
 import {
   Client,
@@ -9,12 +9,12 @@ import {
   PaymentMethods,
   Currencies,
   Languages,
-} from "szamlazz.js";
+} from 'szamlazz.js';
 
 const szamlazzClient = new Client({
   //   user: process.env.SZAMLAZZ_USERNAME,
   //   password: process.env.SZAMLAZZ_PASSWORD,
-  authToken: "97039xbwy2gws4iv7yn4xk8cniuird56tyamat6gy3",
+  authToken: '97039xbwy2gws4iv7yn4xk8cniuird56tyamat6gy3',
   eInvoice: true, // (ha elektronikus számlát szeretnél)
   requestInvoiceDownload: true, // PDF letöltés kérésének engedélyezése
   timeout: 5000,
@@ -22,23 +22,24 @@ const szamlazzClient = new Client({
 
 const seller = new Seller({
   bank: {
-    name: "Your Bank Name",
-    accountNumber: "11111111-11111111-11111111",
+    name: 'Your Bank Name',
+    accountNumber: '11111111-11111111-11111111',
   },
   email: {
-    replyToAddress: "your-company@example.com",
-    subject: "Számla értesítő",
-    message: "Kedves Vásárlónk, mellékelve megtalálja a számláját.",
+    replyToAddress: 'your-company@example.com',
+    subject: 'Számla értesítő',
+    message: 'Kedves Vásárlónk, mellékelve megtalálja a számláját.',
   },
-  issuerName: "Your Company Name",
+  issuerName: 'Your Company Name',
 });
 
+// Add data from form
 function createBuyer(orderData) {
   return new Buyer({
     name: orderData.buyerName,
-    zip: orderData.zip || "0000",
-    city: orderData.city || "City",
-    address: orderData.address || "Address",
+    zip: orderData.zip || '0000',
+    city: orderData.city || 'City',
+    address: orderData.address || 'Address',
     taxNumber: orderData.taxNumber || undefined,
   });
 }
@@ -56,9 +57,9 @@ export async function createInvoice(orderData) {
           quantity: item.quantity,
           vat: item.vat,
           netUnitPrice: item.netUnitPrice, // vagy grossUnitPrice, attól függően, mit szeretnél számolni
-          comment: item.comment || "",
-          unit: item.unit || "db",
-        })
+          comment: item.comment || '',
+          unit: item.unit || 'db',
+        }),
     );
 
     // Invoice létrehozása
@@ -77,10 +78,10 @@ export async function createInvoice(orderData) {
 
     // Számla kibocsátása
     const result = await szamlazzClient.issueInvoice(invoice);
-    console.log("Invoice issued:", result);
+    console.log('Invoice issued:', result);
     return result; // result tartalmazza az invoiceId, netTotal, grossTotal, customerAccountUrl, pdf (Buffer) stb.
   } catch (error) {
-    console.error("Hiba a számla létrehozásakor:", error.stack);
+    console.error('Hiba a számla létrehozásakor:', error.stack);
     throw error;
   }
 }

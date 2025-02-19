@@ -1,14 +1,14 @@
 // app/actions/generateTicketPdfPdfLib.js
-"use server";
+'use server';
 
-import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
-import fs from "fs/promises";
-import path from "path";
+import fs from 'fs/promises';
+import path from 'path';
+import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 
 export async function generateTicketPdf(ticketData) {
   try {
     // 1. Ellenőrizzük, hogy létezik-e a "tickets" mappa, ha nem, létrehozzuk.
-    const ticketsDir = path.join(process.cwd(), "tickets");
+    const ticketsDir = path.join(process.cwd(), 'tickets');
     try {
       await fs.access(ticketsDir);
     } catch (e) {
@@ -38,7 +38,7 @@ export async function generateTicketPdf(ticketData) {
     let yPosition = height - 50;
 
     // 6. Fejléc: "Jegy(ek)"
-    page.drawText("Jegy(ek)", {
+    page.drawText('Jegy(ek)', {
       x: 50,
       y: yPosition,
       size: 20,
@@ -97,8 +97,8 @@ export async function generateTicketPdf(ticketData) {
       // 9. QR kódok megjelenítése
       for (const qr of item.qrCodes) {
         // A QR kód dataURL-jét átalakítjuk byte tömbbé
-        const base64Data = qr.replace(/^data:image\/png;base64,/, "");
-        const qrBytes = Buffer.from(base64Data, "base64");
+        const base64Data = qr.replace(/^data:image\/png;base64,/, '');
+        const qrBytes = Buffer.from(base64Data, 'base64');
         // Embedeljük a PNG képet
         const qrImage = await pdfDoc.embedPng(qrBytes);
         const qrWidth = 100;
@@ -130,7 +130,7 @@ export async function generateTicketPdf(ticketData) {
 
     return {
       voucherId,
-      pdfPath: path.join("tickets", `${voucherId}.pdf`), // relatív út a projekt gyökeréhez képest
+      pdfPath: path.join('tickets', `${voucherId}.pdf`), // relatív út a projekt gyökeréhez képest
       expiresAt,
     };
   } catch (error) {

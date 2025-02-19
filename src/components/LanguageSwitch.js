@@ -2,16 +2,17 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { useTranslation } from 'react-i18next';
 import i18nConfig from '../../i18nConfig';
 import Loader from '../components/Loader';
-import SectionMainTitle from '@/components/SectionMainTitle';
 
 const LanguageSwitch = ({ currentLocale }) => {
   const router = useRouter();
   const currentPathname = usePathname();
   const [isLoading, setIsLoading] = useState(false);
   const [previousPath, setPreviousPath] = useState(currentPathname);
+
+  const isCheckoutPage =
+    currentPathname.includes('payment') || currentPathname.includes('checkout');
 
   const toggleLanguage = async () => {
     if (isLoading) return;
@@ -46,7 +47,8 @@ const LanguageSwitch = ({ currentLocale }) => {
   return (
     <div
       onClick={toggleLanguage}
-      className="inline-flex items-center rounded-[4px] border-2 border-white bg-neutral-900 shadow-[-1px_1px_0px_0px_#000,_-2px_2px_0px_0px_#000,_-3px_3px_0px_0px_#000,_-4px_4px_0px_0px_#000] cursor-pointer"
+      style={{ display: isCheckoutPage ? 'none' : 'inline-flex' }}
+      className="items-center rounded-[4px] border-2 border-white bg-neutral-900 shadow-[-1px_1px_0px_0px_#000,_-2px_2px_0px_0px_#000,_-3px_3px_0px_0px_#000,_-4px_4px_0px_0px_#000] cursor-pointer"
     >
       {isLoading && <Loader />}
       {/* Kék csúszka */}
