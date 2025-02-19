@@ -48,7 +48,7 @@ export default function CheckoutPage({
         emailRepeat: '',
         firstName: '',
         lastName: '',
-        postalCode: '',
+        zip: '',
         city: '',
         street: '',
         country: '',
@@ -64,7 +64,7 @@ export default function CheckoutPage({
         invoiceType: '',
         invoiceName: '',
         invoiceCountry: '',
-        invoicePostalCode: '',
+        invoiceZip: '',
         invoiceCity: '',
         invoiceStreet: '',
         vat: '',
@@ -79,7 +79,7 @@ export default function CheckoutPage({
       emailRepeat: '',
       firstName: '',
       lastName: '',
-      postalCode: '',
+      zip: '',
       city: '',
       street: '',
       country: '',
@@ -93,7 +93,7 @@ export default function CheckoutPage({
       invoiceType: '',
       invoiceName: '',
       invoiceCountry: '',
-      invoicePostalCode: '',
+      invoiceZip: '',
       invoiceCity: '',
       invoiceStreet: '',
       vat: '',
@@ -120,7 +120,7 @@ export default function CheckoutPage({
         return {
           ...prev,
           invoiceName: `${formData.firstName} ${formData.lastName}`,
-          invoicePostalCode: formData.postalCode,
+          invoiceZip: formData.zip,
           invoiceCity: formData.city,
           invoiceStreet: formData.street,
           invoiceCountry: formData.country,
@@ -335,8 +335,6 @@ export default function CheckoutPage({
       setGeneralError(err.message);
     }
   };
-
-  console.log('payment provider: ', paymentProvider);
 
   return (
     <div className="flex flex-col lg:flex-row sm:gap-x-10 w-full pb-[64px] sm:pb-[24px] pt-[60px] sm:pt-[120px] sm:max-w-[1128px] sm:px-[40px] sm:mx-auto">
@@ -560,7 +558,7 @@ export default function CheckoutPage({
                   {cardPaymentFormData.country}
                 </InputLabel>
                 <InputLabel
-                  name={'postalCode'}
+                  name={'zip'}
                   type={'text'}
                   dataSource={formData}
                   onChange={handleChange}
@@ -665,7 +663,7 @@ export default function CheckoutPage({
                       {cardPaymentFormData.country}
                     </InputLabel>
                     <InputLabel
-                      name={'invoicePostalCode'}
+                      name={'invoiceZip'}
                       dataSource={invoiceData}
                       onChange={handleInvoiceChange}
                     >

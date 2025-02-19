@@ -1,31 +1,27 @@
-import { NextRequest, NextResponse } from "next/server";
-import Stripe from "stripe";
-import prisma from "../../../../../utils/db";
-import { getOrder } from "@/app/actions/orders";
-import { getTicket } from "@/app/actions/ticket";
-import { createVoucher } from "@/app/actions/voucher";
-import { PaymentStatus, OrderStatus } from "@prisma/client";
-import { generateOrderQrCodes } from "../../../../../utils/generateOrderQrCodes";
-import { sendTransactionalEmail } from "../../../../../utils/sendTransactionalEmail";
-import { generateTicketPdf } from "@/app/actions/generateTicketPdf";
-import { generateDownloadToken } from "@/app/actions/generateDownloadToken";
-import { createInvoice } from "@/app/actions/szamlazzInvoice";
+import { NextRequest, NextResponse } from 'next/server';
+import Stripe from 'stripe';
+import { PaymentStatus, OrderStatus } from '@prisma/client';
+import prisma from '../../../../../utils/db';
+import { generateOrderQrCodes } from '../../../../../utils/generateOrderQrCodes';
+import { sendTransactionalEmail } from '../../../../../utils/sendTransactionalEmail';
+import { getOrder } from '@/app/actions/orders';
+import { getTicket } from '@/app/actions/ticket';
+import { createVoucher } from '@/app/actions/voucher';
+import { generateTicketPdf } from '@/app/actions/generateTicketPdf';
+import { generateDownloadToken } from '@/app/actions/generateDownloadToken';
+import { createInvoice } from '@/app/actions/szamlazzInvoice';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export async function POST(req) {
-  const sig = req.headers.get("stripe-signature");
+  const sig = req.headers.get('stripe-signature');
   const body = await req.text();
 
   let event;
   try {
-    event = stripe.webhooks.constructEvent(
-      body,
-      sig,
-      process.env.STRIPE_WEBHOOK_SECRET
-    );
+    event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
-    console.error("Webhook signature verification failed.", err);
+    console.error('Webhook signature verification failed.', err);
     return NextResponse.json({ error: err.message }, { status: 400 });
   }
 
@@ -43,7 +39,7 @@ export async function POST(req) {
   //   data: { eventId: event.id },
   // });
 
-  if (event.type === "payment_intent.succeeded") {
+  if (event.type === 'payment_intent.succeeded') {
     const charge = event.data.object;
     const orderId = charge.metadata.orderId;
 
@@ -51,12 +47,12 @@ export async function POST(req) {
 
     const order = await getOrder(parseInt(orderId, 10));
     if (order == null) {
-      return new NextResponse("Bad request", { status: 400 });
+      return new NextResponse('Bad request', { status: 400 });
     }
 
     if (order.status === OrderStatus.PAID) {
       console.log(`Order ${order.id} already paid.`);
-      return new NextResponse("Order already paid", { status: 400 });
+      return new NextResponse('Order already paid', { status: 400 });
     }
     try {
       // Az adatbázis módosítások atomikus módon történnek egy tranzakcióban.
@@ -68,9 +64,7 @@ export async function POST(req) {
             amountInCents: pricePaidInCents,
             currency: charge.currency.toUpperCase(),
             status: PaymentStatus.SUCCESS,
-            errorMessage: charge.last_payment_error
-              ? charge.last_payment_error.message
-              : null,
+            errorMessage: charge.last_payment_error ? charge.last_payment_error.message : null,
           },
         });
 
@@ -87,15 +81,15 @@ export async function POST(req) {
         }
       });
     } catch (error) {
-      console.error("Error processing payment transaction:", error.stack);
-      return new NextResponse("Internal server error", { status: 500 });
+      console.error('Error processing payment transaction:', error.stack);
+      return new NextResponse('Internal server error', { status: 500 });
     }
 
     // const qrCodes = await generateOrderQrCodes(order);
     // console.log("QRCODES: ", qrCodes);
 
     const qrCodesByItem = await generateOrderQrCodes(order);
-    console.log("QR Codes: ", qrCodesByItem);
+    console.log('QR Codes: ', qrCodesByItem);
 
     const ticketData = {
       orderId: order.id,
@@ -112,13 +106,13 @@ export async function POST(req) {
             quantity: item.quantity,
             qrCodes: item.codes,
           };
-        })
+        }),
       ),
     };
 
     //Legeneráljuk a PDF-et a ticketData alapján
     const result = await generateTicketPdf(ticketData);
-    console.log("generateTicketPdf result:", result);
+    console.log('generateTicketPdf result:', result);
     const { voucherId, pdfPath, expiresAt } = result;
     await createVoucher(voucherId, order.id, pdfPath, expiresAt);
 
@@ -126,39 +120,39 @@ export async function POST(req) {
     let token;
     try {
       token = await generateDownloadToken(voucherId, expiresAt);
-      console.log("JWT token:", token);
+      console.log('JWT token:', token);
     } catch (error) {
-      console.error("Error generating token:", error);
+      console.error('Error generating token:', error);
     }
     // Összeállítjuk a letöltési URL-t
     const downloadUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/download-ticket?token=${token}`;
 
     const invoiceData = {
-      buyerName: "Pisti",
+      buyerName: 'Pisti',
       email: order.email,
-      zip: "7274234",
-      city: "Maribor",
-      address: "pontott",
-      taxNumber: "minekaz",
+      zip: '7274234',
+      city: 'Maribor',
+      address: 'pontott',
+      taxNumber: 'minekaz',
       items: order.items.map((item) => ({
-        label: "Konferencia jegy",
+        label: 'Konferencia jegy',
         quantity: item.quantity,
         vat: 27,
         netUnitPrice: item.priceAtPurchase / 100,
-        unit: "db",
+        unit: 'db',
       })),
     };
 
     const invoiceResult = await createInvoice(invoiceData);
-    console.log("Invoice result:", invoiceResult);
+    console.log('Invoice result:', invoiceResult);
 
     await sendTransactionalEmail(order, downloadUrl, invoiceResult.pdf);
-  } else if (event.type === "payment_intent.payment_failed") {
+  } else if (event.type === 'payment_intent.payment_failed') {
     const paymentIntent = event.data.object;
     const orderId = paymentIntent.metadata.orderId;
     const order = await getOrder(parseInt(orderId, 10));
     if (order == null) {
-      return new NextResponse("Bad request", { status: 400 });
+      return new NextResponse('Bad request', { status: 400 });
     }
     try {
       await prisma.$transaction(async (tx) => {
@@ -172,7 +166,7 @@ export async function POST(req) {
             status: PaymentStatus.FAILED,
             errorMessage: paymentIntent.last_payment_error
               ? paymentIntent.last_payment_error.message
-              : "Payment failed",
+              : 'Payment failed',
           },
         });
         // Frissítjük az order státuszát FAILED-re
@@ -182,18 +176,15 @@ export async function POST(req) {
         });
       });
     } catch (error) {
-      console.error(
-        "Error processing failed payment transaction:",
-        error.stack
-      );
+      console.error('Error processing failed payment transaction:', error.stack);
     }
     console.error(`Payment failed for Order ID ${order.id}`);
-  } else if (event.type === "payment_intent.canceled") {
+  } else if (event.type === 'payment_intent.canceled') {
     const paymentIntent = event.data.object;
     const orderId = paymentIntent.metadata.orderId;
     const order = await getOrder(parseInt(orderId, 10));
     if (order == null) {
-      return new NextResponse("Bad request", { status: 400 });
+      return new NextResponse('Bad request', { status: 400 });
     }
     try {
       await prisma.$transaction(async (tx) => {
@@ -207,7 +198,7 @@ export async function POST(req) {
             status: PaymentStatus.CANCELLED,
             errorMessage: paymentIntent.last_payment_error
               ? paymentIntent.last_payment_error.message
-              : "Payment Cancelled",
+              : 'Payment Cancelled',
           },
         });
         // Frissítjük az order státuszát CANCELLED-re
@@ -217,10 +208,7 @@ export async function POST(req) {
         });
       });
     } catch (error) {
-      console.error(
-        "Error processing cancelled payment transaction:",
-        error.stack
-      );
+      console.error('Error processing cancelled payment transaction:', error.stack);
     }
     console.error(`Payment cancelled for Order ID ${order.id}`);
   }
