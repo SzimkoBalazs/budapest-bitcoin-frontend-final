@@ -7,9 +7,10 @@ import { createVoucher } from "@/app/actions/voucher";
 import { PaymentStatus, OrderStatus } from "@prisma/client";
 import { generateOrderQrCodes } from "../../../../../utils/generateOrderQrCodes";
 import { sendTransactionalEmail } from "../../../../../utils/sendTransactionalEmail";
-import { generateTicketPdf } from "@/app/actions/generateTicketPdf";
 import { generateDownloadToken } from "@/app/actions/generateDownloadToken";
 import { createInvoice } from "@/app/actions/szamlazzInvoice";
+import { generateNewTicketPdf } from "@/app/actions/generateNewTicketPDF";
+import logger from "../../../../../utils/logger";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -55,7 +56,7 @@ export async function POST(req) {
     }
 
     if (order.status === OrderStatus.PAID) {
-      console.log(`Order ${order.id} already paid.`);
+      logger.info(`Order ${order.id} already paid.`);
       return new NextResponse("Order already paid", { status: 400 });
     }
     try {
@@ -87,7 +88,7 @@ export async function POST(req) {
         }
       });
     } catch (error) {
-      console.error("Error processing payment transaction:", error.stack);
+      logger.error(`Error processing payment transaction: ${error.stack}`);
       return new NextResponse("Internal server error", { status: 500 });
     }
 
@@ -95,7 +96,7 @@ export async function POST(req) {
     // console.log("QRCODES: ", qrCodes);
 
     const qrCodesByItem = await generateOrderQrCodes(order);
-    console.log("QR Codes: ", qrCodesByItem);
+    logger.info("QR Codes: ", qrCodesByItem);
 
     const ticketData = {
       orderId: order.id,
@@ -117,8 +118,9 @@ export async function POST(req) {
     };
 
     //Legeneráljuk a PDF-et a ticketData alapján
-    const result = await generateTicketPdf(ticketData);
-    console.log("generateTicketPdf result:", result);
+    // const result = await generateTicketPdf(ticketData);
+    const result = await generateNewTicketPdf(ticketData);
+    logger.info("generateTicketPdf result:", result);
     const { voucherId, pdfPath, expiresAt } = result;
     await createVoucher(voucherId, order.id, pdfPath, expiresAt);
 
@@ -126,9 +128,9 @@ export async function POST(req) {
     let token;
     try {
       token = await generateDownloadToken(voucherId, expiresAt);
-      console.log("JWT token:", token);
+      logger.info("JWT token:", token);
     } catch (error) {
-      console.error("Error generating token:", error);
+      logger.error(`Error generating download token: ${error}`);
     }
     // Összeállítjuk a letöltési URL-t
     const downloadUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/download-ticket?token=${token}`;
@@ -150,7 +152,7 @@ export async function POST(req) {
     };
 
     const invoiceResult = await createInvoice(invoiceData);
-    console.log("Invoice result:", invoiceResult);
+    logger.info("Invoice result:", invoiceResult);
 
     await sendTransactionalEmail(order, downloadUrl, invoiceResult.pdf);
   } else if (event.type === "payment_intent.payment_failed") {
@@ -182,9 +184,8 @@ export async function POST(req) {
         });
       });
     } catch (error) {
-      console.error(
-        "Error processing failed payment transaction:",
-        error.stack
+      logger.error(
+        `Error processing failed payment transaction: ${error.stack}`
       );
     }
     console.error(`Payment failed for Order ID ${order.id}`);
@@ -217,12 +218,11 @@ export async function POST(req) {
         });
       });
     } catch (error) {
-      console.error(
-        "Error processing cancelled payment transaction:",
-        error.stack
+      logger.error(
+        `Error processing cancelled payment transaction: ${error.stack}`
       );
     }
-    console.error(`Payment cancelled for Order ID ${order.id}`);
+    logger.error(`Payment cancelled for Order ID ${order.id}`);
   }
 
   return NextResponse.json({ received: true });

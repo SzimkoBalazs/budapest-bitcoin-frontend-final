@@ -1,6 +1,6 @@
 "use server";
 
-import { metadata } from "../[locale]/layout";
+import logger from "../../../utils/logger";
 
 export async function createBtcpayInvoice(order, locale) {
   const btcpayConfig = {
@@ -30,6 +30,9 @@ export async function createBtcpayInvoice(order, locale) {
   const url = `${btcpayConfig.apiUrl}/stores/${btcpayConfig.storeId}/invoices`;
 
   try {
+    logger.info(
+      `Invoice létrehozása elindult: Order ID: ${order.id}, Amount: ${amount}, Currency: ${order.currency}`
+    );
     // Fetch hívás a BTCPay API felé POST módszerrel
     const res = await fetch(url, {
       method: "POST",
@@ -43,13 +46,19 @@ export async function createBtcpayInvoice(order, locale) {
     // Ha a válasz nem OK, olvassuk ki az esetleges hibaszöveget
     if (!res.ok) {
       const errorData = await res.text();
+      logger.error(
+        `BTCPay invoice létrehozási hiba (HTTP ${res.status}): ${errorData}`
+      );
       throw new Error(`BTCPay invoice létrehozási hiba: ${errorData}`);
     }
     // A válasz JSON-ként kerül feldolgozásra, amely tartalmazza az invoice URL-t és egyéb adatokat
     const data = await res.json();
+    logger.info(`BTCPay invoice sikeresen létrejött: ${data.id}`);
     return data;
   } catch (error) {
-    console.error("BTCPay invoice létrehozási hiba:", error.message);
+    logger.error(`BTCPay invoice létrehozási hiba: ${error.message}`, {
+      stack: error.stack,
+    });
     throw error;
   }
 }

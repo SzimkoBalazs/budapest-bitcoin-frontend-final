@@ -1,6 +1,7 @@
 // app/api/webhooks/btcpay/route.js
 import { NextResponse } from "next/server";
 import prisma from "../../../../../utils/db";
+import logger from "@/utils/logger"; // Importáld a logger-t
 
 export async function POST(req) {
   const body = await req.text();
@@ -8,7 +9,7 @@ export async function POST(req) {
   try {
     event = JSON.parse(body);
   } catch (error) {
-    console.error("Webhook JSON parse hiba:", error);
+    logger.error(`Webhook JSON parse hiba: ${error}`); // console.error helyett
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
@@ -24,7 +25,7 @@ export async function POST(req) {
     const orderId = invoice.metadata?.orderId;
 
     if (!orderId) {
-      console.error("Missing orderId in invoice metadata");
+      logger.error("Missing orderId in invoice metadata");
       return NextResponse.json(
         { error: "Missing orderId in invoice metadata" },
         { status: 400 }
@@ -38,7 +39,7 @@ export async function POST(req) {
 
     // Ha az order már PAID, nem dolgozzuk fel újból
     if (order.status === "PAID") {
-      console.log(`Order ${order.id} already paid.`);
+      logger.info(`Order ${order.id} already paid.`);
       return NextResponse.json({ received: true });
     }
 
@@ -68,9 +69,8 @@ export async function POST(req) {
         }
       });
     } catch (error) {
-      console.error(
-        "Error processing BTCPay payment transaction:",
-        error.stack
+      logger.error(
+        `Error processing BTCPay payment transaction: ${error.stack}`
       );
       return NextResponse.json(
         { error: "Internal server error" },
@@ -79,7 +79,7 @@ export async function POST(req) {
     }
 
     const qrCodesByItem = await generateOrderQrCodes(order);
-    console.log("QR Codes:", qrCodesByItem);
+    logger.info("QR Codes:", qrCodesByItem);
 
     const ticketData = {
       orderId: order.id,
@@ -101,7 +101,7 @@ export async function POST(req) {
     };
 
     const result = await generateTicketPdf(ticketData);
-    console.log("generateTicketPdf result:", result);
+    logger.info("generateTicketPdf result:", result);
     const { voucherId, pdfPath, expiresAt } = result;
     await createVoucher(voucherId, order.id, pdfPath, expiresAt);
 
@@ -109,9 +109,9 @@ export async function POST(req) {
     let token;
     try {
       token = await generateDownloadToken(voucherId, expiresAt);
-      console.log("JWT token:", token);
+      logger.info("JWT token:", token);
     } catch (error) {
-      console.error("Error generating token:", error);
+      logger.error(`Error generating token: ${error}`);
     }
     // Összeállítjuk a letöltési URL-t
     const downloadUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/download-ticket?token=${token}`;
@@ -133,7 +133,7 @@ export async function POST(req) {
     };
 
     const invoiceResult = await createInvoice(invoiceData);
-    console.log("Invoice result:", invoiceResult);
+    logger.info("Invoice result:", invoiceResult);
 
     await sendTransactionalEmail(order, downloadUrl, invoiceResult.pdf);
   } else if (event.data.invoice.status === "failed") {
@@ -169,16 +169,15 @@ export async function POST(req) {
         });
       });
     } catch (error) {
-      console.error(
-        "Error processing failed payment transaction:",
-        error.stack
+      logger.error(
+        `Error processing failed payment transaction: ${error.stack}`
       );
       return NextResponse.json(
         { error: "Internal server error" },
         { status: 500 }
       );
     }
-    console.error(`Payment failed for Order ID ${order.id}`);
+    logger.error(`Payment failed for Order ID ${order.id}`);
   }
   return NextResponse.json({ received: true });
 }
