@@ -41,37 +41,48 @@ export default function CheckoutPage({
   const [paymentProvider, setPaymentProvider] = useState(null);
 
   // FORM DATA
-  const [formData, setFormData] = useState(function () {
-    return (
-      JSON.parse(localStorage.getItem('formData')) || {
-        email: '',
-        emailRepeat: '',
-        firstName: '',
-        lastName: '',
-        zip: '',
-        city: '',
-        street: '',
-        country: '',
-        termsAccepted: false,
-        marketingAccepted: false,
-      }
-    );
+  const [formData, setFormData] = useState({
+    email: '',
+    emailRepeat: '',
+    firstName: '',
+    lastName: '',
+    zip: '',
+    city: '',
+    street: '',
+    country: '',
+    termsAccepted: false,
+    marketingAccepted: false,
   });
 
-  const [invoiceData, setInvoiceData] = useState(function () {
-    return (
-      JSON.parse(localStorage.getItem('invoiceData')) || {
-        invoiceType: '',
-        invoiceName: '',
-        invoiceCountry: '',
-        invoiceZip: '',
-        invoiceCity: '',
-        invoiceStreet: '',
-        vat: '',
-        euVat: '',
-      }
-    );
+  const [invoiceData, setInvoiceData] = useState({
+    invoiceType: '',
+    invoiceName: '',
+    invoiceCountry: '',
+    invoiceZip: '',
+    invoiceCity: '',
+    invoiceStreet: '',
+    vat: '',
+    euVat: '',
   });
+
+  useEffect(() => {
+    const formLocalData = localStorage.getItem('formData');
+    const invoiceLocalData = localStorage.getItem('invoiceData');
+    if (formLocalData) {
+      setFormData(JSON.parse(formLocalData));
+    }
+    if (invoiceLocalData) {
+      setInvoiceData(JSON.parse(invoiceLocalData));
+    }
+
+    const storedTickets = JSON.parse(localStorage.getItem('selectedTickets')) || [];
+    setSelectedTickets((prevTickets) =>
+      prevTickets.map((ticket) => {
+        const storedTicket = storedTickets.find((stored) => stored.id === ticket.id);
+        return storedTicket ? { ...ticket, quantity: storedTicket.quantity } : ticket;
+      }),
+    );
+  }, []);
 
   function clearForm() {
     setFormData({
@@ -165,21 +176,9 @@ export default function CheckoutPage({
   }, []);
 
   // ✅ Jegyek állapotának kezelése
-  const [selectedTickets, setSelectedTickets] = useState(function () {
-    // Elmentett ticketek
-    const storedTickets = JSON.parse(localStorage.getItem('selectedTickets')) || [];
-
-    // Backendes ticketeken vegig megyunk
-    //Megnezzuk hogy storedTicket id meg ticket id egyezik e
-    //Ha egyezik akkor masoljuk a backendes ticketet, es at irjuk a quantityt a storedos quantityre
-    //Ha nincs, akkor backendes ticket es quantity 0
-    return tickets.map((ticket) => {
-      const storedTicket = storedTickets.find((stored) => stored.id === ticket.id);
-      return storedTicket
-        ? { ...ticket, quantity: storedTicket.quantity }
-        : { ...ticket, quantity: 0 };
-    });
-  });
+  const [selectedTickets, setSelectedTickets] = useState(() =>
+    tickets.map((ticket) => ({ ...ticket, quantity: 0 })),
+  );
 
   // When selectedTickets change, we save the quantity and id from the selected ticket to local storage
   useEffect(() => {
@@ -337,7 +336,7 @@ export default function CheckoutPage({
   };
 
   return (
-    <div className="flex flex-col lg:flex-row sm:gap-x-10 w-full pb-[64px] sm:pb-[24px] pt-[60px] sm:pt-[120px] sm:max-w-[1128px] sm:px-[40px] sm:mx-auto">
+    <div className="flex flex-col gap-y-10 lg:flex-row sm:gap-x-10 w-full pb-[64px] sm:pb-[24px] pt-[60px] sm:pt-[120px] sm:max-w-[1128px] sm:px-[40px] sm:mx-auto">
       <div className="flex flex-col mx-auto w-full max-w-[400px] sm:w-[40%] p-4 sm:p-0 gap-y-6 bg-neutral-900">
         {tickets.map((ticket, index) => (
           <div key={ticket.id} className="flex flex-col gap-y-4 items-end w-full">

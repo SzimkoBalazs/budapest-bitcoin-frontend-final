@@ -42,7 +42,6 @@ const TicketCardCheckout = ({
     if (ticketRef.current) {
       setBarcodeHeight(ticketRef.current.offsetHeight);
     }
-    console.log('ticket ref height', ticketRef.current.offsetHeight);
   }, [ticketRef.current]);
 
   return (

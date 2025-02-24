@@ -23,7 +23,7 @@ const CheckoutIcon = () => {
 
   return (
     <a
-      className="cursor-pointer items-center bg-primary-600 justify-center fixed right-[40px] bottom-[40px] sm:right-[100px] sm:bottom-[100px] rounded-[40px] shadow-[0_3px_0_0_#000]"
+      className="cursor-pointer items-center bg-primary-600 justify-center fixed right-[32px] bottom-[32px] sm:right-[72px] sm:bottom-[72px] rounded-[40px] shadow-[0_3px_0_0_#000]"
       style={{
         display: isCheckoutActive && !isCheckoutPage ? 'flex' : 'none',
         width: 52,

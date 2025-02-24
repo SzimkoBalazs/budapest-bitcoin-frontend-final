@@ -9,10 +9,9 @@ export async function getTickets() {
     //   saleEnd: { gte: new Date() }, // És még nem járt le az értékesítésük
     // },
     orderBy: {
-      priceInEur: "asc", // Legolcsóbb jegyek előre
+      priceInEur: 'asc', // Legolcsóbb jegyek előre
     },
   });
-  console.log('get Tickets', tickets);
   return tickets;
 }
 

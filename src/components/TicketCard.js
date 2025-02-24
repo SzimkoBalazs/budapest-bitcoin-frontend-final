@@ -48,7 +48,12 @@ const TicketCard = ({ ticketCardContent, ticketInfo, borderColor, beforePrice, l
                   {priceWithSpace(beforePrice, false)}
                 </h5>
                 <h3
-                  className="text-neutral-700 absolute right-[-30px] lg:right-[-42px] text-[12px] lg:text-[18px] mb-[1px] lg:mb-[2px] tracking-[1px]"
+                  className={cln(
+                    locale === 'hu'
+                      ? 'right-[-16px] lg:right-[-24px]'
+                      : 'right-[-28px] lg:right-[-40px]',
+                    'text-neutral-700 absolute text-[12px] lg:text-[18px] mb-[1px] lg:mb-[2px] tracking-[1px]',
+                  )}
                   style={{ fontWeight: 400, lineHeight: '100%' }}
                 >
                   {locale === 'hu' ? 'Ft' : 'EUR'}
@@ -66,12 +71,15 @@ const TicketCard = ({ ticketCardContent, ticketInfo, borderColor, beforePrice, l
                 className="text-white text-[28px] lg:text-[38px] tracking-[2.4px]"
                 style={{ fontWeight: 800, lineHeight: '100%' }}
               >
-                {locale === 'en'
-                  ? `${getTicketPrice(ticketInfo, locale) / 100}`
-                  : `${getTicketPrice(ticketInfo, locale)}`}
+                {priceWithSpace(getTicketPrice(ticketInfo, locale), locale !== 'hu')}
               </h3>
               <h3
-                className="text-white absolute right-[-36px] lg:right-[-50px] text-[16px] lg:text-[22px] tracking-[1px] mb-[2px] lg:mb-[4px]"
+                className={cln(
+                  locale === 'hu'
+                    ? 'right-[-16px] lg:right-[-24px]'
+                    : 'right-[-36px] lg:right-[-48px]',
+                  'text-white absolute text-[16px] lg:text-[22px] tracking-[1px] mb-[2px] lg:mb-[4px]',
+                )}
                 style={{ fontWeight: 400, lineHeight: '100%' }}
               >
                 {locale === 'hu' ? 'Ft' : 'EUR'}
