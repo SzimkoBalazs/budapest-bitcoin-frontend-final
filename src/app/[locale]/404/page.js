@@ -1,5 +1,5 @@
 import React from 'react';
-import GetYourPassCTAButton from '@/components/GetYourPassCTAButton';
+import SecondaryButton from '@/components/Buttons/SecondaryButton';
 
 async function fetchErrorPageData(locale) {
   const res = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/error-404?locale=${locale}`);
@@ -30,7 +30,7 @@ export default async function PageNotFound({ params }) {
           {errorText.subtitle}
         </p>
       </div>
-      <GetYourPassCTAButton href={`home-page`} buttonText={errorText.buttonText} />
+      <SecondaryButton text={errorText.buttonText} locale={locale} isHomePageNavigation={true} />
     </div>
   );
 }

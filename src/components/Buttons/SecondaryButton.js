@@ -1,13 +1,28 @@
 'use client';
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { cln } from '@/utilities/classnames';
 
-const SecondaryButton = ({ type, onClick, style, text, disabled }) => {
+const SecondaryButton = ({
+  type,
+  onClick,
+  style,
+  text,
+  disabled,
+  locale,
+  isHomePageNavigation,
+}) => {
+  const router = useRouter();
+  function homePageNavigation(e) {
+    e.preventDefault();
+    router.push(`/${locale || 'en'}#home-page`);
+  }
+
   return (
     <button
       type={type}
-      onClick={onClick}
+      onClick={isHomePageNavigation ? homePageNavigation : onClick}
       className={cln(
         !disabled &&
           'hover:bg-neutral-700 active:bg-secondary-600 active:shadow-none active:translate-y-[6px] cursor-pointer',
