@@ -1,50 +1,49 @@
-import { Fredoka, Exo } from "next/font/google";
-import "./globals.css";
-import Script from "next/script";
-import Navbar from "@/components/Navbar";
+import { Fredoka, Exo } from 'next/font/google';
+import './globals.css';
+import Script from 'next/script';
+import Navbar from '@/components/Navbar';
 
 const fredoka = Fredoka({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-fredoka",
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-fredoka',
 });
 
 const exo = Exo({
-  subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-  variable: "--font-exo",
+  subsets: ['latin'],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  variable: '--font-exo',
 });
 
 export const metadata = {
-  metadataBase: new URL("https://www.budapestbitcoin.com/"),
+  metadataBase: new URL('https://www.budapestbitcoin.com/'),
 
   title: {
-    default:
-      "Budapest Bitcoin - The Bitcoin Conference with a bit of difference",
-    template: "%s | Budapest Bitcoin",
+    default: 'Budapest Bitcoin - The Bitcoin Conference with a bit of difference',
+    template: '%s | Budapest Bitcoin',
   },
   description:
-    "This isn’t just another Bitcoin event, it’s a new beginning! No distractions, no noise, just Bitcoin, networking, and good Budapest vibes.",
+    'This isn’t just another Bitcoin event, it’s a new beginning! No distractions, no noise, just Bitcoin, networking, and good Budapest vibes.',
   openGraph: {
-    title: "Budapest Bitcoin - The Bitcoin Conference with a bit of difference",
+    title: 'Budapest Bitcoin - The Bitcoin Conference with a bit of difference',
     description:
-      "This isn’t just another Bitcoin event, it’s a new beginning! No distractions, no noise, just Bitcoin, networking, and good Budapest vibes.",
-    type: "website",
-    url: "https://www.budapestbitcoin.com/",
-    sitename: "Budapest Bitcoin",
+      'This isn’t just another Bitcoin event, it’s a new beginning! No distractions, no noise, just Bitcoin, networking, and good Budapest vibes.',
+    type: 'website',
+    url: 'https://www.budapestbitcoin.com/',
+    sitename: 'Budapest Bitcoin',
     images: [
       {
-        url: "https://www.budapestbitcoin.com/opengraph-image.jpg",
+        url: 'https://www.budapestbitcoin.com/opengraph-image.jpg',
         width: 1200,
         height: 630,
-        alt: "Budapest Bitcoin Conference",
+        alt: 'Budapest Bitcoin Conference',
       },
     ],
   },
   icons: {
-    icon: "/bpconflogo.svg",
-    shortcut: "/bpconflogo.svg",
-    apple: "/bpconflogo.svg",
+    icon: '/bpconflogo.svg',
+    shortcut: '/bpconflogo.svg',
+    apple: '/bpconflogo.svg',
   },
 };
 
@@ -60,7 +59,7 @@ export default async function RootLayout({ children, params }) {
           data-cbid={process.env.COKKIEBOT_DOMAIN_GROUPID}
           data-blockingmode="auto"
           type="text/javascript"
-        ></Script>
+        />
 
         {/* Google Tag Manager */}
         <Script id="google-tag-manager" strategy="afterInteractive">
@@ -79,8 +78,8 @@ export default async function RootLayout({ children, params }) {
             src={`https://www.googletagmanager.com/ns.html?id=${process.env.GOOGLE_TAG_MANAGER_ID}`}
             height="0"
             width="0"
-            style={{ display: "none", visibility: "hidden" }}
-          ></iframe>
+            style={{ display: 'none', visibility: 'hidden' }}
+          />
         </noscript>
         <Navbar locale={locale} />
         <main className="w-full min-h-screen bg-neutral-900">{children}</main>
