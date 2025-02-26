@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { OrderStatus } from "@prisma/client";
-import logger from "../../../../../../utils/logger";
+
 
 export default function PayWithBtcpayButton({ order, locale }) {
   const router = useRouter();
@@ -28,7 +28,7 @@ export default function PayWithBtcpayButton({ order, locale }) {
       // Átirányítás a BTCPay checkout linkre
       router.push(data.checkoutLink || data.url);
     } catch (err) {
-      logger.error(err);
+      console.error(err);
       setError(err.message);
     } finally {
       setIsLoading(false);
