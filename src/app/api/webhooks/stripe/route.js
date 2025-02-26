@@ -43,6 +43,9 @@ export async function POST(req) {
   if (event.type === 'payment_intent.succeeded') {
     const charge = event.data.object;
     const orderId = charge.metadata.orderId;
+    const metadata = event.data.object.metadata || {};
+
+    console.log("metadata: ", metadata);
 
     const pricePaidInCents = charge.amount;
 
@@ -129,23 +132,112 @@ export async function POST(req) {
     // Összeállítjuk a letöltési URL-t
     const downloadUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/download-ticket?token=${token}`;
 
-    const invoiceData = {
-      buyerName: 'Pisti',
-      email: order.email,
-      zip: '7274234',
-      city: 'Maribor',
-      address: 'pontott',
-      taxNumber: 'minekaz',
-      items: order.items.map((item) => ({
-        label: 'Konferencia jegy',
-        quantity: item.quantity,
-        vat: 27,
-        netUnitPrice: item.priceAtPurchase / 100,
-        unit: 'db',
-      })),
+    const invoiceNeeded = metadata.invoiceNeeded === 'true';
+
+// Ha invoiceNeeded true, akkor invoiceData mezőket használunk, különben formData mezőket.
+const processedData = invoiceNeeded
+  ? {
+      // Invoice adatok (invoiceData)
+      invoiceType: metadata.invoiceType || null,
+      invoiceName: metadata.invoiceName || null,
+      invoiceCountry: metadata.invoiceCountry || null,
+      invoiceCity: metadata.invoiceCity || null,
+      invoiceStreet: metadata.invoiceStreet || null,
+      invoiceZip: metadata.invoiceZip || null,
+      euVat: metadata.euVat || null,
+      vat: metadata.vat || null,
+    }
+  : {
+      // Form adatok (formData)
+      firstName: metadata.firstName || null,
+      lastName: metadata.lastName || null,
+      email: metadata.email || null,
+      country: metadata.country || null,
+      city: metadata.city || null,
+      street: metadata.street || null,
+      zip: metadata.zip || null,
+      marketingAccepted: metadata.marketingAccepted || null,
+      termsAccepted: metadata.termsAccepted || null,
     };
 
-    const invoiceResult = await createInvoice(invoiceData);
+console.log("Processed metadata:", processedData);
+
+console.log("Order in the WEBHOOK:", order);
+
+const defaultInvoiceData = {
+  buyerName: '', // Ezt később beállíthatod
+  email: order.email,
+  zip: '',
+  city: '',
+  address: '',
+  taxNumber: '',
+  items: order.items.map((item) => {
+    const isEUR = order.currency.toUpperCase() === 'EUR';
+    let grossUnitPrice;
+    if (isEUR) {
+      // EUR esetén az adatbázisban centben tárolt értéket 100-zal osztjuk le.
+      grossUnitPrice = item.priceAtPurchase / 100;
+    } else {
+      // Más valutában (pl. HUF) az érték változatlan (tax-inclusive)
+      grossUnitPrice = item.priceAtPurchase;
+    }
+    // Ha van kupon, akkor módosítjuk az egyedi tétel bruttó árát:
+    if (order.coupon && order.coupon.discountValue != null) {
+      if (order.coupon.discountType === 'PERCENTAGE') {
+        // Százalékos kedvezmény: például 50% kedvezmény esetén az ár feleződik.
+        grossUnitPrice = grossUnitPrice * (1 - order.coupon.discountValue / 100);
+      } else if (order.coupon.discountType === 'FIXED') {
+        // Fix kedvezmény: egyszerűen levonjuk a discountValue-t.
+        // Feltételezzük, hogy a discountValue mértékegysége megegyezik a grossUnitPrice-ével.
+        grossUnitPrice = grossUnitPrice - order.coupon.discountValue;
+        if (grossUnitPrice < 0) grossUnitPrice = 0;
+      }
+    }
+    // Ha EUR, kerekítünk két tizedesjegyre:
+    if (isEUR) {
+      grossUnitPrice = parseFloat(grossUnitPrice.toFixed(2));
+    }
+    return {
+      label: 'Konferencia jegy',
+      quantity: item.quantity,
+      vat: 27, // A VAT kulcs, amit a számlázó a végösszeghez használ (nettó + áfa = bruttó)
+      grossUnitPrice: grossUnitPrice, // Csak a bruttó árat adjuk át, a számlázó rendszer onnan számolja a további értékeket
+      unit: 'pcs',
+    };
+  }),
+};
+
+console.log("Default Invoice Data:", defaultInvoiceData);
+
+    const finalInvoiceData = {
+      buyerName: invoiceNeeded
+        ? processedData.invoiceName || defaultInvoiceData.buyerName
+        : (processedData.firstName && processedData.lastName
+            ? `${processedData.firstName} ${processedData.lastName}`
+            : defaultInvoiceData.buyerName),
+      email: invoiceNeeded
+        ? processedData.email || defaultInvoiceData.email
+        : processedData.email || defaultInvoiceData.email,
+      zip: invoiceNeeded
+        ? processedData.invoiceZip || defaultInvoiceData.zip
+        : processedData.zip || defaultInvoiceData.zip,
+      city: invoiceNeeded
+        ? processedData.invoiceCity || defaultInvoiceData.city
+        : processedData.city || defaultInvoiceData.city,
+      address: invoiceNeeded
+        ? processedData.invoiceStreet || defaultInvoiceData.address
+        : processedData.street || defaultInvoiceData.address,
+      taxNumber: invoiceNeeded
+        ? processedData.vat || defaultInvoiceData.taxNumber // vagy ha van külön taxNumber mező
+        : defaultInvoiceData.taxNumber,
+      items: defaultInvoiceData.items, // Az items rész nem változik
+      currency: order.currency
+    };
+
+    console.log("Final invoiceData:", finalInvoiceData);
+
+
+    const invoiceResult = await createInvoice(finalInvoiceData);
     logger.info("Invoice result:", invoiceResult);
 
     await sendTransactionalEmail(order, downloadUrl, invoiceResult.pdf);

@@ -1,10 +1,30 @@
 // app/api/webhooks/btcpay/route.js
 import { NextResponse } from "next/server";
+import crypto from "crypto";
 import prisma from "../../../../../utils/db";
 import logger from "@/utils/logger"; // Importáld a logger-t
 
+function verifyBtcPaySignature(payload, signature, secret) {
+  const expectedSignature = crypto
+    .createHmac("sha256", secret)
+    .update(payload)
+    .digest("hex");
+  return signature === expectedSignature;
+}
+
 export async function POST(req) {
   const body = await req.text();
+
+  const signature = req.headers.get("btcpay-signature");
+  if (!signature) {
+    logger.error("Missing BTCPay signature header.");
+    return NextResponse.json({ error: "Missing signature" }, { status: 400 });
+  }
+  if (!verifyBtcPaySignature(body, signature, process.env.BTCPAY_WEBHOOK_SECRET)) {
+    logger.error("Invalid BTCPay signature.");
+    return NextResponse.json({ error: "Invalid signature" }, { status: 403 });
+  }
+
   let event;
   try {
     event = JSON.parse(body);
@@ -116,23 +136,50 @@ export async function POST(req) {
     // Összeállítjuk a letöltési URL-t
     const downloadUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/download-ticket?token=${token}`;
 
-    const invoiceData = {
-      buyerName: "Pisti",
+    const defaultInvoiceData = {
+      buyerName: '', 
       email: order.email,
-      zip: "7274234",
-      city: "Maribor",
-      address: "pontott",
-      taxNumber: "minekaz",
-      items: order.items.map((item) => ({
-        label: "Konferencia jegy",
-        quantity: item.quantity,
-        vat: 27,
-        netUnitPrice: item.priceAtPurchase / 100,
-        unit: "db",
-      })),
+      zip: '',
+      city: '',
+      address: '',
+      taxNumber: '',
+      items: order.items.map((item) => {
+        const isEUR = order.currency.toUpperCase() === 'EUR';
+        let grossUnitPrice;
+        if (isEUR) {
+          // EUR esetén az adatbázisban centben tárolt értéket 100-zal osztjuk le.
+          grossUnitPrice = item.priceAtPurchase / 100;
+        } else {
+          // Más valutában (pl. HUF) az érték változatlan (tax-inclusive)
+          grossUnitPrice = item.priceAtPurchase;
+        }
+        // Ha van kupon, akkor módosítjuk az egyedi tétel bruttó árát:
+        if (order.coupon && order.coupon.discountValue != null) {
+          if (order.coupon.discountType === 'PERCENTAGE') {
+            // Százalékos kedvezmény: például 50% kedvezmény esetén az ár feleződik.
+            grossUnitPrice = grossUnitPrice * (1 - order.coupon.discountValue / 100);
+          } else if (order.coupon.discountType === 'FIXED') {
+            // Fix kedvezmény: egyszerűen levonjuk a discountValue-t.
+            // Feltételezzük, hogy a discountValue mértékegysége megegyezik a grossUnitPrice-ével.
+            grossUnitPrice = grossUnitPrice - order.coupon.discountValue;
+            if (grossUnitPrice < 0) grossUnitPrice = 0;
+          }
+        }
+        // Ha EUR, kerekítünk két tizedesjegyre:
+        if (isEUR) {
+          grossUnitPrice = parseFloat(grossUnitPrice.toFixed(2));
+        }
+        return {
+          label: 'Konferencia jegy',
+          quantity: item.quantity,
+          vat: 27, // A VAT kulcs, amit a számlázó a végösszeghez használ (nettó + áfa = bruttó)
+          grossUnitPrice: grossUnitPrice, // Csak a bruttó árat adjuk át, a számlázó rendszer onnan számolja a további értékeket
+          unit: 'pcs',
+        };
+      }),
     };
 
-    const invoiceResult = await createInvoice(invoiceData);
+    const invoiceResult = await createInvoice(defaultInvoiceData);
     logger.info("Invoice result:", invoiceResult);
 
     await sendTransactionalEmail(order, downloadUrl, invoiceResult.pdf);

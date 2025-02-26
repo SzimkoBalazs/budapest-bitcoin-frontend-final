@@ -36,10 +36,10 @@ const seller = new Seller({
 // Add data from form
 function createBuyer(orderData) {
   return new Buyer({
-    name: orderData.buyerName,
-    zip: orderData.zip || '0000',
-    city: orderData.city || 'City',
-    address: orderData.address || 'Address',
+    name: orderData.buyerName || orderData.email,
+    zip: orderData.zip || '',
+    city: orderData.city || '',
+    address: orderData.address || '',
     taxNumber: orderData.taxNumber || undefined,
   });
 }
@@ -56,16 +56,17 @@ export async function createInvoice(orderData) {
           label: item.label,
           quantity: item.quantity,
           vat: item.vat,
-          netUnitPrice: item.netUnitPrice, // vagy grossUnitPrice, attól függően, mit szeretnél számolni
+          grossUnitPrice: parseFloat(item.grossUnitPrice),   // String -> Number
+          
           comment: item.comment || '',
-          unit: item.unit || 'db',
+          unit: item.unit || 'pcs',
         }),
     );
 
     // Invoice létrehozása
     const invoice = new Invoice({
       paymentMethod: PaymentMethods.CreditCard,
-      currency: Currencies.EUR,
+      currency: (orderData.currency).toUpperCase() === "EUR" ? Currencies.EUR : Currencies.HUF,
       language: Languages.English,
       seller: seller,
       buyer: buyer,

@@ -5,6 +5,7 @@ import { getOrder } from '@/app/actions/orders';
 import { getTicket, getTickets } from '@/app/actions/ticket';
 import { fetchTicketCards } from '@/components/SinglePageComponents/TicketsSection';
 import { cln } from '@/utilities/classnames';
+import PaymentIntentCreator from './PaymentIntentCreator';
 
 async function fetchOrderSummary(locale) {
   const res = await fetch(
@@ -19,7 +20,7 @@ async function fetchOrderSummary(locale) {
   return data.data || [];
 }
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
 
 export default async function PaymentPage({ params }) {
   const { id } = await params;
@@ -43,26 +44,26 @@ export default async function PaymentPage({ params }) {
     );
   }
 
-  // TODO: Ez az if kell ide? mert csak kinyillik bezarodik de nincs benne semmi function
-  if (order.status === 'PENDING' || order.status === 'FAILED' || order.status === 'CANCELLED') {
-  }
+  // // TODO: Ez az if kell ide? mert csak kinyillik bezarodik de nincs benne semmi function
+  // if (order.status === 'PENDING' || order.status === 'FAILED' || order.status === 'CANCELLED') {
+  // }
 
-  console.log('stripe final amount', order.finalAmountInCents);
-  console.log('orders currency: ', order.currency);
-  const paymentIntent = await stripe.paymentIntents.create(
-    {
-      amount: order.finalAmountInCents,
-      currency: order.currency.toLowerCase(),
-      metadata: { orderId: order.id },
-    },
-    {
-      idempotencyKey: `order_${order.id}`,
-    },
-  );
+  // console.log('stripe final amount', order.finalAmountInCents);
+  // console.log('orders currency: ', order.currency);
+  // const paymentIntent = await stripe.paymentIntents.create(
+  //   {
+  //     amount: order.finalAmountInCents,
+  //     currency: order.currency.toLowerCase(),
+  //     metadata: { orderId: order.id },
+  //   },
+  //   {
+  //     idempotencyKey: `order_${order.id}`,
+  //   },
+  // );
 
-  if (paymentIntent.client_secret == null) {
-    throw Error('Stripe failed to create payment intent');
-  }
+  // if (paymentIntent.client_secret == null) {
+  //   throw Error('Stripe failed to create payment intent');
+  // }
 
   return (
     <div className="max-w-xl mx-auto p-6 bg-white shadow-md mt-[100px] rounded-lg">
@@ -171,9 +172,8 @@ export default async function PaymentPage({ params }) {
         </div>
       </div>
       <div className="mt-10">
-        <PaymentClientStripe
+        <PaymentIntentCreator
           order={order}
-          clientSecret={paymentIntent.client_secret}
           locale={locale}
           buttonText={orderSummaryData.purchase}
           currency={locale === 'hu' ? 'Ft' : 'EUR'}

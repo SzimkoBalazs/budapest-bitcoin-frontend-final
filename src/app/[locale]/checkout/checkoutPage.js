@@ -63,6 +63,7 @@ export default function CheckoutPage({
     invoiceStreet: '',
     vat: '',
     euVat: '',
+    invoiceNeeded: false,
   });
 
   useEffect(() => {
@@ -109,6 +110,7 @@ export default function CheckoutPage({
       invoiceStreet: '',
       vat: '',
       euVat: '',
+      invoiceNeeded: false,
     });
   }
 
@@ -220,6 +222,16 @@ export default function CheckoutPage({
     });
   }
 
+  const handleNeedsInvoiceChange = (e) => {
+    const isChecked = e.target.checked;
+    setNeedsInvoice(isChecked);
+  
+    setInvoiceData((prev) => ({
+      ...prev,
+      invoiceNeeded: isChecked, 
+    }));
+  };
+
   // INVOICE FORM FILL FUNCTION
   function handleInvoiceChange(e) {
     setInvoiceData((prevData) => {
@@ -298,7 +310,7 @@ export default function CheckoutPage({
   const handleOrder = async () => {
     setGeneralError(null);
 
-    console.log('🎟 Applied Coupon before sending order:', appliedCoupon);
+    console.log(' Applied Coupon before sending order:', appliedCoupon);
 
     try {
       const items = selectedTickets
@@ -587,7 +599,7 @@ export default function CheckoutPage({
                       type="checkbox"
                       name="needsInvoice"
                       checked={needsInvoice}
-                      onChange={(e) => setNeedsInvoice(e.target.checked)}
+                      onChange={handleNeedsInvoiceChange}
                       className="max-w-[18px] max-h-[18px] mt-1"
                     />
                     <label

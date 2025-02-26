@@ -46,7 +46,7 @@ export const metadata = {
   },
 };
 
-export default async function RootLayout({ children, params }) {
+export default async function SiteLayout({ children, params }) {
   const { locale } = await params;
   const isValidLocale = ['en', 'hu'].includes(locale);
   const actualLocale = isValidLocale ? locale : 'en';

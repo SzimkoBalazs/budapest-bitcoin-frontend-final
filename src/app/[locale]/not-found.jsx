@@ -12,8 +12,8 @@ async function fetchErrorPageData(locale) {
   return data.data || [];
 }
 
-export default async function PageNotFound({ params }) {
-  const { locale } = await params;
+export default async function NotFound({ params }) {
+    const locale = "en";
   const errorText = await fetchErrorPageData(locale);
 
   return (
@@ -34,3 +34,4 @@ export default async function PageNotFound({ params }) {
     </div>
   );
 }
+
