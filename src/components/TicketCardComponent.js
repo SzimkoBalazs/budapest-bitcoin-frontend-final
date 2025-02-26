@@ -3,7 +3,20 @@ import TicketCard from './TicketCard';
 import { getTickets } from '@/app/actions/ticket';
 
 const TicketCardComponent = async ({ ticketCardContent, locale }) => {
-  const tickets = await getTickets();
+  let tickets = [];
+  try {
+    tickets = await getTickets();
+  } catch (error) {
+    console.error("Error fetching tickets:", error);
+  }
+  if (!tickets || tickets.length === 0) {
+    
+    return (
+      <div className="text-center py-10">
+        <p>Nincsenek elérhető jegyek jelenleg.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="scrollbar-container px-[16px] md:px-[40px] mt-10 flex mx-auto gl:mx-0 gl:justify-center items-center content-center gap-x-[24px] lg:gap-x-[40px] pb-[24px] overflow-x-scroll flex-nowrap">
@@ -17,7 +30,7 @@ const TicketCardComponent = async ({ ticketCardContent, locale }) => {
             locale={locale}
           />
         ) : (
-          <div className="flex flex-col gap-y-[56px]">
+          <div key={ticketCardContent[index].id} className="flex flex-col gap-y-[56px]">
             <TicketCard
               key={ticketCardContent[index].id}
               ticketCardContent={ticketCardContent[index]}
