@@ -105,7 +105,7 @@ const GetYourPassCTAButton = ({
   return anchorOrButton === 'anchor' ? (
     <a
       href={href ? href : '#tickets'}
-      onClick={!href && handleClick}
+      onClick={!href ? handleClick : undefined}
       onMouseEnter={() => !isMobile && setIsHovered(true)}
       onMouseLeave={() => !isMobile && setIsHovered(false)}
       onTouchStart={() => isMobile && setIsTouched(true)}

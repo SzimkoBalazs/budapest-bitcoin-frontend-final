@@ -6,7 +6,7 @@ import GetYourPassCTAButton from '@/components/GetYourPassCTAButton';
 import SecondaryCTAButton from '@/components/SecondaryCTAButton';
 import LanguageSwitch from '@/components/LanguageSwitch';
 
-const NavHamburgerIcon = ({ navLinks, currentLocale, buttonText }) => {
+const NavHamburgerIcon = ({ navLinks, currentLocale, buttonText, secondaryButtonText }) => {
   const [isClicked, setIsClicked] = useState(false);
 
   // Gomb lenyomása
@@ -104,7 +104,7 @@ const NavHamburgerIcon = ({ navLinks, currentLocale, buttonText }) => {
             locale={currentLocale}
           />
           <SecondaryCTAButton
-            text="Become a partner"
+            text={secondaryButtonText}
             actionType={'scroll'}
             setIsClicked={setIsClicked}
             locale={currentLocale}

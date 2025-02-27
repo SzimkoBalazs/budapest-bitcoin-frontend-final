@@ -52,7 +52,7 @@ const speakersPage = async ({ params }) => {
       </div>
       <ContentWrapper className="mt-[96px] sm:mt-[120px] sm:pb-10">
         <SectionMainTitle text={pageData.title} color="bg-secondary-600" underlineWidth={'97%'} />
-        <h2 className="text-white/80 mt-4 max-w-[760px] font-exo text-[18px] sm:text-[26px] font-normal leading-[130%] tracking-[2px] self-stretch">
+        <h2 className="text-white/80 mt-4 max-w-[760px] font-exo text-[16px] sm:text-[26px] font-normal leading-[130%] tracking-[2px] self-stretch">
           {pageData.subtitle}
         </h2>
       </ContentWrapper>
