@@ -40,7 +40,7 @@ function createBuyer(orderData) {
     zip: orderData.zip || '',
     city: orderData.city || '',
     address: orderData.address || '',
-    taxNumber: orderData.taxNumber || undefined,
+    taxNumber: orderData.taxNumber || "",
   });
 }
 

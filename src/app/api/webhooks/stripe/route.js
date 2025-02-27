@@ -10,6 +10,7 @@ import { sendTransactionalEmail } from "../../../../../utils/sendTransactionalEm
 import { generateDownloadToken } from "@/app/actions/generateDownloadToken";
 import { createInvoice } from "@/app/actions/szamlazzInvoice";
 import { generateNewTicketPdf } from "@/app/actions/generateNewTicketPDF";
+import { handleContactSubscription } from "@/app/actions/brevoReminderContact";
 import logger from "../../../../../utils/logger";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -44,6 +45,7 @@ export async function POST(req) {
     const charge = event.data.object;
     const orderId = charge.metadata.orderId;
     const metadata = event.data.object.metadata || {};
+    
 
     console.log("metadata: ", metadata);
 
@@ -241,6 +243,18 @@ console.log("Default Invoice Data:", defaultInvoiceData);
     logger.info("Invoice result:", invoiceResult);
 
     await sendTransactionalEmail(order, downloadUrl, invoiceResult.pdf);
+
+    const orderEmail = order.email && order.email.trim();
+if (!orderEmail) {
+  console.error("No valid email found on order.");
+} else {
+  try {
+    await handleContactSubscription({ email: orderEmail, subscribe: false });
+  } catch (error) {
+    console.error("Error unsubscribing contact from Brevo list:", error.stack);
+    // Nem kritikus, így nem állítjuk le a folyamatot
+  }
+}
   } else if (event.type === 'payment_intent.payment_failed') {
     const paymentIntent = event.data.object;
     const orderId = paymentIntent.metadata.orderId;

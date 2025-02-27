@@ -3,6 +3,7 @@
 import prisma from "../../../utils/db";
 import { orderSchema } from "../../../utils/validation";
 import { PaymentProvider, Currency } from "@prisma/client";
+import { handleContactSubscription } from "./brevoReminderContact";
 
 export async function createOrder(data) {
   try {
@@ -144,6 +145,7 @@ export async function createOrder(data) {
               };
             }),
           },
+         
         },
         include: {
           items: true,
@@ -170,6 +172,12 @@ export async function createOrder(data) {
       }
 
       console.log('✅ Order created successfully:', newOrder);
+      try {
+        await handleContactSubscription({ email, subscribe: true });
+      } catch (error) {
+        console.error("Error subscribing contact to Brevo list:", error.stack);
+        // Nem kritikus, így nem állítjuk le a folyamatot
+      }
       return newOrder;
     });
 
