@@ -1,4 +1,4 @@
-// app/api/send-reminder-emails/route.js
+
 import { NextResponse } from 'next/server';
 import prisma from '../../../../utils/db';
 import { sendReminderEmail } from '@/app/actions/sendReminderEmail';
