@@ -1,5 +1,5 @@
 // sendReminderEmail.js
-export async function sendReminderEmail(order, reminderType) {
+export async function sendReminderEmail(order) {
     // Példa: A Brevo transactional email API endpointja
     const BREVO_API_URL = process.env.BREVO_API_URL;
     const BREVO_API_KEY = process.env.BREVO_API_KEY;
@@ -14,7 +14,7 @@ export async function sendReminderEmail(order, reminderType) {
       to: [{ email: order.email }],
       templateId: parseInt(BREVO_REMINDER_TEMPLATE_ID, 10),
       params: {
-        reminderType, 
+       
         orderId: order.id,
        
       },
