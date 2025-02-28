@@ -18,7 +18,7 @@ export async function createBtcpayInvoice(order, locale) {
     orderId: order.id.toString(),
 
     redirectURL: `${process.env.NEXT_PUBLIC_BASE_URL}/${locale}/payment/btcpay/${order.id}/success`,
-    // A webhook URL, ahol a BTCPay visszaértesíti a fizetés állapotáról
+    
     notificationURL: `${process.env.NEXT_PUBLIC_BASE_URL}/api/webhooks/btcpay`,
     metadata: {
       orderId: order.id.toString(),
@@ -56,9 +56,7 @@ export async function createBtcpayInvoice(order, locale) {
     logger.info(`BTCPay invoice sikeresen létrejött: ${data.id}`);
     return data;
   } catch (error) {
-    logger.error(`BTCPay invoice létrehozási hiba: ${error.message}`, {
-      stack: error.stack,
-    });
+    logger.error(`BTCPay invoice létrehozási hiba: ${error.stack}`);
     throw error;
   }
 }
