@@ -26,15 +26,17 @@ export async function createBtcpayInvoice(order, locale) {
     },
   };
 
+  const apiEndpoint = `/api/v1/stores/${btcpayConfig.storeId}/invoices`
+
   // Az invoice létrehozásához szükséges URL
-  const url = `${btcpayConfig.apiUrl}/stores/${btcpayConfig.storeId}/invoices`;
+  const url = `${btcpayConfig.apiUrl}`;
 
   try {
     logger.info(
       `Invoice létrehozása elindult: Order ID: ${order.id}, Amount: ${amount}, Currency: ${order.currency}`
     );
     // Fetch hívás a BTCPay API felé POST módszerrel
-    const res = await fetch(url, {
+    const res = await fetch(url + apiEndpoint, {
       method: "POST",
       headers: {
         Authorization: `token ${btcpayConfig.apiKey}`,
