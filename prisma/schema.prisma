@@ -46,8 +46,8 @@ model Order {
   payments        Payment[]
   couponId          Int?     //  Az alkalmazott kupon ID-ja (opcionális)
   coupon            Coupon?  @relation(fields: [couponId], references: [id]) // Kapcsolat a Coupon modellel
-  reminder6hSent      Boolean      @default(false)
-  reminder24hSent     Boolean      @default(false)
+  reminderSent      Boolean      @default(false)
+  
 }
 
 enum OrderStatus {

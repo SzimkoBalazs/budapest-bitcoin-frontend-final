@@ -91,7 +91,11 @@ const SpeakersSection = async ({ locale }) => {
             <SpeakerCard
               name={speaker.Name}
               description={speaker.Position}
-              image={`${process.env.NEXT_PUBLIC_STRAPI_URL}${speaker.Picture.formats.small.url}`}
+              image={
+                speaker.Picture?.formats?.small?.url
+                  ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${speaker.Picture.formats.small.url}`
+                  : `${process.env.NEXT_PUBLIC_STRAPI_URL}${speaker.Picture.formats.thumbnail.url}`
+              }
               company={speaker.Company}
             />
           </div>
