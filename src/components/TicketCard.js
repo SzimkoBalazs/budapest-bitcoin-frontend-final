@@ -71,7 +71,7 @@ const TicketCard = ({ ticketCardContent, ticketInfo, borderColor, beforePrice, l
                 className="text-white text-[28px] lg:text-[38px] tracking-[2.4px]"
                 style={{ fontWeight: 800, lineHeight: '100%' }}
               >
-                {priceWithSpace(getTicketPrice(ticketInfo, locale), locale !== 'hu')}
+                {priceWithSpace(getTicketPrice(ticketInfo, locale), true)}
               </h3>
               <h3
                 className={cln(

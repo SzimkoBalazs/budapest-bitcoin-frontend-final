@@ -117,7 +117,7 @@ const TicketCardCheckout = ({
               className="text-white text-[24px] lg:text-[34px] tracking-[2.4px]"
               style={{ fontWeight: 800, lineHeight: '100%' }}
             >
-              {priceWithSpace(price, locale !== 'hu')}
+              {priceWithSpace(price, true)}
             </h3>
             <h3
               className="text-white text-[16px] lg:text-[22px] mb-[2px]"

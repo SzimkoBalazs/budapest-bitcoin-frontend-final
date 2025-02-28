@@ -119,7 +119,7 @@ function Form({ priceInCents, locale, buttonText, currency, order }) {
           ) : isLoading ? (
             <SpinningLoader />
           ) : (
-            `${buttonText} - ${priceWithSpace(priceInCents, locale !== 'hu')} ${currency}`
+            `${buttonText} - ${priceWithSpace(priceInCents, true)} ${currency}`
           )}
         </PayButton>
       </div>

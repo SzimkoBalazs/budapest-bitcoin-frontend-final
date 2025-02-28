@@ -29,7 +29,7 @@ export default async function BtcpayPaymentPage({ params }) {
                 {item.quantity} ×{" "}
                 {locale === "en"
                   ? `${(item.priceAtPurchase / 100).toFixed(2)} EUR`
-                  : `${item.priceAtPurchase} Ft`}
+                  : `${(item.priceAtPurchase / 100).toFixed(2)} Ft`}
               </span>
             </li>
           ))}
@@ -57,21 +57,21 @@ export default async function BtcpayPaymentPage({ params }) {
           <strong>Total:</strong>{" "}
           {locale === "en"
             ? `${(order.totalAmountInCents / 100).toFixed(2)} EUR`
-            : `${order.totalAmountInCents} Ft`}
+            : `${(order.totalAmountInCents / 100).toFixed(2)} Ft`}
         </p>
         {order.discountInCents > 0 && (
           <p className="text-red-600">
             <strong>Discount:</strong>{" "}
             {locale === "en"
               ? `-${(order.discountInCents / 100).toFixed(2)} EUR`
-              : `-${order.discountInCents} Ft`}
+              : `-${(order.discountInCents / 100).toFixed(2)} Ft`}
           </p>
         )}
         <p className="text-xl font-bold">
           <strong>Final Amount:</strong>{" "}
           {locale === "en"
             ? `${(order.finalAmountInCents / 100).toFixed(2)} EUR`
-            : `${order.finalAmountInCents} Ft`}
+            : `${(order.finalAmountInCents / 100).toFixed(2)} Ft`}
         </p>
         <p>
           <strong>Payment Provider:</strong> {order.paymentProvider}

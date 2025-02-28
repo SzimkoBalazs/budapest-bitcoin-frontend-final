@@ -88,7 +88,7 @@ export default async function PaymentPage({ params }) {
                 <li key={item.id} className="flex justify-between border-b pb-2">
                   {ticketCards && <span>{matchedTicket?.PassTitle}</span>}
                   <span>
-                    {item.quantity} × {priceWithSpace(item.priceAtPurchase, locale !== 'hu')}{' '}
+                    {item.quantity} × {priceWithSpace(item.priceAtPurchase, true)}{' '}
                     {locale === 'en' ? 'EUR' : 'Ft'}
                   </span>
                 </li>
@@ -104,7 +104,7 @@ export default async function PaymentPage({ params }) {
               <div className="flex flex-row justify-between mt-2">
                 <p className="text-[16px]">{orderSummaryData.total} </p>
                 <p className="text-[16px]">
-                  {priceWithSpace(order.totalAmountInCents, locale !== 'hu')}{' '}
+                  {priceWithSpace(order.totalAmountInCents, true)}{' '}
                   {locale === 'hu' ? 'Ft' : 'EUR'}
                 </p>
               </div>
@@ -123,7 +123,7 @@ export default async function PaymentPage({ params }) {
                       {': '}
                       <strong>
                         {order.coupon.discountType === 'FIXED'
-                          ? `-${priceWithSpace(order.coupon.discountValue, locale !== 'hu')} ${
+                          ? `-${priceWithSpace(order.coupon.discountValue, true)} ${
                               locale === 'hu' ? 'Ft' : 'EUR'
                             }`
                           : `-${order.coupon.discountValue}%`}
@@ -132,7 +132,7 @@ export default async function PaymentPage({ params }) {
                   </div>
 
                   <p className="text-green-700 font-bold text-[16px] ml-auto mt-auto">
-                    -{priceWithSpace(order.discountInCents, locale !== 'hu')}{' '}
+                    -{priceWithSpace(order.discountInCents, true)}{' '}
                     {locale === 'hu' ? 'Ft' : 'EUR'}
                   </p>
                 </div>
@@ -141,7 +141,7 @@ export default async function PaymentPage({ params }) {
             <div className="flex flex-row justify-between mt-2">
               <p className="font-bold text-[20px]">{orderSummaryData.finalAmount} </p>
               <p className="text-[20px] font-bold">
-                {priceWithSpace(order.finalAmountInCents, locale !== 'hu')}{' '}
+                {priceWithSpace(order.finalAmountInCents, true)}{' '}
                 {locale === 'hu' ? 'Ft' : 'EUR'}
               </p>
             </div>

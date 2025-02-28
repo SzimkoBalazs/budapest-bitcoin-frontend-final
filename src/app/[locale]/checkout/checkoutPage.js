@@ -428,7 +428,7 @@ export default function CheckoutPage({
 
             {/*TODO: Ha forint akkor talan false lesz hogy ossza e el 100al*/}
             <h3 className="text-[20px] font-exo font-black text-white">
-              {priceWithSpace(subtotal - discountAmount, locale !== 'hu')}
+              {priceWithSpace(subtotal - discountAmount, true)}
               {locale === 'hu' ? ' Ft' : ' EUR'}
             </h3>
           </div>
@@ -476,7 +476,7 @@ export default function CheckoutPage({
               <p className="text-green-600 mt-2">
                 ✅ Coupon applied: {appliedCoupon.code} (-
                 {locale === 'hu'
-                  ? `${priceWithSpace(discountAmount, false)} Ft`
+                  ? `${priceWithSpace(discountAmount, true)} Ft`
                   : `${priceWithSpace(discountAmount)} EUR`}
                 )
               </p>
