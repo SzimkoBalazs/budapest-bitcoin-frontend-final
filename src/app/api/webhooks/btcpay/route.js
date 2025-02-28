@@ -2,7 +2,7 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 import prisma from "../../../../../utils/db";
-import logger from "@/utils/logger"; // Importáld a logger-t
+import logger from "../../../../../utils/logger";
 
 function verifyBtcPaySignature(payload, signature, secret) {
   const expectedSignature = crypto
