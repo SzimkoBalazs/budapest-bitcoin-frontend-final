@@ -7,6 +7,7 @@ import { Column } from "primereact/column";
 import { Button } from "primereact/button";
 import CreateCouponModal from "./createCouponModal";
 import EditCouponModal from "./EditCouponModal";
+import logger from "../../../../../utils/logger";
 import "primereact/resources/themes/lara-light-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
@@ -24,6 +25,8 @@ export default function CouponsPage({ coupons }) {
   const [size, setSize] = useState(sizeOptions[1].value);
 
   if (!coupons.length) return <p>Nincsenek kuponok</p>;
+
+logger.info("Coupons in admin coupons:", coupons);
 
   const columns = Object.keys(coupons[0]).filter(
     (col) => col !== "id" && col !== "createdAt"
