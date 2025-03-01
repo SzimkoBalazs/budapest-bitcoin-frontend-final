@@ -24,6 +24,9 @@ export const metadata = {
     template: '%s | Budapest Bitcoin',
   },
   description: 'The Bitcoin Conference with a bit of difference',
+  other:{
+  "color-scheme": "only light"
+  },
   openGraph: {
     title: 'Budapest Bitcoin',
     description: 'The Bitcoin Conference with a bit of difference',

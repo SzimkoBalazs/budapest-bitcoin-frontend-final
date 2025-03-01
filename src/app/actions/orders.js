@@ -64,7 +64,7 @@ export async function createOrder(data) {
 
       console.log(foundTicket);
 
-      if (locale === "en") {
+      if (paymentProvider === PaymentProvider.BTCPAY || locale === "en") {
         totalAmountInCents += foundTicket.priceInEur * ticket.quantity;
       } else {
         totalAmountInCents += foundTicket.priceInHuf * ticket.quantity;
