@@ -18,9 +18,9 @@ export async function GET(req) {
     );
   }
   // Token valid, hitelesítő cookie beállítása
-  const response = NextResponse.redirect(
-    new URL("/authorized-ticket-verification", req.url)
-  );
+  const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL;
+  const redirectUrl = new URL("/authorized-ticket-verification", baseUrl);
+  const response = NextResponse.redirect(redirectUrl);
   response.cookies.set("auth", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",

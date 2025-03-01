@@ -181,7 +181,7 @@ const defaultInvoiceData = {
       grossUnitPrice = item.priceAtPurchase / 100;
     } else {
       // Más valutában (pl. HUF) az érték változatlan (tax-inclusive)
-      grossUnitPrice = item.priceAtPurchase;
+      grossUnitPrice = item.priceAtPurchase / 100;
     }
     // Ha van kupon, akkor módosítjuk az egyedi tétel bruttó árát:
     if (order.coupon && order.coupon.discountValue != null) {
