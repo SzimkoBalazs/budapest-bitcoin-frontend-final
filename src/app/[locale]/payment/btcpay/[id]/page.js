@@ -27,9 +27,8 @@ export default async function BtcpayPaymentPage({ params }) {
               <span>Ticket ID: {item.ticketId}</span>
               <span>
                 {item.quantity} ×{" "}
-                {locale === "en"
-                  ? `${(item.priceAtPurchase / 100).toFixed(2)} EUR`
-                  : `${(item.priceAtPurchase / 100).toFixed(2)} Ft`}
+                 {`${(item.priceAtPurchase / 100).toFixed(2)} EUR`}
+                  
               </span>
             </li>
           ))}
@@ -55,23 +54,17 @@ export default async function BtcpayPaymentPage({ params }) {
         <h2 className="text-lg font-semibold">Payment Details</h2>
         <p>
           <strong>Total:</strong>{" "}
-          {locale === "en"
-            ? `${(order.totalAmountInCents / 100).toFixed(2)} EUR`
-            : `${(order.totalAmountInCents / 100).toFixed(2)} Ft`}
+          {`${(order.totalAmountInCents / 100).toFixed(2)} EUR`}
         </p>
         {order.discountInCents > 0 && (
           <p className="text-red-600">
             <strong>Discount:</strong>{" "}
-            {locale === "en"
-              ? `-${(order.discountInCents / 100).toFixed(2)} EUR`
-              : `-${(order.discountInCents / 100).toFixed(2)} Ft`}
+            {`-${(order.discountInCents / 100).toFixed(2)} EUR`}
           </p>
         )}
         <p className="text-xl font-bold">
           <strong>Final Amount:</strong>{" "}
-          {locale === "en"
-            ? `${(order.finalAmountInCents / 100).toFixed(2)} EUR`
-            : `${(order.finalAmountInCents / 100).toFixed(2)} Ft`}
+          {`${(order.finalAmountInCents / 100).toFixed(2)} EUR`}
         </p>
         <p>
           <strong>Payment Provider:</strong> {order.paymentProvider}
