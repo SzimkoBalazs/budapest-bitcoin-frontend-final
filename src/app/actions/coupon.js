@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "../../../utils/db";
+import logger from "../../../utils/logger";
 
 export async function validateCoupon(code, selectedTickets) {
   console.log(selectedTickets);
@@ -75,6 +76,7 @@ export async function getCouponById(id) {
 export async function getAllCoupons() {
   try {
     const coupons = await prisma.coupon.findMany();
+    logger.info("kuponok a server actionbe:", coupons);
     return coupons;
   } catch (error) {
     console.error("Hiba a kuponok lekérdezése közben:", error);
