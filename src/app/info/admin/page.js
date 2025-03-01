@@ -3,6 +3,7 @@
 import AdminNavigation from "../components/AdminNavigation";
 import { logout } from "../login/actions";
 import { useRouter } from "next/navigation";
+export const dynamic = 'force-dynamic';
 
 export default function Dashboard() {
   const router = useRouter();
