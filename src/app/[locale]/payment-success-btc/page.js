@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation';
 import React from 'react';
-import prisma from '@/utils/db';
 import ContentWrapper from '@/utilities/ContentWrapper';
 import LikeBitcoin from '../../../../public/like_bitcoin.svg';
 import Image from 'next/image';
