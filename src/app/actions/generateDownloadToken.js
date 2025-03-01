@@ -12,5 +12,5 @@ export async function generateDownloadToken(voucherId, expiresAt) {
   const payload = { voucherId, expiresAt: expiresAt.toISOString() };
   console.log("JWT payload:", payload);
   const secret = process.env.JWT_DOWNLOAD_SECRET;
-  return jwt.sign(payload, secret, { expiresIn: "24h" });
+  return jwt.sign(payload, secret, { expiresIn: "365d" });
 }
