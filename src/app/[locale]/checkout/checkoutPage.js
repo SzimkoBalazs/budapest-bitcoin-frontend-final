@@ -1,10 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { PaymentProvider } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
+import Select from 'react-select';
+import countryList from 'react-select-country-list';
+import countries from 'i18n-iso-countries';
+import en from 'i18n-iso-countries/langs/en.json';
+import hu from 'i18n-iso-countries/langs/hu.json';
 import ChevronDown from '../../../../public/chevron-down.svg';
 import { priceWithSpace } from '../../../../utils/priceWithSpace';
 import { getTicketPrice } from '../../../../utils/getTicketPrice';
@@ -18,6 +23,9 @@ import SelectButton from '@/components/Buttons/SelectButton';
 import PayButton from '@/components/Buttons/PayButton';
 import InputLabel from '@/components/Checkout/InputLabel';
 
+countries.registerLocale(en);
+countries.registerLocale(hu);
+
 export default function CheckoutPage({
   tickets,
   checkoutPageData,
@@ -30,6 +38,17 @@ export default function CheckoutPage({
   // STRAPI DATA
   // TODO: Nemkene mindenhova empty statebe default?
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
+  const [countryOptions, setCountryOptions] = useState([]);
+  const [countryFocused, setCountryFocused] = useState(false);
+
+  useEffect(() => {
+    const countryData = countryList().getData();
+    const localizedOptions = countryData.map((country) => ({
+      value: country.value,
+      label: countries.getName(country.value, locale) || country.label,
+    }));
+    setCountryOptions(localizedOptions);
+  }, [locale]);
 
   // WINDOW HEIGHT FOR SUMMARY WINDOW
   const [windowHeight, setWindowHeight] = useState(400);
@@ -184,7 +203,10 @@ export default function CheckoutPage({
 
   // When selectedTickets change, we save the quantity and id from the selected ticket to local storage
   useEffect(() => {
-    const filteredTickets = selectedTickets.map(({ id, quantity }) => ({ id, quantity }));
+    const filteredTickets = selectedTickets.map(({ id, quantity }) => ({
+      id,
+      quantity,
+    }));
     localStorage.setItem('selectedTickets', JSON.stringify(filteredTickets));
 
     setAnyTicketsAddded(
@@ -212,34 +234,49 @@ export default function CheckoutPage({
     }));
   }, [formData.email, formData.emailRepeat]);
 
-  // FORM FILL FUNCTION
   function handleChange(e) {
-    setFormData((prevData) => {
-      return {
+    if (e?.target) {
+      // Handle regular inputs
+      setFormData((prevData) => ({
         ...prevData,
         [e.target.name]: e.target.type === 'checkbox' ? e.target.checked : e.target.value,
-      };
-    });
+      }));
+    } else {
+      // Handle react-select (which passes an object instead of an event)
+      setFormData((prevData) => ({
+        ...prevData,
+        country: e.label, // Store the whole selected object
+      }));
+    }
   }
 
   const handleNeedsInvoiceChange = (e) => {
     const isChecked = e.target.checked;
     setNeedsInvoice(isChecked);
-  
+
     setInvoiceData((prev) => ({
       ...prev,
-      invoiceNeeded: isChecked, 
+      invoiceNeeded: isChecked,
     }));
   };
 
   // INVOICE FORM FILL FUNCTION
   function handleInvoiceChange(e) {
-    setInvoiceData((prevData) => {
-      return {
-        ...prevData,
-        [e.target.name]: e.target.value,
-      };
-    });
+    if (e?.target) {
+      setInvoiceData((prevData) => {
+        return {
+          ...prevData,
+          [e.target.name]: e.target.value,
+        };
+      });
+    } else {
+      setInvoiceData((prevData) => {
+        return {
+          ...prevData,
+          invoiceCountry: e.label,
+        };
+      });
+    }
   }
 
   useEffect(() => {
@@ -397,36 +434,41 @@ export default function CheckoutPage({
             isSummaryOpen ? 'pl-4' : 'pl-4 sm:pl-4',
           )}
         >
-             <h2
-              className="font-exo hidden sm:flex text-[22px] font-bold tracking-[1px] text-primary-500"
-              style={{ lineHeight: '100%' }}
-            >
-              {checkoutPageData.title}
-            </h2>
-            <button
-              className="flex sm:hidden w-full justify-between items-center py-3 pr-2"
-              onClick={() => setIsSummaryOpen((prevState) => !prevState)}
-            >
-               <h2
+          <h2
+            className="font-exo hidden sm:flex text-[22px] font-bold tracking-[1px] text-primary-500"
+            style={{ lineHeight: '100%' }}
+          >
+            {checkoutPageData.title}
+          </h2>
+          <button
+            className="flex sm:hidden w-full justify-between items-center py-3 pr-2"
+            onClick={() => setIsSummaryOpen((prevState) => !prevState)}
+          >
+            <h2
               className="font-exo text-[22px] font-bold tracking-[1px] text-primary-500"
               style={{ lineHeight: '100%' }}
             >
               {checkoutPageData.title}
             </h2>
-              <Image
-                src={ChevronDown}
-                alt={'Chevron down icon'}
-                width={21}
-                height={16}
-                style={{
-                  transform: isSummaryOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                  transition: 'transform 0.2s ease-in-out',
-                }}
-              />
-            </button>
+            <Image
+              src={ChevronDown}
+              alt={'Chevron down icon'}
+              width={21}
+              height={16}
+              style={{
+                transform: isSummaryOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                transition: 'transform 0.2s ease-in-out',
+              }}
+            />
+          </button>
           {/* Subtotal */}
           <div className="flex justify-between">
-            <h3 className={cln(isSummaryOpen ? 'pl-0' : 'pl-[20%] sm:pl-0', "text-[16px] font-exo font-semibold text-white")}>
+            <h3
+              className={cln(
+                isSummaryOpen ? 'pl-0' : 'pl-[20%] sm:pl-0',
+                'text-[16px] font-exo font-semibold text-white',
+              )}
+            >
               {checkoutPageData.totalCost}
             </h3>
 
@@ -564,14 +606,53 @@ export default function CheckoutPage({
                 >
                   {cardPaymentFormData.lastName}
                 </InputLabel>
-                <InputLabel
-                  name={'country'}
-                  type={'text'}
-                  dataSource={formData}
-                  onChange={handleChange}
-                >
-                  {cardPaymentFormData.country}
-                </InputLabel>
+                <div className="flex relative w-full sm:w-[calc(50%-8px)]">
+                  <Select
+                    name={'country'}
+                    options={countryOptions}
+                    value={formData.country}
+                    onChange={handleChange}
+                    isSearchable={true}
+                    placeholder={formData?.country}
+                    className="w-full"
+                    styles={{
+                      control: (base, state) => {
+                        setCountryFocused(state.isFocused);
+                        return {
+                          ...base,
+                          backgroundColor: 'none',
+                          border: formData.country
+                            ? '1px solid green'
+                            : state.isFocused
+                            ? '1px solid #308ADB'
+                            : '1px solid #B2B2B2',
+                          fontSize: 14,
+                          fontFamily: 'exo',
+                          height: 50,
+                          borderRadius: 50,
+                          paddingLeft: 24,
+                        };
+                      },
+                      placeholder: (base) => ({
+                        ...base,
+                        color: 'white',
+                      }),
+                      input: (base) => ({
+                        ...base,
+                        color: 'white',
+                      }),
+                    }}
+                  />
+                  <label
+                    htmlFor={'country'}
+                    className={cln(
+                      'absolute w-fit h-fit text-[14px] font-exo font-normal text-neutral-300 top-[-14px] left-4 bg-black py-[2px] px-2 rounded-[6px] transition-transform duration-200 ease-in-out',
+                    )}
+                  >
+                    <span className="text-red-500 text-[16px] font-exo font-bold">* </span>
+                    {cardPaymentFormData.country}
+                  </label>
+                </div>
                 <InputLabel
                   name={'zip'}
                   type={'text'}
@@ -614,22 +695,22 @@ export default function CheckoutPage({
                     </label>
                   </div>
                   {needsInvoice && (
-                      <div className="flex w-full items-start gap-[10px] sm:mt-0 py-[4px] pl-[12px] pr-0">
-                    <input
+                    <div className="flex w-full items-start gap-[10px] sm:mt-0 py-[4px] pl-[12px] pr-0">
+                      <input
                         id={'billingMatchesData'}
                         type="checkbox"
                         name="billingMatchesData"
                         checked={billingMatchesData}
                         onChange={(e) => setBillingMatchesData(e.target.checked)}
                         className="min-h-6 min-w-6 h-6 w-6 sm:min-h-4 sm:min-w-4 sm:h-4 sm:w-4 mt-1"
-                    />
-                    <label
+                      />
+                      <label
                         className="text-neutral-300 font-exo text-[14px] pb-2 sm:pb-0 font-medium leading-normal"
                         htmlFor={'billingMatchesData'}
-                    >
-                      {cardPaymentFormData.billingMatchesData}
-                    </label>
-                  </div>
+                      >
+                        {cardPaymentFormData.billingMatchesData}
+                      </label>
+                    </div>
                   )}
                 </div>
                 {needsInvoice === true && (
@@ -642,11 +723,11 @@ export default function CheckoutPage({
                         {cardPaymentFormData.invoiceFor}
                       </label>
                       <Image
-                          src={ChevronDown}
-                          alt={'Chevron down icon'}
-                          width={14}
-                          height={14}
-                          className="absolute right-4 top-[60px] sm:top-[52px] pointer-events-none"
+                        src={ChevronDown}
+                        alt={'Chevron down icon'}
+                        width={14}
+                        height={14}
+                        className="absolute right-4 top-[60px] sm:top-[52px] pointer-events-none"
                       />
                       <select
                         value={invoiceData.invoiceType}
@@ -672,13 +753,60 @@ export default function CheckoutPage({
                     >
                       {cardPaymentFormData.invoiceName}
                     </InputLabel>
-                    <InputLabel
-                      name={'invoiceCountry'}
-                      dataSource={invoiceData}
-                      onChange={handleInvoiceChange}
-                    >
-                      {cardPaymentFormData.country}
-                    </InputLabel>
+                    {/*<InputLabel*/}
+                    {/*  name={'invoiceCountry'}*/}
+                    {/*  dataSource={invoiceData}*/}
+                    {/*  onChange={handleInvoiceChange}*/}
+                    {/*>*/}
+                    {/*  {cardPaymentFormData.country}*/}
+                    {/*</InputLabel>*/}
+                    <div className="flex relative w-full sm:w-[calc(50%-8px)]">
+                      <Select
+                        name={'invoiceCountry'}
+                        options={countryOptions}
+                        value={invoiceData.invoiceCountry}
+                        onChange={handleInvoiceChange}
+                        isSearchable={true}
+                        placeholder={invoiceData?.invoiceCountry}
+                        className="w-full"
+                        styles={{
+                          control: (base, state) => {
+                            setCountryFocused(state.isFocused);
+                            return {
+                              ...base,
+                              backgroundColor: 'none',
+                              border: invoiceData.invoiceCountry
+                                ? '1px solid green'
+                                : state.isFocused
+                                ? '1px solid #308ADB'
+                                : '1px solid #B2B2B2',
+                              fontSize: 14,
+                              fontFamily: 'exo',
+                              height: 50,
+                              borderRadius: 50,
+                              paddingLeft: 24,
+                            };
+                          },
+                          placeholder: (base) => ({
+                            ...base,
+                            color: 'white',
+                          }),
+                          input: (base) => ({
+                            ...base,
+                            color: 'white',
+                          }),
+                        }}
+                      />
+                      <label
+                        htmlFor={'invoiceCountry'}
+                        className={cln(
+                          'absolute w-fit h-fit text-[14px] font-exo font-normal text-neutral-300 top-[-14px] left-4 bg-black py-[2px] px-2 rounded-[6px] transition-transform duration-200 ease-in-out',
+                        )}
+                      >
+                        <span className="text-red-500 text-[16px] font-exo font-bold">* </span>
+                        {cardPaymentFormData.country}
+                      </label>
+                    </div>
                     <InputLabel
                       name={'invoiceZip'}
                       dataSource={invoiceData}
@@ -781,10 +909,13 @@ export default function CheckoutPage({
                 disabled={!canSubmit}
               >
                 {' '}
-                {paymentProvider === PaymentProvider.STRIPE ? checkoutPageData.payWithCard : checkoutPageData.payWithBitcoin}
+                {paymentProvider === PaymentProvider.STRIPE
+                  ? checkoutPageData.payWithCard
+                  : checkoutPageData.payWithBitcoin}
               </PayButton>
             </div>
           )}
+
           {/*TODO: Jobban kinezo clearbutton, mobilon is ne legyen eldugva*/}
           <div className="flex relative justify-center">
             <button
