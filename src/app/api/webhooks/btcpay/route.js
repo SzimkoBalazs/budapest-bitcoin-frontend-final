@@ -50,7 +50,7 @@ export async function POST(req) {
     event &&
     event.data &&
     event.data.invoice &&
-    event.data.invoice.status === "complete"
+    (event.data.invoice.status === "complete" || event.data.invoice.status === "paid")
   ) {
     const invoice = event.data.invoice;
     // A metadata-ban érdemes elhelyezni a rendelés azonosítóját a BTCPay invoice létrehozásakor
