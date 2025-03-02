@@ -43,11 +43,14 @@ export async function POST(req) {
     }
   });
 
-  const signature = req.headers.get("btcpay-sig");
-  if (!signature) {
+  const headerSignature = req.headers.get("btcpay-sig");
+  if (!headerSignature) {
     logger.error("Missing BTCPay signature header.");
     return NextResponse.json({ error: "Missing signature" }, { status: 400 });
   }
+  const signature = headerSignature.startsWith("sha256=")
+  ? headerSignature.slice("sha256=".length)
+  : headerSignature;
   if (!verifyBtcPaySignature(body, signature, process.env.BTCPAY_WEBHOOK_SECRET)) {
     logger.error("Invalid BTCPay signature.");
     return NextResponse.json({ error: "Invalid signature" }, { status: 403 });
