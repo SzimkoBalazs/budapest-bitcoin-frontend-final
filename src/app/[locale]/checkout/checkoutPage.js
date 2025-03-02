@@ -604,7 +604,7 @@ export default function CheckoutPage({
                       name="needsInvoice"
                       checked={needsInvoice}
                       onChange={handleNeedsInvoiceChange}
-                      className="min-h-5 min-w-5 h-5 w-5 sm:min-h-4 sm:min-w-4 sm:h-4 sm:w-4 mt-1"
+                      className="min-h-6 min-w-6 h-6 w-6 sm:min-h-4 sm:min-w-4 sm:h-4 sm:w-4 mt-1"
                     />
                     <label
                       className="text-neutral-300 font-exo text-[14px] pb-2 sm:pb-0 font-medium leading-normal"
@@ -613,22 +613,24 @@ export default function CheckoutPage({
                       {cardPaymentFormData.needInvoice}
                     </label>
                   </div>
-                  <div className="flex w-full items-start gap-[10px] sm:mt-0 py-[4px] pl-[12px] pr-0">
+                  {needsInvoice && (
+                      <div className="flex w-full items-start gap-[10px] sm:mt-0 py-[4px] pl-[12px] pr-0">
                     <input
-                      id={'billingMatchesData'}
-                      type="checkbox"
-                      name="billingMatchesData"
-                      checked={billingMatchesData}
-                      onChange={(e) => setBillingMatchesData(e.target.checked)}
-                      className="min-h-5 min-w-5 h-5 w-5 sm:min-h-4 sm:min-w-4 sm:h-4 sm:w-4 mt-1"
+                        id={'billingMatchesData'}
+                        type="checkbox"
+                        name="billingMatchesData"
+                        checked={billingMatchesData}
+                        onChange={(e) => setBillingMatchesData(e.target.checked)}
+                        className="min-h-6 min-w-6 h-6 w-6 sm:min-h-4 sm:min-w-4 sm:h-4 sm:w-4 mt-1"
                     />
                     <label
-                      className="text-neutral-300 font-exo text-[14px] pb-2 sm:pb-0 font-medium leading-normal"
-                      htmlFor={'billingMatchesData'}
+                        className="text-neutral-300 font-exo text-[14px] pb-2 sm:pb-0 font-medium leading-normal"
+                        htmlFor={'billingMatchesData'}
                     >
                       {cardPaymentFormData.billingMatchesData}
                     </label>
                   </div>
+                  )}
                 </div>
                 {needsInvoice === true && (
                   //   todo: dropdown icon not visible
@@ -737,7 +739,7 @@ export default function CheckoutPage({
                   required
                   checked={formData.marketingAccepted}
                   onChange={handleChange}
-                  className="min-h-5 min-w-5 h-5 w-5 sm:min-h-4 sm:min-w-4 sm:h-4 sm:w-4 mt-1"
+                  className="min-h-6 min-w-6 h-6 w-6 sm:min-h-4 sm:min-w-4 sm:h-4 sm:w-4 mt-1"
                 />
                 <label
                   className="text-neutral-300 font-exo text-[14px] pb-2 sm:pb-0 font-medium leading-normal"
@@ -754,7 +756,7 @@ export default function CheckoutPage({
                   required
                   checked={formData.termsAccepted} // Properly bind the checkbox state
                   onChange={handleChange} // Use the updated handleChange
-                  className="min-h-5 min-w-5 w-5 h-5 sm:min-h-4 sm:min-w-4 sm:h-4 sm:w-4 mt-1"
+                  className="min-h-6 min-w-6 w-6 h-6 sm:min-h-4 sm:min-w-4 sm:h-4 sm:w-4 mt-1"
                 />
                 <label
                   className="text-neutral-300 font-exo text-[14px] pb-2 sm:pb-0 font-medium leading-normal"
