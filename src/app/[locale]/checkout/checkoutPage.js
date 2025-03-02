@@ -393,21 +393,26 @@ export default function CheckoutPage({
         {/* Subtotal */}
         <div
           className={cln(
-            'flex flex-col gap-y-1 pt-4 pr-4 pb-2',
-            isSummaryOpen ? 'pl-4' : 'pl-[20%] sm:pl-4',
+            'flex flex-col gap-y-1 pt-0 sm:pt-4 pr-4 pb-2',
+            isSummaryOpen ? 'pl-4' : 'pl-4 sm:pl-4',
           )}
         >
-          <div className="flex flex-row justify-between items-center w-full">
-            <h2
-              className="font-exo text-[22px] font-bold tracking-[1px] text-primary-500"
+             <h2
+              className="font-exo hidden sm:flex text-[22px] font-bold tracking-[1px] text-primary-500"
               style={{ lineHeight: '100%' }}
             >
               {checkoutPageData.title}
             </h2>
             <button
-              className="flex sm:hidden w-full justify-end py-2 pr-2"
+              className="flex sm:hidden w-full justify-between items-center py-3 pr-2"
               onClick={() => setIsSummaryOpen((prevState) => !prevState)}
             >
+               <h2
+              className="font-exo text-[22px] font-bold tracking-[1px] text-primary-500"
+              style={{ lineHeight: '100%' }}
+            >
+              {checkoutPageData.title}
+            </h2>
               <Image
                 src={ChevronDown}
                 alt={'Chevron down icon'}
@@ -419,10 +424,9 @@ export default function CheckoutPage({
                 }}
               />
             </button>
-          </div>
           {/* Subtotal */}
           <div className="flex justify-between">
-            <h3 className="text-[16px] font-exo font-semibold text-white">
+            <h3 className={cln(isSummaryOpen ? 'pl-0' : 'pl-[20%] sm:pl-0', "text-[16px] font-exo font-semibold text-white")}>
               {checkoutPageData.totalCost}
             </h3>
 
