@@ -3,9 +3,12 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { OrderStatus } from "@prisma/client";
+import PayButton from "@/components/Buttons/PayButton";
+import {priceWithSpace} from "../../../../../../utils/priceWithSpace";
+import SpinningLoader from "@/components/SpinningLoader";
 
 
-export default function PayWithBtcpayButton({ order, locale }) {
+export default function PayWithBtcpayButton({ order, locale, buttonText }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -38,13 +41,20 @@ export default function PayWithBtcpayButton({ order, locale }) {
   return (
     <div>
       {error && <p className="text-red-600 mb-2">Error: {error}</p>}
-      <button
-        onClick={handlePay}
-        className="px-4 py-2 bg-green-600 text-white rounded disabled:bg-gray-500"
-        disabled={isLoading || isPaid}
-      >
-        {isLoading ? "Processing..." : "Pay with BTCPay"}
-      </button>
+      <PayButton
+          isCardPayment={false}
+          text={`${buttonText} - ${priceWithSpace(order.finalAmountInCents, true)} EUR`}
+          disabled={isLoading || isPaid}
+          onClick={handlePay}
+        >
+          {isPaid ? (
+            'Order Paid'
+          ) : isLoading ? (
+            <SpinningLoader />
+          ) : (
+            `${buttonText} - ${priceWithSpace(order.finalAmountInCents, true)} EUR`
+          )}
+        </PayButton>
     </div>
   );
 }

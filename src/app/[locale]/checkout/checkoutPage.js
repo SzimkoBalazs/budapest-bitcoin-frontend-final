@@ -349,7 +349,7 @@ export default function CheckoutPage({
 
   return (
     <div className="flex flex-col gap-y-10 lg:flex-row sm:gap-x-10 w-full pb-[64px] sm:pb-[24px] pt-[60px] sm:pt-[120px] sm:max-w-[1128px] sm:px-[40px] sm:mx-auto">
-      <div className="flex flex-col mx-auto w-full max-w-[400px] sm:w-[40%] p-4 sm:p-0 gap-y-6 bg-neutral-900">
+      <div className="flex flex-col mx-auto w-full pb-[56px] sm:pb-0 max-w-[400px] sm:w-[40%] p-4 sm:p-0 gap-y-6 bg-neutral-900">
         {tickets.map((ticket, index) => (
           <div key={ticket.id} className="flex flex-col gap-y-4 items-end w-full">
             <TicketCardCheckout
@@ -380,20 +380,20 @@ export default function CheckoutPage({
           isSummaryOpen ? `pb-[0px]` : 'pb-0',
         )}
         style={{
-          height: !isMobile ? 'auto' : isSummaryOpen ? 'auto' : 96,
+          height: !isMobile ? 'auto' : isSummaryOpen ? 'auto' : 90,
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
           borderBottomRightRadius: !isMobile && 20,
           borderBottomLeftRadius: !isMobile && 20,
           overflow: 'hidden',
           zIndex: isSummaryOpen ? 50 : 20,
-          maxHeight: '100vh',
+          maxHeight: '100dvh',
         }}
       >
         {/* Subtotal */}
         <div
           className={cln(
-            'flex flex-col gap-y-1 pt-4 pr-4',
+            'flex flex-col gap-y-1 pt-4 pr-4 pb-2',
             isSummaryOpen ? 'pl-4' : 'pl-[20%] sm:pl-4',
           )}
         >
@@ -405,7 +405,7 @@ export default function CheckoutPage({
               {checkoutPageData.title}
             </h2>
             <button
-              className="flex sm:hidden w-full justify-end py-2"
+              className="flex sm:hidden w-full justify-end py-2 pr-2"
               onClick={() => setIsSummaryOpen((prevState) => !prevState)}
             >
               <Image
@@ -600,7 +600,7 @@ export default function CheckoutPage({
                       name="needsInvoice"
                       checked={needsInvoice}
                       onChange={handleNeedsInvoiceChange}
-                      className="max-w-[18px] max-h-[18px] mt-1"
+                      className="min-h-5 min-w-5 h-5 w-5 sm:min-h-4 sm:min-w-4 sm:h-4 sm:w-4 mt-1"
                     />
                     <label
                       className="text-neutral-300 font-exo text-[14px] pb-2 sm:pb-0 font-medium leading-normal"
@@ -616,7 +616,7 @@ export default function CheckoutPage({
                       name="billingMatchesData"
                       checked={billingMatchesData}
                       onChange={(e) => setBillingMatchesData(e.target.checked)}
-                      className="max-w-[18px] max-h-[18px] mt-1"
+                      className="min-h-5 min-w-5 h-5 w-5 sm:min-h-4 sm:min-w-4 sm:h-4 sm:w-4 mt-1"
                     />
                     <label
                       className="text-neutral-300 font-exo text-[14px] pb-2 sm:pb-0 font-medium leading-normal"
@@ -630,7 +630,7 @@ export default function CheckoutPage({
                   //   todo: dropdown icon not visible
                   //   todo: hello, vedd ki a marketingesbol h muszaj, ne legzzen meusyja
                   <>
-                    <div className="peer flex relative flex-col gap-y-2 w-[calc(35%-8px)]">
+                    <div className="peer flex relative flex-col gap-y-2 w-full sm:w-[calc(35%-8px)]">
                       <label className="text-neutral-300 font-exo text-[14px] pl-2 pb-2 sm:pb-0 font-medium leading-normal">
                         <span className="text-red-500 text-[16px] font-exo font-bold">* </span>
                         {cardPaymentFormData.invoiceFor}
@@ -640,7 +640,7 @@ export default function CheckoutPage({
                         alt={'Chevron down icon'}
                         width={14}
                         height={14}
-                        className="absolute right-4 top-[52px]"
+                        className="absolute right-4 top-[60px] sm:top-[52px]"
                       />
                       <select
                         value={invoiceData.invoiceType}
@@ -733,7 +733,7 @@ export default function CheckoutPage({
                   required
                   checked={formData.marketingAccepted}
                   onChange={handleChange}
-                  className="max-w-[18px] max-h-[18px] mt-1"
+                  className="min-h-5 min-w-5 h-5 w-5 sm:min-h-4 sm:min-w-4 sm:h-4 sm:w-4 mt-1"
                 />
                 <label
                   className="text-neutral-300 font-exo text-[14px] pb-2 sm:pb-0 font-medium leading-normal"
@@ -750,7 +750,7 @@ export default function CheckoutPage({
                   required
                   checked={formData.termsAccepted} // Properly bind the checkbox state
                   onChange={handleChange} // Use the updated handleChange
-                  className="max-w-[18px] max-h-[18px] mt-1"
+                  className="min-h-5 min-w-5 w-5 h-5 sm:min-h-4 sm:min-w-4 sm:h-4 sm:w-4 mt-1"
                 />
                 <label
                   className="text-neutral-300 font-exo text-[14px] pb-2 sm:pb-0 font-medium leading-normal"

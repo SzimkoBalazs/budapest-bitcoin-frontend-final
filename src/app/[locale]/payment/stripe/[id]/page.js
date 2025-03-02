@@ -66,7 +66,7 @@ export default async function PaymentPage({ params }) {
   // }
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white shadow-md mt-[100px] rounded-lg">
+    <div className="max-w-xl mx-auto p-6 bg-white shadow-md mt-[100px] mb-10 rounded-lg">
       <h1 className="text-2xl font-bold">{orderSummaryData.orderSummaryTitle}</h1>
 
       {/* Email */}

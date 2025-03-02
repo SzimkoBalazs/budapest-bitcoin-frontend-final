@@ -139,7 +139,7 @@ export async function createOrder(data) {
                 ticketId: ticket.id,
                 quantity: ticket.quantity,
                 priceAtPurchase:
-                  locale === "en"
+                  locale === "en" || paymentProvider === PaymentProvider.BTCPAY
                     ? foundTicket.priceInEur
                     : foundTicket.priceInHuf,
               };
