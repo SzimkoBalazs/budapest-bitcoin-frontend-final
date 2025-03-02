@@ -88,7 +88,7 @@ export async function POST(req) {
     // Ha az order már PAID, nem dolgozzuk fel újból
     if (order.status === "PAID") {
       logger.info(`Order ${order.id} already paid.`);
-      return NextResponse.json({ received: true }, { status: 200 });
+      return NextResponse.json({ received: true });
     }
 
     const amountPaid = invoice.amount;
@@ -223,9 +223,6 @@ export async function POST(req) {
         // Nem kritikus, így nem állítjuk le a folyamatot
       }
     }
-
-    return NextResponse.json({ received: true }, { status: 200 });
-    
    
   }
   } else if (event.data.invoice.status === "failed") {
@@ -271,5 +268,5 @@ export async function POST(req) {
     }
     logger.error(`Payment failed for Order ID ${order.id}`);
   }
-  return NextResponse.json({ received: true }, { status: 200 });
+  return NextResponse.json({ received: true });
 }
