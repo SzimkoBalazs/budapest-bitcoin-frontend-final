@@ -788,7 +788,7 @@ export default function CheckoutPage({
           {/*TODO: Jobban kinezo clearbutton, mobilon is ne legyen eldugva*/}
           <div className="flex relative justify-center">
             <button
-              className="text-red-800 bg-black px-3 py-2 underline-offset-4 underline left-4 bottom-4"
+              className="text-red-700 bg-black px-3 py-2 underline-offset-4 underline left-4 bottom-4"
               onClick={() => {
                 clearForm();
                 needsInvoice && clearInvoiceForm();
