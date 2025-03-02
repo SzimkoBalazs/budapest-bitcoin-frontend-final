@@ -456,7 +456,7 @@ export default function CheckoutPage({
                   type="text"
                   value={coupon}
                   onChange={(e) => setCoupon(e.target.value)}
-                  className="peer border focus:border-2 flex items-center justify-center px-6 py-2 rounded-[44] border-neutral-300 focus:border-secondary-600 w-full bg-black placeholder:text-[14px] placeholder:text-neutral-300 text-white focus:outline-none"
+                  className="peer border focus:border-2 flex items-center justify-center px-6 py-2 rounded-[44px] border-neutral-300 focus:border-secondary-600 w-full bg-black placeholder:text-[14px] placeholder:text-neutral-300 text-white focus:outline-none"
                   placeholder=" "
                 />
                 <label
@@ -642,11 +642,11 @@ export default function CheckoutPage({
                         {cardPaymentFormData.invoiceFor}
                       </label>
                       <Image
-                        src={ChevronDown}
-                        alt={'Chevron down icon'}
-                        width={14}
-                        height={14}
-                        className="absolute right-4 top-[60px] sm:top-[52px]"
+                          src={ChevronDown}
+                          alt={'Chevron down icon'}
+                          width={14}
+                          height={14}
+                          className="absolute right-4 top-[60px] sm:top-[52px] pointer-events-none"
                       />
                       <select
                         value={invoiceData.invoiceType}
@@ -654,9 +654,9 @@ export default function CheckoutPage({
                         onChange={handleInvoiceChange}
                         className={cln(
                           invoiceData.invoiceType.length > 0
-                            ? 'border-green-600'
-                            : 'border-neutral-300',
-                          'peer appearance-none border h-[50px] focus:border-2 flex items-center justify-center px-6 py-2 rounded-[44] focus:border-secondary-600 w-full bg-black placeholder:text-[14px] placeholder:text-neutral-300 text-white focus:outline-none',
+                            ? 'border-green-600 text-white'
+                            : 'border-neutral-300 text-neutral-300',
+                          'peer appearance-none border h-[50px] focus:border-2 flex items-center justify-center px-6 py-2 rounded-[44px] focus:border-secondary-600 w-full bg-black placeholder:text-[14px] placeholder:text-neutral-300 focus:outline-none',
                         )}
                       >
                         <option value="">{cardPaymentFormData.select}</option>
@@ -708,7 +708,7 @@ export default function CheckoutPage({
                         >
                           {cardPaymentFormData.atLeastOneVatNumber}
                         </h4>
-                        <div className="flex sm:flex-row w-full justify-between">
+                        <div className="flex flex-col gap-y-6 sm:flex-row w-full justify-between">
                           <InputLabel
                             name={'vat'}
                             dataSource={invoiceData}

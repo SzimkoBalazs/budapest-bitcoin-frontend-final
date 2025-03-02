@@ -29,7 +29,7 @@ export default function InputLabel({
         onChange={onChange}
         className={cln(
           type === 'email' ? emailCheck : regularCheck,
-          'peer autoFillInput border h-[50px] focus:border-2 flex items-center justify-center px-6 py-2 rounded-[44] focus:border-secondary-600 w-full bg-black placeholder:text-[14px] placeholder:text-neutral-300 text-white focus:outline-none',
+          'peer autoFillInput border h-[50px] focus:border-2 flex items-center justify-center px-6 py-2 rounded-[44px] focus:border-secondary-600 w-full bg-black placeholder:text-[14px] placeholder:text-neutral-300 text-white focus:outline-none',
         )}
         placeholder=" "
         required={required}
