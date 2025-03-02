@@ -781,7 +781,7 @@ export default function CheckoutPage({
                 disabled={!canSubmit}
               >
                 {' '}
-                {paymentProvider === PaymentProvider.STRIPE ? 'Pay with card' : 'Pay with Bitcoin'}
+                {paymentProvider === PaymentProvider.STRIPE ? checkoutPageData.payWithCard : checkoutPageData.payWithBitcoin}
               </PayButton>
             </div>
           )}
