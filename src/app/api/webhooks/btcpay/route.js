@@ -15,6 +15,9 @@ import { createInvoice } from "@/app/actions/szamlazzInvoice";
 import { generateNewTicketPdf } from "@/app/actions/generateNewTicketPDF";
 import { handleContactSubscription } from "@/app/actions/brevoReminderContact";
 
+import fs from "fs";
+import path from "path";
+
 
 function verifyBtcPaySignature(payload, signature, secret) {
   const expectedSignature = crypto
@@ -26,6 +29,19 @@ function verifyBtcPaySignature(payload, signature, secret) {
 
 export async function POST(req) {
   const body = await req.text();
+
+  const headers = JSON.stringify([...req.headers.entries()], null, 2);
+
+  const logData = `Date: ${new Date().toISOString()}\nHeaders: ${headers}\nBody: ${body}\n\n`;
+
+  const logFilePath = path.join(process.cwd(), "webhook_logs.txt");
+
+  
+  fs.appendFile(logFilePath, logData, (err) => {
+    if (err) {
+      logger.error("Error appending to file:", err);
+    }
+  });
 
   const signature = req.headers.get("btcpay-signature");
   if (!signature) {
@@ -41,7 +57,7 @@ export async function POST(req) {
   try {
     event = JSON.parse(body);
   } catch (error) {
-    logger.error(`Webhook JSON parse hiba: ${error}`); // console.error helyett
+    logger.error(`Webhook JSON parse hiba: ${error}`); 
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
