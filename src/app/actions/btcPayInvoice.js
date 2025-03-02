@@ -16,10 +16,8 @@ export async function createBtcpayInvoice(order, locale) {
     amount,
     currency: order.currency,
     orderId: order.id.toString(),
-
-    redirectURL: `${process.env.NEXT_PUBLIC_BASE_URL}/${locale}/payment-success-btc?orderId=${order.id}`,
-    
-    notificationURL: `${process.env.NEXT_PUBLIC_BASE_URL}/api/webhooks/btcpay`,
+    redirectURL: `${process.env.NEXT_PUBLIC_SERVER_URL}/${locale}/payment-success-btc?orderId=${order.id}`,
+    notificationURL: `${process.env.NEXT_PUBLIC_SERVER_URL}/api/webhooks/btcpay`,
     metadata: {
       orderId: order.id.toString(),
       email: order.email,
