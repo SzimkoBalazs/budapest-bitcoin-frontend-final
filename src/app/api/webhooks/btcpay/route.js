@@ -43,7 +43,7 @@ export async function POST(req) {
     }
   });
 
-  const signature = req.headers.get("btcpay-signature");
+  const signature = req.headers.get("btcpay-sig");
   if (!signature) {
     logger.error("Missing BTCPay signature header.");
     return NextResponse.json({ error: "Missing signature" }, { status: 400 });
@@ -62,12 +62,9 @@ export async function POST(req) {
   }
 
   // Például: Ha az invoice státusza "complete", akkor a fizetés sikeres volt
-  if (
-    event &&
-    event.data &&
-    event.data.invoice &&
-    (event.data.invoice.status === "complete" || event.data.invoice.status === "paid")
-  ) {
+  if (event && event.type === "InvoicePaymentSettled") {
+    if(event.payment && event.payment.status === "Settled"){
+    
     const invoice = event.data.invoice;
     // A metadata-ban érdemes elhelyezni a rendelés azonosítóját a BTCPay invoice létrehozásakor
     const orderId = invoice.metadata?.orderId;
@@ -223,6 +220,8 @@ export async function POST(req) {
         // Nem kritikus, így nem állítjuk le a folyamatot
       }
     }
+   
+  }
   } else if (event.data.invoice.status === "failed") {
     const invoice = event.data.invoice;
     const amountPaid = invoice.amount;
