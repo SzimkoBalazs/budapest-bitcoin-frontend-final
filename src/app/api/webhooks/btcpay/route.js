@@ -3,6 +3,18 @@ import { NextResponse } from "next/server";
 import crypto from "crypto";
 import prisma from "../../../../../utils/db";
 import logger from "../../../../../utils/logger";
+import { PaymentStatus } from "@prisma/client";
+import { OrderStatus } from "@prisma/client";
+import { getTicket } from "@/app/actions/ticket";
+import { getOrder } from "@/app/actions/orders";
+import { createVoucher } from "@/app/actions/voucher";
+import { generateOrderQrCodes } from "../../../../../utils/generateOrderQrCodes";
+import { sendTransactionalEmail } from "../../../../../utils/sendTransactionalEmail";
+import { generateDownloadToken } from "@/app/actions/generateDownloadToken";
+import { createInvoice } from "@/app/actions/szamlazzInvoice";
+import { generateNewTicketPdf } from "@/app/actions/generateNewTicketPDF";
+import { handleContactSubscription } from "@/app/actions/brevoReminderContact";
+
 
 function verifyBtcPaySignature(payload, signature, secret) {
   const expectedSignature = crypto
@@ -120,7 +132,7 @@ export async function POST(req) {
       ),
     };
 
-    const result = await generateTicketPdf(ticketData);
+    const result = await generateNewTicketPdf(ticketData);
     logger.info("generateTicketPdf result:", result);
     const { voucherId, pdfPath, expiresAt } = result;
     await createVoucher(voucherId, order.id, pdfPath, expiresAt);
@@ -183,6 +195,18 @@ export async function POST(req) {
     logger.info("Invoice result:", invoiceResult);
 
     await sendTransactionalEmail(order, downloadUrl, invoiceResult.pdf);
+
+    const orderEmail = order.email && order.email.trim();
+    if (!orderEmail) {
+      console.error("No valid email found on order.");
+    } else {
+      try {
+        await handleContactSubscription({ email: orderEmail, subscribe: false });
+      } catch (error) {
+        console.error("Error unsubscribing contact from Brevo list:", error.stack);
+        // Nem kritikus, így nem állítjuk le a folyamatot
+      }
+    }
   } else if (event.data.invoice.status === "failed") {
     const invoice = event.data.invoice;
     const amountPaid = invoice.amount;
