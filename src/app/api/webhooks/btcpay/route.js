@@ -68,9 +68,9 @@ export async function POST(req) {
   if (event && event.type === "InvoicePaymentSettled") {
     if(event.payment && event.payment.status === "Settled"){
     
-    const invoice = event.data.invoice;
+    const invoice = event.payment
     // A metadata-ban érdemes elhelyezni a rendelés azonosítóját a BTCPay invoice létrehozásakor
-    const orderId = invoice.metadata?.orderId;
+    const orderId = event.metadata.orderId;
 
     if (!orderId) {
       logger.error("Missing orderId in invoice metadata");
@@ -91,7 +91,7 @@ export async function POST(req) {
       return NextResponse.json({ received: true }, { status: 200 });
     }
 
-    const amountPaid = invoice.amount;
+    const amountPaid = invoice.value;
 
     try {
       await prisma.$transaction(async (tx) => {
@@ -100,7 +100,7 @@ export async function POST(req) {
             orderId: order.id,
             providerId: invoice.id, // A BTCPay invoice ID-t használjuk providerId-ként
             amountInCents: amountPaid,
-            currency: invoice.currency.toUpperCase(),
+            currency: "EUR",
             status: PaymentStatus.SUCCESS,
             errorMessage: null,
           },
