@@ -40,16 +40,16 @@ const seller = new Seller({
 function createBuyer(orderData) {
   return new Buyer({
     name: orderData.buyerName || orderData.email,
-    zip: orderData.zip || "",
-    city: orderData.city || "",
-    address: orderData.address || "",
+    zip: orderData.zip || "0000",
+    city: orderData.city || "N/A",
+    address: orderData.address || "N/A",
     taxNumber: orderData.taxNumber || "",
   });
 }
 
 export async function createInvoice(orderData) {
   try {
-    logger.info(`📄 Számla készítése elindult. Order ID: ${orderData.orderId}`);
+    logger.info(`📄 Szamla keszitese elindult.`);
 
     // 🔍 Bemeneti adatok loggolása
     logger.info(`Bemeneti adatok: ${JSON.stringify(orderData, null, 2)}`);

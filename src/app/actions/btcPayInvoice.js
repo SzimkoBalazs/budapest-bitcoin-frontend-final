@@ -26,16 +26,7 @@ export async function createBtcpayInvoice(order, locale) {
     },
   };
 
-  const debugLogPath = path.join(process.cwd(), "invoice_debug.txt");
-  fs.appendFile(
-    debugLogPath,
-    `Invoice data: ${JSON.stringify(invoiceData)}\n`,
-    (err) => {
-      if (err) {
-        logger.error("Error writing invoice debug data:", err);
-      }
-    }
-  );
+  logger.info(`Invoice Data: ${JSON.stringify(invoiceData, null, 2)}`);
 
   const apiEndpoint = `/api/v1/stores/${btcpayConfig.storeId}/invoices`;
 
