@@ -11,7 +11,7 @@ const logger = winston.createLogger({
   ),
   transports: [
     new winston.transports.Console(),
-    // Hibák esetén írhatod log fájlba is
+    new winston.transports.File({ filename: "logs/combined.log" }),
     new winston.transports.File({ filename: "errors.log", level: "error" }),
   ],
 });

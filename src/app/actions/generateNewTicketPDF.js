@@ -15,10 +15,9 @@ export async function generateNewTicketPdf(ticketData) {
     }
 
     const voucherId = Date.now();
-    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    const expiresAt = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000);
     const pdfFilePath = path.join(ticketsDir, `${voucherId}.pdf`);
 
-    // 🚀 PDF generálása streamként
     const pdfStream = await renderToStream(
       <TicketPdf ticketData={ticketData} />
     );
