@@ -92,6 +92,7 @@ export async function POST(req) {
     }
 
     const amountPaid = invoice.value;
+    const satoshiAmount = Math.round(parseFloat(amountPaid) * 100000000);
 
     try {
       await prisma.$transaction(async (tx) => {
@@ -99,7 +100,7 @@ export async function POST(req) {
           data: {
             orderId: order.id,
             providerId: invoice.id, // A BTCPay invoice ID-t használjuk providerId-ként
-            amountInCents: amountPaid,
+            amountInCents: satoshiAmount,
             currency: "EUR",
             status: PaymentStatus.SUCCESS,
             errorMessage: null,
