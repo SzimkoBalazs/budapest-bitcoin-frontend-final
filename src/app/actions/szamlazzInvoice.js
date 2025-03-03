@@ -22,15 +22,15 @@ const szamlazzClient = new Client({
 
 const seller = new Seller({
   bank: {
-    name: 'Your Bank Name',
-    accountNumber: '11111111-11111111-11111111',
+    name: 'Raiffeisen Bank',
+    accountNumber: 'HU17120107210202845600100000',
   },
   email: {
-    replyToAddress: 'your-company@example.com',
-    subject: 'Számla értesítő',
-    message: 'Kedves Vásárlónk, mellékelve megtalálja a számláját.',
+    replyToAddress: 'hello@budapestbitcoin.com',
+    subject: 'Invoice Notification',
+    message: 'Dear Customer, your invoice is attached for your review. Thank you for choosing our service.',
   },
-  issuerName: 'Your Company Name',
+  issuerName: 'Road 21 Limited',
 });
 
 // Add data from form

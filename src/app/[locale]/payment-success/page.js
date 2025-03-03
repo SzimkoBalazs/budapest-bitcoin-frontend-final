@@ -1,16 +1,17 @@
-import { notFound } from 'next/navigation';
-import React from 'react';
-import Stripe from 'stripe';
-import Image from 'next/image';
-import prisma from '../../../../utils/db';
-import LikeBitcoin from '../../../../public/like_bitcoin.svg';
-import ContentWrapper from '@/utilities/ContentWrapper';
+import { notFound } from "next/navigation";
+import React from "react";
+import Stripe from "stripe";
+import Image from "next/image";
+import prisma from "../../../../utils/db";
+import LikeBitcoin from "../../../../public/like_bitcoin.svg";
+import ContentWrapper from "@/utilities/ContentWrapper";
+import PaymentStatusPoller from "./PaymentStatusPoller";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 async function fetchSuccessData(locale) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/successful-payment?locale=${locale}`,
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/successful-payment?locale=${locale}`
   );
 
   if (!res.ok) {
@@ -40,16 +41,17 @@ export default async function SuccessPage({ searchParams, params }) {
     },
   });
   if (order == null) return notFound();
-  
-  const isSuccess = paymentIntent.status === 'succeeded';
-  const isPaid = order.status === 'PAID';
 
-
+  const isSuccess = paymentIntent.status === "succeeded";
+  const isPaid = order.status === "PAID";
 
   // TODO: Ide meg felvinni a forditasokat strapibol
 
   return (
-    <ContentWrapper className="mt-[80px] sm:mt-[120px]" maxWidth={'max-w-[800px]'}>
+    <ContentWrapper
+      className="mt-[80px] sm:mt-[120px]"
+      maxWidth={"max-w-[800px]"}
+    >
       {isSuccess && isPaid ? (
         <div className="flex flex-col">
           <div className="flex flex-col">
@@ -64,18 +66,28 @@ export default async function SuccessPage({ searchParams, params }) {
           <div className="flex flex-col gap-y-4 xxs:gap-y-0 xxs:flex-row justify-between">
             <div className="flex flex-col gap-y-2 xxs:gap-y-4">
               <div className="flex flex-col xxs:gap-y-1 mt-4 xxs:mt-8 flex-wrap">
-                <h3 className="text-white/80 font-exo text-[18px] font-normal">Payment ID:</h3>
-                <h3 className="text-white font-exo text-[18px] font-bold">{order.payments[0].providerId}</h3>
+                <h3 className="text-white/80 font-exo text-[18px] font-normal">
+                  Payment ID:
+                </h3>
+                <h3 className="text-white font-exo text-[18px] font-bold">
+                  {order.payments[0].providerId}
+                </h3>
               </div>
               <div className="flex flex-col xxs:gap-y-1 flex-wrap">
                 <h4 className="text-white/80 font-exo text-[18px] font-normal">
-                  Your ticket has been sent to:{' '}
+                  Your ticket has been sent to:{" "}
                 </h4>
-                <h4 className="text-white font-exo text-[18px] font-bold">{order.email}</h4>
+                <h4 className="text-white font-exo text-[18px] font-bold">
+                  {order.email}
+                </h4>
               </div>
             </div>
             <div className="flex justify-center">
-              <Image src={LikeBitcoin} alt={'Bitcoin figure likes this'} width={200} />
+              <Image
+                src={LikeBitcoin}
+                alt={"Bitcoin figure likes this"}
+                width={200}
+              />
             </div>
           </div>
 
@@ -83,14 +95,18 @@ export default async function SuccessPage({ searchParams, params }) {
             <h4 className="text-white font-exo text-[16px] text-center xxs:text-left font-normal">
               Need any help? Get in touch with us at:
             </h4>
-            <h4 className="text-white font-exo text-[16px] font-bold">info@bitcoinbudapest.com</h4>
+            <h4 className="text-white font-exo text-[16px] font-bold">
+              info@bitcoinbudapest.com
+            </h4>
           </div>
           {/* Itt megjeleníthetsz további információkat a rendelésről */}
         </div>
       ) : (
         <>
-          <h1 className="text-yellow-600 font-bold text-2xl">{successText.processing}</h1>
-          {/* Itt esetleg egy polling komponens is elhelyezhető, hogy frissítse a státuszt */}
+          <h1 className="text-yellow-600 font-bold text-2xl">
+            {successText.processing}
+          </h1>
+          <PaymentStatusPoller orderId={order.id} pollInterval={5000} />
         </>
       )}
     </ContentWrapper>

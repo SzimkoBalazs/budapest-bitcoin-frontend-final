@@ -16,14 +16,18 @@ import logger from "../../../../../utils/logger";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export async function POST(req) {
-  const sig = req.headers.get('stripe-signature');
+  const sig = req.headers.get("stripe-signature");
   const body = await req.text();
 
   let event;
   try {
-    event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+    event = stripe.webhooks.constructEvent(
+      body,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
   } catch (err) {
-    console.error('Webhook signature verification failed.', err);
+    console.error("Webhook signature verification failed.", err);
     return NextResponse.json({ error: err.message }, { status: 400 });
   }
 
@@ -41,11 +45,10 @@ export async function POST(req) {
   //   data: { eventId: event.id },
   // });
 
-  if (event.type === 'payment_intent.succeeded') {
+  if (event.type === "payment_intent.succeeded") {
     const charge = event.data.object;
     const orderId = charge.metadata.orderId;
     const metadata = event.data.object.metadata || {};
-    
 
     console.log("metadata: ", metadata);
 
@@ -53,7 +56,7 @@ export async function POST(req) {
 
     const order = await getOrder(parseInt(orderId, 10));
     if (order == null) {
-      return new NextResponse('Bad request', { status: 400 });
+      return new NextResponse("Bad request", { status: 400 });
     }
 
     if (order.status === OrderStatus.PAID) {
@@ -70,7 +73,9 @@ export async function POST(req) {
             amountInCents: pricePaidInCents,
             currency: charge.currency.toUpperCase(),
             status: PaymentStatus.SUCCESS,
-            errorMessage: charge.last_payment_error ? charge.last_payment_error.message : null,
+            errorMessage: charge.last_payment_error
+              ? charge.last_payment_error.message
+              : null,
           },
         });
 
@@ -112,7 +117,7 @@ export async function POST(req) {
             quantity: item.quantity,
             qrCodes: item.codes,
           };
-        }),
+        })
       ),
     };
 
@@ -134,89 +139,90 @@ export async function POST(req) {
     // Összeállítjuk a letöltési URL-t
     const downloadUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/download-ticket?token=${token}`;
 
-    const invoiceNeeded = metadata.invoiceNeeded === 'true';
+    const invoiceNeeded = metadata.invoiceNeeded === "true";
 
-// Ha invoiceNeeded true, akkor invoiceData mezőket használunk, különben formData mezőket.
-const processedData = invoiceNeeded
-  ? {
-      // Invoice adatok (invoiceData)
-      invoiceType: metadata.invoiceType || null,
-      invoiceName: metadata.invoiceName || null,
-      invoiceCountry: metadata.invoiceCountry || null,
-      invoiceCity: metadata.invoiceCity || null,
-      invoiceStreet: metadata.invoiceStreet || null,
-      invoiceZip: metadata.invoiceZip || null,
-      euVat: metadata.euVat || null,
-      vat: metadata.vat || null,
-    }
-  : {
-      // Form adatok (formData)
-      firstName: metadata.firstName || null,
-      lastName: metadata.lastName || null,
-      email: metadata.email || null,
-      country: metadata.country || null,
-      city: metadata.city || null,
-      street: metadata.street || null,
-      zip: metadata.zip || null,
-      marketingAccepted: metadata.marketingAccepted || null,
-      termsAccepted: metadata.termsAccepted || null,
+    // Ha invoiceNeeded true, akkor invoiceData mezőket használunk, különben formData mezőket.
+    const processedData = invoiceNeeded
+      ? {
+          // Invoice adatok (invoiceData)
+          invoiceType: metadata.invoiceType || null,
+          invoiceName: metadata.invoiceName || null,
+          invoiceCountry: metadata.invoiceCountry || null,
+          invoiceCity: metadata.invoiceCity || null,
+          invoiceStreet: metadata.invoiceStreet || null,
+          invoiceZip: metadata.invoiceZip || null,
+          euVat: metadata.euVat || null,
+          vat: metadata.vat || null,
+        }
+      : {
+          // Form adatok (formData)
+          firstName: metadata.firstName || null,
+          lastName: metadata.lastName || null,
+          email: metadata.email || null,
+          country: metadata.country || null,
+          city: metadata.city || null,
+          street: metadata.street || null,
+          zip: metadata.zip || null,
+          marketingAccepted: metadata.marketingAccepted || null,
+          termsAccepted: metadata.termsAccepted || null,
+        };
+
+    console.log("Processed metadata:", processedData);
+
+    console.log("Order in the WEBHOOK:", order);
+
+    const defaultInvoiceData = {
+      buyerName: "", // Ezt később beállíthatod
+      email: order.email,
+      zip: "",
+      city: "",
+      address: "",
+      taxNumber: "",
+      items: order.items.map((item) => {
+        const isEUR = order.currency.toUpperCase() === "EUR";
+        let grossUnitPrice;
+        if (isEUR) {
+          // EUR esetén az adatbázisban centben tárolt értéket 100-zal osztjuk le.
+          grossUnitPrice = item.priceAtPurchase / 100;
+        } else {
+          // Más valutában (pl. HUF) az érték változatlan (tax-inclusive)
+          grossUnitPrice = item.priceAtPurchase / 100;
+        }
+        // Ha van kupon, akkor módosítjuk az egyedi tétel bruttó árát:
+        if (order.coupon && order.coupon.discountValue != null) {
+          if (order.coupon.discountType === "PERCENTAGE") {
+            // Százalékos kedvezmény: például 50% kedvezmény esetén az ár feleződik.
+            grossUnitPrice =
+              grossUnitPrice * (1 - order.coupon.discountValue / 100);
+          } else if (order.coupon.discountType === "FIXED") {
+            // Fix kedvezmény: egyszerűen levonjuk a discountValue-t.
+            // Feltételezzük, hogy a discountValue mértékegysége megegyezik a grossUnitPrice-ével.
+            grossUnitPrice = grossUnitPrice - order.coupon.discountValue;
+            if (grossUnitPrice < 0) grossUnitPrice = 0;
+          }
+        }
+        // Ha EUR, kerekítünk két tizedesjegyre:
+        if (isEUR) {
+          grossUnitPrice = parseFloat(grossUnitPrice.toFixed(2));
+        }
+        return {
+          label: "Konferencia jegy",
+          quantity: item.quantity,
+          vat: 27, // A VAT kulcs, amit a számlázó a végösszeghez használ (nettó + áfa = bruttó)
+          grossUnitPrice: grossUnitPrice, // Csak a bruttó árat adjuk át, a számlázó rendszer onnan számolja a további értékeket
+          unit: "pcs",
+        };
+      }),
     };
 
-console.log("Processed metadata:", processedData);
-
-console.log("Order in the WEBHOOK:", order);
-
-const defaultInvoiceData = {
-  buyerName: '', // Ezt később beállíthatod
-  email: order.email,
-  zip: '',
-  city: '',
-  address: '',
-  taxNumber: '',
-  items: order.items.map((item) => {
-    const isEUR = order.currency.toUpperCase() === 'EUR';
-    let grossUnitPrice;
-    if (isEUR) {
-      // EUR esetén az adatbázisban centben tárolt értéket 100-zal osztjuk le.
-      grossUnitPrice = item.priceAtPurchase / 100;
-    } else {
-      // Más valutában (pl. HUF) az érték változatlan (tax-inclusive)
-      grossUnitPrice = item.priceAtPurchase / 100;
-    }
-    // Ha van kupon, akkor módosítjuk az egyedi tétel bruttó árát:
-    if (order.coupon && order.coupon.discountValue != null) {
-      if (order.coupon.discountType === 'PERCENTAGE') {
-        // Százalékos kedvezmény: például 50% kedvezmény esetén az ár feleződik.
-        grossUnitPrice = grossUnitPrice * (1 - order.coupon.discountValue / 100);
-      } else if (order.coupon.discountType === 'FIXED') {
-        // Fix kedvezmény: egyszerűen levonjuk a discountValue-t.
-        // Feltételezzük, hogy a discountValue mértékegysége megegyezik a grossUnitPrice-ével.
-        grossUnitPrice = grossUnitPrice - order.coupon.discountValue;
-        if (grossUnitPrice < 0) grossUnitPrice = 0;
-      }
-    }
-    // Ha EUR, kerekítünk két tizedesjegyre:
-    if (isEUR) {
-      grossUnitPrice = parseFloat(grossUnitPrice.toFixed(2));
-    }
-    return {
-      label: 'Konferencia jegy',
-      quantity: item.quantity,
-      vat: 27, // A VAT kulcs, amit a számlázó a végösszeghez használ (nettó + áfa = bruttó)
-      grossUnitPrice: grossUnitPrice, // Csak a bruttó árat adjuk át, a számlázó rendszer onnan számolja a további értékeket
-      unit: 'pcs',
-    };
-  }),
-};
-
-console.log("Default Invoice Data:", defaultInvoiceData);
+    console.log("Default Invoice Data:", defaultInvoiceData);
 
     const finalInvoiceData = {
       buyerName: invoiceNeeded
         ? processedData.invoiceName || defaultInvoiceData.buyerName
-        : (processedData.firstName && processedData.lastName
-            ? `${processedData.firstName} ${processedData.lastName}`
-            : defaultInvoiceData.buyerName),
+        : processedData.firstName && processedData.lastName
+        ? `${processedData.firstName} ${processedData.lastName}`
+        : defaultInvoiceData.buyerName,
       email: invoiceNeeded
         ? processedData.email || defaultInvoiceData.email
         : processedData.email || defaultInvoiceData.email,
@@ -233,34 +239,21 @@ console.log("Default Invoice Data:", defaultInvoiceData);
         ? processedData.vat || defaultInvoiceData.taxNumber // vagy ha van külön taxNumber mező
         : defaultInvoiceData.taxNumber,
       items: defaultInvoiceData.items, // Az items rész nem változik
-      currency: order.currency
+      currency: order.currency,
     };
 
     console.log("Final invoiceData:", finalInvoiceData);
-
 
     const invoiceResult = await createInvoice(finalInvoiceData);
     logger.info("Invoice result:", invoiceResult);
 
     await sendTransactionalEmail(order, downloadUrl, invoiceResult.pdf);
-
-    const orderEmail = order.email && order.email.trim();
-if (!orderEmail) {
-  console.error("No valid email found on order.");
-} else {
-  try {
-    await handleContactSubscription({ email: orderEmail, subscribe: false });
-  } catch (error) {
-    console.error("Error unsubscribing contact from Brevo list:", error.stack);
-    // Nem kritikus, így nem állítjuk le a folyamatot
-  }
-}
-  } else if (event.type === 'payment_intent.payment_failed') {
+  } else if (event.type === "payment_intent.payment_failed") {
     const paymentIntent = event.data.object;
     const orderId = paymentIntent.metadata.orderId;
     const order = await getOrder(parseInt(orderId, 10));
     if (order == null) {
-      return new NextResponse('Bad request', { status: 400 });
+      return new NextResponse("Bad request", { status: 400 });
     }
     try {
       await prisma.$transaction(async (tx) => {
@@ -274,7 +267,7 @@ if (!orderEmail) {
             status: PaymentStatus.FAILED,
             errorMessage: paymentIntent.last_payment_error
               ? paymentIntent.last_payment_error.message
-              : 'Payment failed',
+              : "Payment failed",
           },
         });
         // Frissítjük az order státuszát FAILED-re
@@ -289,12 +282,12 @@ if (!orderEmail) {
       );
     }
     console.error(`Payment failed for Order ID ${order.id}`);
-  } else if (event.type === 'payment_intent.canceled') {
+  } else if (event.type === "payment_intent.canceled") {
     const paymentIntent = event.data.object;
     const orderId = paymentIntent.metadata.orderId;
     const order = await getOrder(parseInt(orderId, 10));
     if (order == null) {
-      return new NextResponse('Bad request', { status: 400 });
+      return new NextResponse("Bad request", { status: 400 });
     }
     try {
       await prisma.$transaction(async (tx) => {
@@ -308,7 +301,7 @@ if (!orderEmail) {
             status: PaymentStatus.CANCELLED,
             errorMessage: paymentIntent.last_payment_error
               ? paymentIntent.last_payment_error.message
-              : 'Payment Cancelled',
+              : "Payment Cancelled",
           },
         });
         // Frissítjük az order státuszát CANCELLED-re
