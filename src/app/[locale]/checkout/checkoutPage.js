@@ -383,7 +383,7 @@ export default function CheckoutPage({
 
   return (
     <div className="flex flex-col gap-y-10 lg:flex-row sm:gap-x-10 w-full pb-[80px] sm:pb-[24px] pt-[60px] sm:pt-[120px] sm:max-w-[1128px] sm:px-[40px] sm:mx-auto">
-      <div className="flex flex-col mx-auto w-full pb-[56px] sm:pb-0 max-w-[400px] sm:w-[40%] p-4 sm:p-0 gap-y-6 bg-neutral-900">
+      <div className="flex flex-col mx-auto w-full pb-[64px] sm:pb-0 max-w-[400px] sm:w-[40%] p-4 sm:p-0 gap-y-6 bg-neutral-900">
         {tickets.map((ticket, index) => (
           <div key={ticket.id} className="flex flex-col gap-y-4 items-end w-full">
             <TicketCardCheckout
@@ -414,7 +414,7 @@ export default function CheckoutPage({
           isSummaryOpen ? `pb-[0px]` : 'pb-0',
         )}
         style={{
-          height: !isMobile ? 'auto' : isSummaryOpen ? 'auto' : 110,
+          height: !isMobile ? 'auto' : isSummaryOpen ? 'auto' : 118,
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
           borderBottomRightRadius: !isMobile && 20,
@@ -422,6 +422,7 @@ export default function CheckoutPage({
           overflow: 'hidden',
           zIndex: isSummaryOpen ? 50 : 20,
           maxHeight: '100dvh',
+          boxShadow: isMobile ? '0px -8px 8px 4px rgba(0,0,0,0.3)' : '',
         }}
       >
         {/* Subtotal */}
