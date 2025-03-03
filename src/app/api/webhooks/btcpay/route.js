@@ -64,12 +64,22 @@ export async function POST(req) {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  // Például: Ha az invoice státusza "complete", akkor a fizetés sikeres volt
-  if (event && event.type === "InvoicePaymentSettled") {
+  if (event && event.type === "InvoiceCreated") {
+    logger.info("InvoiceCreated event received; no further processing.");
+    return NextResponse.json({ received: true }, { status: 200 });
+  }
+
+  if (event && event.type === "InvoiceProcessing") {
+    logger.info("InvoiceProcessing event received; no further action.");
+    return NextResponse.json({ received: true }, { status: 200 });
+  }
+
+  
+  if (event && (event.type === "InvoicePaymentSettled" || event.type === "InvoiceReceivedPayment")) {
     if(event.payment && event.payment.status === "Settled"){
     
     const invoice = event.payment
-    // A metadata-ban érdemes elhelyezni a rendelés azonosítóját a BTCPay invoice létrehozásakor
+    
     const orderId = event.metadata.orderId;
 
     if (!orderId) {
@@ -85,7 +95,7 @@ export async function POST(req) {
       return NextResponse.json({ error: "Order not found" }, { status: 404 });
     }
 
-    // Ha az order már PAID, nem dolgozzuk fel újból
+    
     if (order.status === "PAID") {
       logger.info(`Order ${order.id} already paid.`);
       return NextResponse.json({ received: true }, { status: 200 });
@@ -99,7 +109,7 @@ export async function POST(req) {
         await tx.payment.create({
           data: {
             orderId: order.id,
-            providerId: invoice.id, // A BTCPay invoice ID-t használjuk providerId-ként
+            providerId: invoice.id, 
             amountInCents: satoshiAmount,
             currency: "EUR",
             status: PaymentStatus.SUCCESS,
@@ -136,7 +146,7 @@ export async function POST(req) {
       // Az items tömb tartalmazza az egyes jegyek adatait:
       items: await Promise.all(
         qrCodesByItem.map(async (item) => {
-          // Itt lehet egy függvény, ami lekéri a ticket nevét a ticketId alapján
+          
           const ticket = await getTicket(item.ticketId);
           const ticketName = await ticket.name;
           return {
@@ -154,7 +164,7 @@ export async function POST(req) {
     const { voucherId, pdfPath, expiresAt } = result;
     await createVoucher(voucherId, order.id, pdfPath, expiresAt);
 
-    // Generálunk egy JWT-t a voucherId alapján
+    
     let token;
     try {
       token = await generateDownloadToken(voucherId, expiresAt);
@@ -162,7 +172,7 @@ export async function POST(req) {
     } catch (error) {
       logger.error(`Error generating token: ${error}`);
     }
-    // Összeállítjuk a letöltési URL-t
+    
     const downloadUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/download-ticket?token=${token}`;
 
     const defaultInvoiceData = {
@@ -176,33 +186,32 @@ export async function POST(req) {
         const isEUR = order.currency.toUpperCase() === 'EUR';
         let grossUnitPrice;
         if (isEUR) {
-          // EUR esetén az adatbázisban centben tárolt értéket 100-zal osztjuk le.
+          
           grossUnitPrice = item.priceAtPurchase / 100;
         } else {
-          // Más valutában (pl. HUF) az érték változatlan (tax-inclusive)
+          
           grossUnitPrice = item.priceAtPurchase;
         }
-        // Ha van kupon, akkor módosítjuk az egyedi tétel bruttó árát:
+        
         if (order.coupon && order.coupon.discountValue != null) {
           if (order.coupon.discountType === 'PERCENTAGE') {
-            // Százalékos kedvezmény: például 50% kedvezmény esetén az ár feleződik.
+            
             grossUnitPrice = grossUnitPrice * (1 - order.coupon.discountValue / 100);
           } else if (order.coupon.discountType === 'FIXED') {
-            // Fix kedvezmény: egyszerűen levonjuk a discountValue-t.
-            // Feltételezzük, hogy a discountValue mértékegysége megegyezik a grossUnitPrice-ével.
+            
             grossUnitPrice = grossUnitPrice - order.coupon.discountValue;
             if (grossUnitPrice < 0) grossUnitPrice = 0;
           }
         }
-        // Ha EUR, kerekítünk két tizedesjegyre:
+        
         if (isEUR) {
           grossUnitPrice = parseFloat(grossUnitPrice.toFixed(2));
         }
         return {
           label: 'Konferencia jegy',
           quantity: item.quantity,
-          vat: 27, // A VAT kulcs, amit a számlázó a végösszeghez használ (nettó + áfa = bruttó)
-          grossUnitPrice: grossUnitPrice, // Csak a bruttó árat adjuk át, a számlázó rendszer onnan számolja a további értékeket
+          vat: 27, 
+          grossUnitPrice: grossUnitPrice, 
           unit: 'pcs',
         };
       }),
@@ -221,15 +230,16 @@ export async function POST(req) {
         await handleContactSubscription({ email: orderEmail, subscribe: false });
       } catch (error) {
         console.error("Error unsubscribing contact from Brevo list:", error.stack);
-        // Nem kritikus, így nem állítjuk le a folyamatot
+        
       }
     }
     return NextResponse.json({ received: true }, { status: 200 });
   }
-  } else if (event.data.invoice.status === "failed") {
-    const invoice = event.data.invoice;
-    const amountPaid = invoice.amount;
-    const orderId = invoice.metadata?.orderId;
+  } else if (event && (event.type === "InvoiceExpired" || event.type === "InvoiceInvalid")) {
+    const invoice = event?.payment;
+    const amountPaid = invoice.value;
+    const satoshiAmount = Math.round(parseFloat(amountPaid) * 100000000);
+    const orderId = event.metadata.orderId;
 
     const order = await getOrder(parseInt(orderId, 10));
     if (order == null) {
@@ -238,21 +248,20 @@ export async function POST(req) {
 
     try {
       await prisma.$transaction(async (tx) => {
-        // Payment rekord létrehozása FAILED státusszal,
-        // invoice.id-t használjuk providerId-ként
+        
         await tx.payment.create({
           data: {
             orderId: order.id,
             providerId: invoice.id,
-            amountInCents: invoice.amount,
-            currency: invoice.currency.toUpperCase(),
+            amountInCents: satoshiAmount,
+            currency: "EUR",
             status: PaymentStatus.FAILED,
             errorMessage: invoice.last_payment_error
               ? invoice.last_payment_error.message
               : "Payment failed",
           },
         });
-        // Frissítjük az order státuszát FAILED-re
+       
         await tx.order.update({
           where: { id: order.id },
           data: { status: OrderStatus.FAILED },
