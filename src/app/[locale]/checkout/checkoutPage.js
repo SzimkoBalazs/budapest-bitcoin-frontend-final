@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { PaymentProvider } from '@prisma/client';
 import Image from 'next/image';
@@ -35,11 +35,8 @@ export default function CheckoutPage({
 }) {
   const router = useRouter();
   const { locale } = useParams();
-  // STRAPI DATA
-  // TODO: Nemkene mindenhova empty statebe default?
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
   const [countryOptions, setCountryOptions] = useState([]);
-  const [countryFocused, setCountryFocused] = useState(false);
 
   useEffect(() => {
     const countryData = countryList().getData();
@@ -385,7 +382,7 @@ export default function CheckoutPage({
   };
 
   return (
-    <div className="flex flex-col gap-y-10 lg:flex-row sm:gap-x-10 w-full pb-[64px] sm:pb-[24px] pt-[60px] sm:pt-[120px] sm:max-w-[1128px] sm:px-[40px] sm:mx-auto">
+    <div className="flex flex-col gap-y-10 lg:flex-row sm:gap-x-10 w-full pb-[80px] sm:pb-[24px] pt-[60px] sm:pt-[120px] sm:max-w-[1128px] sm:px-[40px] sm:mx-auto">
       <div className="flex flex-col mx-auto w-full pb-[56px] sm:pb-0 max-w-[400px] sm:w-[40%] p-4 sm:p-0 gap-y-6 bg-neutral-900">
         {tickets.map((ticket, index) => (
           <div key={ticket.id} className="flex flex-col gap-y-4 items-end w-full">
@@ -417,7 +414,7 @@ export default function CheckoutPage({
           isSummaryOpen ? `pb-[0px]` : 'pb-0',
         )}
         style={{
-          height: !isMobile ? 'auto' : isSummaryOpen ? 'auto' : 90,
+          height: !isMobile ? 'auto' : isSummaryOpen ? 'auto' : 110,
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
           borderBottomRightRadius: !isMobile && 20,
@@ -441,24 +438,20 @@ export default function CheckoutPage({
             {checkoutPageData.title}
           </h2>
           <button
-            className="flex sm:hidden w-full justify-between items-center py-3 pr-2"
+            className="flex sm:hidden w-full mb-2 mt-4 justify-center items-center gap-x-4 py-3 pr-2 bg-primary-700 active:bg-primary-600 rounded-[40px]"
             onClick={() => setIsSummaryOpen((prevState) => !prevState)}
           >
             <h2
-              className="font-exo text-[22px] font-bold tracking-[1px] text-primary-500"
+              className="font-exo text-[18px] text-white font-bold tracking-[1px"
               style={{ lineHeight: '100%' }}
             >
-              {checkoutPageData.title}
+              {isSummaryOpen ? checkoutPageData.closeButton : checkoutPageData.openButton}
             </h2>
             <Image
               src={ChevronDown}
               alt={'Chevron down icon'}
-              width={21}
-              height={16}
-              style={{
-                transform: isSummaryOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                transition: 'transform 0.2s ease-in-out',
-              }}
+              width={18}
+              style={{ transform: isSummaryOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
             />
           </button>
           {/* Subtotal */}
@@ -617,7 +610,6 @@ export default function CheckoutPage({
                     className="w-full"
                     styles={{
                       control: (base, state) => {
-                        setCountryFocused(state.isFocused);
                         return {
                           ...base,
                           backgroundColor: 'none',
@@ -753,13 +745,6 @@ export default function CheckoutPage({
                     >
                       {cardPaymentFormData.invoiceName}
                     </InputLabel>
-                    {/*<InputLabel*/}
-                    {/*  name={'invoiceCountry'}*/}
-                    {/*  dataSource={invoiceData}*/}
-                    {/*  onChange={handleInvoiceChange}*/}
-                    {/*>*/}
-                    {/*  {cardPaymentFormData.country}*/}
-                    {/*</InputLabel>*/}
                     <div className="flex relative w-full sm:w-[calc(50%-8px)]">
                       <Select
                         name={'invoiceCountry'}
@@ -771,7 +756,6 @@ export default function CheckoutPage({
                         className="w-full"
                         styles={{
                           control: (base, state) => {
-                            setCountryFocused(state.isFocused);
                             return {
                               ...base,
                               backgroundColor: 'none',
