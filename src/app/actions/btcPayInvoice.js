@@ -18,7 +18,9 @@ export async function createBtcpayInvoice(order, locale) {
     amount,
     currency: order.currency,
     orderId: order.id.toString(),
-    redirectURL: `${process.env.NEXT_PUBLIC_SERVER_URL}/${locale}/payment-success-btc?orderId=${order.id}`,
+    checkout: {
+      redirectURL: `${process.env.NEXT_PUBLIC_SERVER_URL}/${locale}/payment-success-btc?orderId=${order.id}`,
+    },
     notificationURL: `${process.env.NEXT_PUBLIC_SERVER_URL}/api/webhooks/btcpay`,
     metadata: {
       orderId: order.id.toString(),
