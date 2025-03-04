@@ -74,7 +74,7 @@ export default async function BTCPaySuccessPage({ searchParams, params }) {
               Need any help? Contact us at:
             </h4>
             <h4 className="text-white font-exo text-[16px] font-bold">
-              info@yourdomain.com
+              info@bitcoinbudapest.com
             </h4>
           </div>
           {/* További információk megjeleníthetők itt, például jegyek adatai */}

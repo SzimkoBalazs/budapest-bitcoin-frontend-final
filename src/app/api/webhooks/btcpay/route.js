@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import crypto from "crypto";
 import prisma from "../../../../../utils/db";
 import logger from "../../../../../utils/logger";
-import { PaymentStatus } from "@prisma/client";
+import { PaymentStatus, Currency } from "@prisma/client";
 import { OrderStatus } from "@prisma/client";
 import { getTicket } from "@/app/actions/ticket";
 import { getOrder } from "@/app/actions/orders";
@@ -112,14 +112,14 @@ export async function POST(req) {
               orderId: order.id,
               providerId: invoice.id,
               amountInCents: satoshiAmount,
-              currency: "EUR",
+              currency: Currency.SATS,
               status: PaymentStatus.SUCCESS,
               errorMessage: null,
             },
           });
           await tx.order.update({
             where: { id: order.id },
-            data: { status: OrderStatus.PAID },
+            data: { status: OrderStatus.PAID, currency: Currency.SATS },
           });
           if (order.couponId && order.coupon) {
             await tx.coupon.update({
@@ -242,8 +242,7 @@ export async function POST(req) {
     (event.type === "InvoiceExpired" || event.type === "InvoiceInvalid")
   ) {
     const invoice = event?.payment;
-    const amountPaid = invoice.value;
-    const satoshiAmount = Math.round(parseFloat(amountPaid) * 100000000);
+
     const orderId = event.metadata.orderId;
 
     const order = await getOrder(parseInt(orderId, 10));
@@ -257,12 +256,10 @@ export async function POST(req) {
           data: {
             orderId: order.id,
             providerId: invoice.id,
-            amountInCents: satoshiAmount,
+            amountInCents: order.finalAmountInCents,
             currency: "EUR",
             status: PaymentStatus.FAILED,
-            errorMessage: invoice.last_payment_error
-              ? invoice.last_payment_error.message
-              : "Payment failed",
+            errorMessage: event.type,
           },
         });
 
