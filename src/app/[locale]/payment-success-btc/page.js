@@ -43,14 +43,14 @@ export default async function BTCPaySuccessPage({ searchParams, params }) {
               {successText.successfulPayment}
             </h1>
             <h2 className="text-white font-exo text-[20px] sm:text-[24px] font-normal">
-              Your payment was successful! Thank you for your order.
+              {successText.youAreIn}
             </h2>
           </div>
           <div className="flex flex-col gap-y-4 xxs:gap-y-0 xxs:flex-row justify-between">
             <div className="flex flex-col gap-y-2 xxs:gap-y-4">
               <div className="flex flex-col xxs:gap-y-1 mt-4 xxs:mt-8">
                 <h3 className="text-white/80 font-exo text-[18px] font-normal">
-                  Order ID:
+                  {successText.paymentId}
                 </h3>
                 <h3 className="text-white font-exo text-[18px] font-bold">
                   {order.id}
@@ -58,7 +58,7 @@ export default async function BTCPaySuccessPage({ searchParams, params }) {
               </div>
               <div className="flex flex-col xxs:gap-y-1">
                 <h4 className="text-white/80 font-exo text-[18px] font-normal">
-                  A confirmation has been sent to:
+                  {successText.ticketSentTo}{" "}
                 </h4>
                 <h4 className="text-white font-exo text-[18px] font-bold">
                   {order.email}
@@ -71,7 +71,7 @@ export default async function BTCPaySuccessPage({ searchParams, params }) {
           </div>
           <div className="flex gap-x-2 mt-[20px] xxs:mt-[44px] flex-wrap justify-center">
             <h4 className="text-white font-exo text-[16px] text-center xxs:text-left font-normal">
-              Need any help? Contact us at:
+              {successText.needHelp}
             </h4>
             <h4 className="text-white font-exo text-[16px] font-bold">
               info@bitcoinbudapest.com
