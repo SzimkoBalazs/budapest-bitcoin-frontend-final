@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { DataTable } from "primereact/datatable";
 import { SelectButton } from "primereact/selectbutton";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
+import { Toast } from "primereact/toast";
 import { FilterMatchMode } from "primereact/api";
 import { resendTicketEmail } from "@/app/actions/resendTicketEmail";
 import { priceWithSpace } from "../../../../../utils/priceWithSpace";
@@ -27,18 +28,32 @@ export default function OrdersPage({ orders }) {
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     email: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const toast = useRef(null);
 
   const columns = Object.keys(orders[0]).filter(
     (col) => col !== "couponId" && col !== "reminderSent"
   );
 
   async function handleSendTicket(order) {
+    setIsLoading(true);
     try {
       const result = await resendTicketEmail(order);
-      console.log(result.message);
+      toast.current.show({
+        severity: "success",
+        summary: "Success",
+        detail: result.message || "Ticket email re-sent successfully",
+        life: 3000,
+      });
     } catch (error) {
-      console.log(error.message);
+      toast.current.show({
+        severity: "error",
+        summary: "Error",
+        detail: error.message || "Failed to resend ticket email",
+        life: 3000,
+      });
     } finally {
+      setIsLoading(false);
     }
   }
 
@@ -75,6 +90,7 @@ export default function OrdersPage({ orders }) {
         tooltipOptions={{ position: "top" }}
         onClick={() => handleSendTicket(rowData)}
         disabled={rowData.status !== "PAID"}
+        loading={isLoading}
       />
     );
   };
@@ -82,6 +98,7 @@ export default function OrdersPage({ orders }) {
   return (
     <div className="p-5">
       {renderHeader()}
+      <Toast ref={toast} />
       <div className="flex justify-center mb-4 mt-2">
         <SelectButton
           value={size}
