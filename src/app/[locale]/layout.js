@@ -2,6 +2,7 @@ import { Fredoka, Exo } from 'next/font/google';
 import './globals.css';
 import Script from 'next/script';
 import Navbar from '@/components/Navbar';
+import CheckoutIcon from '@/components/Buttons/CheckoutIcon';
 
 const fredoka = Fredoka({
   subsets: ['latin'],
@@ -47,10 +48,13 @@ export const metadata = {
   },
 };
 
-export default async function RootLayout({ children, params }) {
+export default async function SiteLayout({ children, params }) {
   const { locale } = await params;
+  const isValidLocale = ['en', 'hu'].includes(locale);
+  const actualLocale = isValidLocale ? locale : 'en';
+  console.log('Aktuális locale:', actualLocale);
   return (
-    <html lang={locale}>
+    <html lang={actualLocale}>
       <head>
         {/*COOKIEBOT*/}
         <Script
@@ -81,7 +85,8 @@ export default async function RootLayout({ children, params }) {
             style={{ display: 'none', visibility: 'hidden' }}
           />
         </noscript>
-        <Navbar locale={locale} />
+        <CheckoutIcon />
+        <Navbar locale={actualLocale} />
         <main className="w-full min-h-screen bg-neutral-900">{children}</main>
       </body>
     </html>

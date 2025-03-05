@@ -33,6 +33,20 @@ body {
   box-shadow:0px 0px 6px 7px rgba(0,0,0,0.05);
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: 3px solid rgb(22 163 74);
+  -webkit-text-fill-color: white;
+  -webkit-box-shadow: 0 0 0px 1000px #000 inset;
+}
+
 @keyframes moveStopSequence {
   0% {
     transform: translateX(142px); /* Start position */
@@ -92,5 +106,84 @@ body {
   100% {
     width:74%; /* Linear return */
     animation-timing-function: linear; /* Smooth return */
+  }
+}
+
+@keyframes bounceUp {
+  0%{transform:translateY(0px);}
+  50%{transform:translateY(-8px);}
+  100%{transform:translateY(0px);}
+}
+
+@keyframes bounceDown {
+  0%{transform:translateY(0px);}
+  50%{transform:translateY(8px);}
+  100%{transform:translateY(0px);}
+}
+
+.animate-bounceUp{
+  animation:bounceUp 0.2s ease-in-out;
+}
+
+.animate-bounceDown{
+  animation:bounceDown 0.2s ease-in-out;
+}
+
+
+/* From Uiverse.io by AbanoubMagdy1 */
+.loader {
+  width: 16px;
+  height: 16px;
+  position: relative;
+  animation: spin988 2s linear infinite;
+}
+
+.loader .circle {
+  width: 6px;
+  height: 6px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+}
+
+.loader .circle:nth-child(1) {
+  top: 0;
+  left: 0;
+}
+
+.loader .circle:nth-child(2) {
+  top: 0;
+  right: 0;
+}
+
+.loader .circle:nth-child(3) {
+  bottom: 0;
+  left: 0;
+}
+
+.loader .circle:nth-child(4) {
+  bottom: 0;
+  right: 0;
+}
+
+@keyframes spin988 {
+  0% {
+    transform: scale(1) rotate(0);
+  }
+
+ 25% {
+    transform: scale(1.2) rotate(90deg);
+  }
+
+ 50% {
+    transform: scale(1) rotate(180deg);
+  }
+
+  75% {
+    transform: scale(1.2) rotate(270deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(360deg);
   }
 }

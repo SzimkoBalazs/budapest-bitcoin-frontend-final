@@ -1,8 +1,10 @@
 import React from 'react';
+import Link from 'next/link';
 import LanguageSwitch from './LanguageSwitch';
 import BTCBudapestLogo from './BTCBudapestLogo';
 import NavbarWebComponent from './NavbarWebComponent';
 import GetYourPassCTAButton from './GetYourPassCTAButton';
+import BudapestMainLogo from './BudapestMainLogo';
 import NavHamburgerIcon from './NavHamburgerIcon';
 
 async function fetchNavLinks(locale) {
@@ -18,13 +20,13 @@ async function fetchNavLinks(locale) {
   return data.data || [];
 }
 
-async function fetchHeroSectionData(locale) {
+async function fetchGYPButton(locale) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/hero-section?locale=${locale}`
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/get-your-pass-button?locale=${locale}`,
   );
 
   if (!res.ok) {
-    throw new Error("Failed to fetch hero section data");
+    throw new Error('Failed to fetch navbar links');
   }
 
   const data = await res.json();
@@ -34,7 +36,7 @@ async function fetchHeroSectionData(locale) {
 const Navbar = async ({ locale }) => {
   // const locale = "hu"; // Változtasd dinamikusan, ha van nyelvkezelés
   const navLinks = await fetchNavLinks(locale);
-  const heroSectionData = await fetchHeroSectionData(locale)
+  const buttonText = await fetchGYPButton(locale);
 
   return (
     <div
@@ -57,7 +59,10 @@ const Navbar = async ({ locale }) => {
         </div>
         <div className="hidden navbarBreak:flex justify-end items-center   gap-4 xl:gap-8">
           <LanguageSwitch currentLocale={locale} />
-          <GetYourPassCTAButton buttonText={heroSectionData.GetYourPassBTNText} locale={locale} />
+          <GetYourPassCTAButton
+            buttonText={buttonText.ButtonText}
+            locale={locale}
+          />
         </div>
         <div className="flex navbarBreak:hidden">
           <NavHamburgerIcon

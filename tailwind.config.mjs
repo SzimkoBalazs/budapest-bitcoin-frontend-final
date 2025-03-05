@@ -5,6 +5,7 @@ export default {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/utilities/**/*.{js,ts,jsx,tsx,mdx}",
+    "node_modules/primereact/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     screens: {
@@ -14,16 +15,16 @@ export default {
       pop: "1246px",
       ticket: "1275px",
       speaker: "655px",
-      md:'768px',
-      sm:'640px',
-      xs:'500px',
-      xxs:'390px',
+      md: "768px",
+      sm: "640px",
+      xs: "500px",
+      xxs: "390px",
       gl: "900px",
-      footerTitle:'800px',
-      navbarBreak:'1200px',
-      whatToExpectBreak:'1000px',
-      whaleTextXs:'410px',
-      whaleTextXsHu:'373px',
+      footerTitle: "800px",
+      navbarBreak: "1200px",
+      whatToExpectBreak: "1000px",
+      whaleTextXs: "410px",
+      whaleTextXsHu: "373px",
     },
     extend: {
       fontFamily: {
@@ -38,8 +39,11 @@ export default {
           700: "#F57F18",
         },
         neutral: {
+          950:"#0f0f0f",
           900: "#1F1F1F",
           700: "#4D4D4D",
+          300:"#B2B2B2",
+          200:"#CCCCCC",
           100: "#E6E6E6",
         },
         secondary: {
@@ -67,10 +71,10 @@ export default {
         'hero-section':'95vh',
         'hero-section-small':'110vh',
       },
-      minHeight:{
-        'mobile-menu':'500px',
-        'mobile-menu-auto':'auto',
-      }
+      minHeight: {
+        "mobile-menu": "500px",
+        "mobile-menu-auto": "auto",
+      },
     },
   },
   plugins: [
@@ -92,18 +96,20 @@ export default {
           "backgroundSize":"160vh",
           "backgroundPosition":"50% 0%",
         },
-        ".big-title":{
-          "textShadow": "0px 0px 3px #000,  -1px 1px 0px #FFAE0B, -2px 2px 0px #FFAE0B, -3px 3px 0px #FFAE0B, -4px 4px 0px #FFAE0B, -5px 5px 0px #FFAE0B, -6px 6px 0px #FFAE0B, -7px 7px 0px #FFAE0B, -9px 9px 8px rgba(247, 147, 26, 0.20)",
+        ".big-title": {
+          textShadow:
+            "0px 0px 3px #000,  -1px 1px 0px #FFAE0B, -2px 2px 0px #FFAE0B, -3px 3px 0px #FFAE0B, -4px 4px 0px #FFAE0B, -5px 5px 0px #FFAE0B, -6px 6px 0px #FFAE0B, -7px 7px 0px #FFAE0B, -9px 9px 8px rgba(247, 147, 26, 0.20)",
         },
-        ".big-title-mobile":{
-          "textShadow": "0px 0px 3px #000,  -1px 1px 0px #FFAE0B, -2px 2px 0px #FFAE0B, -3px 3px 0px #FFAE0B, -4px 4px 0px #FFAE0B, -5px 5px 0px #FFAE0B,  -7px 7px 6px rgba(247, 147, 26, 0.20)",
+        ".big-title-mobile": {
+          textShadow:
+            "0px 0px 3px #000,  -1px 1px 0px #FFAE0B, -2px 2px 0px #FFAE0B, -3px 3px 0px #FFAE0B, -4px 4px 0px #FFAE0B, -5px 5px 0px #FFAE0B,  -7px 7px 6px rgba(247, 147, 26, 0.20)",
         },
-        ".mobile-menu-container":{
-          "height":"100dvh",
+        ".mobile-menu-container": {
+          height: "100dvh",
         },
-        ".no-scroll":{
-          "overflow":"hidden"
-        }
+        ".no-scroll": {
+          overflow: "hidden",
+        },
       });
     },
   ],

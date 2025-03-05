@@ -8,7 +8,7 @@ async function fetchFooterData(locale) {
   const res = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/footer?locale=${locale}`);
 
   if (!res.ok) {
-    throw new Error("Failed to fetch gallery section's data");
+    throw new Error("Failed to fetch footer section's data");
   }
 
   const data = await res.json();
@@ -16,7 +16,8 @@ async function fetchFooterData(locale) {
 }
 
 const Footer = async ({ locale }) => {
-  const partnerUsSectionData = await fetchFooterData(locale);
+  const actualLocale = locale ? locale : "en";
+  const partnerUsSectionData = await fetchFooterData(actualLocale);
   return (
     <div
       id="contact"

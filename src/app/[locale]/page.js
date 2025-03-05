@@ -1,7 +1,6 @@
 import HeroSection from '@/components/SinglePageComponents/HeroSection';
 import SpeakersSection from '@/components/SinglePageComponents/SpeakersSection';
 import TicketsSection from '@/components/SinglePageComponents/TicketsSection';
-import Navbar from '@/components/Navbar';
 import WhatToExpectSection from '@/components/SinglePageComponents/WhatToExpectSection';
 import ThereIsMore from '@/components/SinglePageComponents/ThereIsMore';
 import WhaleVenuePicturesSection from '@/components/SinglePageComponents/WhaleVenuePicturesSection';

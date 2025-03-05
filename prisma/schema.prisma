@@ -1,0 +1,152 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Ticket {
+  id                Int      @id @default(autoincrement())
+  name              String
+  description       String?  // Opcionális leírás
+  priceInEur             Int  @default(10)    // Az ár centben/fillérben tárolva
+  priceInHuf             Int  @default(10)
+  currency          Currency   @default(EUR) // Ha több pénznem is lehet
+  quantityAvailable Int      // Összesen ennyi jegy elérhető
+  maxPerUser        Int      // Egy felhasználó max ennyit vehet
+  saleStart         DateTime // Mikor kezdődik az eladás
+  saleEnd           DateTime // Mikor zárul le az eladás
+  orders            OrderItem[] // Kapcsolat az OrderItem modellel
+}
+
+enum Currency {
+  EUR
+  HUF
+  SATS
+}
+
+model Order {
+  id              Int      @id @default(autoincrement())
+  email           String   // Felhasználótól csak az email cím kell
+  totalAmountInCents  Int      // Végösszeg centben
+  discountInCents     Int?     // Mennyi kedvezményt vontunk le
+  finalAmountInCents  Int  @default(0)     // Végösszeg a kedvezmény levonása után
+  currency        Currency   @default(EUR)
+  status          OrderStatus @default(PENDING)
+  paymentProvider PaymentProvider
+  createdAt       DateTime @default(now())
+  items           OrderItem[]
+  payments        Payment[]
+  couponId          Int?     //  Az alkalmazott kupon ID-ja (opcionális)
+  coupon            Coupon?  @relation(fields: [couponId], references: [id]) // Kapcsolat a Coupon modellel
+  reminderSent      Boolean      @default(false)
+  
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  FAILED
+  CANCELLED
+}
+
+enum PaymentProvider {
+  BTCPAY
+  STRIPE
+}
+
+model OrderItem {
+  id              Int      @id @default(autoincrement())
+  orderId         Int
+  ticketId        Int
+  quantity        Int
+  priceAtPurchase Int // Mennyibe került a jegy vásárláskor
+  instances       TicketInstance[]
+
+  order   Order   @relation(fields: [orderId], references: [id], map: "OrderItem_orderId_fkey")
+  ticket  Ticket  @relation(fields: [ticketId], references: [id], map: "OrderItem_ticketId_fkey")
+}
+
+model TicketInstance {
+  id          Int       @id @default(autoincrement())
+  orderItemId Int
+  validated   Boolean   @default(false)
+  validatedAt DateTime? 
+  
+  orderItem   OrderItem @relation(fields: [orderItemId], references: [id])
+}
+
+model Payment {
+  id              Int      @id @default(autoincrement())
+  orderId         Int
+  providerId      String   // BTCPay invoice ID vagy Stripe charge ID
+  amountInCents          Int      // Mennyit fizettek centben
+  currency        Currency   @default(EUR)
+  status          PaymentStatus @default(PENDING)
+  errorMessage    String?
+  createdAt       DateTime @default(now())
+  order           Order    @relation(fields: [orderId], references: [id])
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  CANCELLED
+}
+
+model Coupon {
+  id           Int      @id @default(autoincrement())
+  code         String   @unique // Egyedi kuponkód
+  discountType DiscountType // FIXED (fix összegű) vagy PERCENTAGE (százalékos)
+  discountValue Int      // Ha fix összegű, akkor centben; ha százalékos, akkor 1-100 közötti érték
+  maxRedemptions Int?    // Hányszor lehet használni (opcionális)
+  usedRedemptions Int    @default(0) // Hányszor használták
+  minTicketsRequired Int   @default(1)
+  validFrom    DateTime? // Mikortól érvényes
+  validUntil   DateTime? // Meddig érvényes
+  isActive       Boolean  @default(true)
+  createdAt    DateTime  @default(now())
+  orders Order[]
+  
+}
+
+enum DiscountType {
+  FIXED
+  PERCENTAGE
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  email         String  @unique
+  password      String
+}
+
+model Voucher {
+  id        BigInt      @id  
+  orderId   Int
+  pdfPath   String
+  downloadUrl String? @db.LongText
+  invoicePath String?
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model StripeWebhookEvent {
+  id        Int      @id @default(autoincrement())
+  eventId   String   @unique
+  processedAt DateTime @default(now())
+}
+
+
+
+
+
