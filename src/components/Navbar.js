@@ -33,10 +33,25 @@ async function fetchGYPButton(locale) {
   return data.data || [];
 }
 
+async function fetchHeroSectionData(locale) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/hero-section?locale=${locale}`
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch hero section data");
+  }
+
+  const data = await res.json();
+  return data.data || [];
+}
+
 const Navbar = async ({ locale }) => {
   // const locale = "hu"; // Változtasd dinamikusan, ha van nyelvkezelés
   const navLinks = await fetchNavLinks(locale);
   const buttonText = await fetchGYPButton(locale);
+  const heroSectionData = await fetchHeroSectionData(locale)
+
 
   return (
     <div
