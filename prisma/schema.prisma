@@ -134,6 +134,8 @@ model Voucher {
   id        BigInt      @id  
   orderId   Int
   pdfPath   String
+  downloadUrl String? @db.LongText
+  invoicePath String?
   expiresAt DateTime
   createdAt DateTime @default(now())
 }

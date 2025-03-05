@@ -1,6 +1,8 @@
 "use server";
 
 import logger from "../../../utils/logger";
+import fs from "fs";
+import path from "path";
 
 import {
   Client,
@@ -92,7 +94,25 @@ export async function createInvoice(orderData) {
     // Számla kibocsátása
     const result = await szamlazzClient.issueInvoice(invoice);
     console.log("Invoice issued:", result);
-    return result; // result tartalmazza az invoiceId, netTotal, grossTotal, customerAccountUrl, pdf (Buffer) stb.
+    let invoiceFilePath;
+    let relativeInvoicePath;
+    if (result.pdf) {
+      const invoicesFolder = path.join(process.cwd(), "invoices");
+
+      if (!fs.existsSync(invoicesFolder)) {
+        fs.mkdirSync(invoicesFolder);
+      }
+      // Fájl név: invoice_order_<orderId>.pdf
+      const orderId = orderData.orderID || orderData.Id;
+      const invoiceFilename = `invoicefor_${orderId}.pdf`;
+      invoiceFilePath = path.join(invoicesFolder, invoiceFilename);
+      fs.writeFileSync(invoiceFilePath, result.pdf);
+      logger.info(`Invoice PDF saved at ${invoiceFilePath}`);
+      relativeInvoicePath = path.join("invoices", invoiceFilename);
+    } else {
+      logger.error("Invoice result does not contain a PDF.");
+    }
+    return { ...result, invoiceFilePath: relativeInvoicePath }; // result tartalmazza az invoiceId, netTotal, grossTotal, customerAccountUrl, pdf (Buffer) stb.
   } catch (error) {
     logger.error(`🚨 Hiba a számla létrehozásakor: ${error.message}`, {
       stack: error.stack,

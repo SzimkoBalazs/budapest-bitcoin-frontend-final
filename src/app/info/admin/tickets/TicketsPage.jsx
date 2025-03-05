@@ -8,6 +8,7 @@ import { Button } from "primereact/button";
 import { Tooltip } from "primereact/tooltip";
 import CreateTicketModal from "./CreateTicketModal";
 import EditTicketModal from "./EditTicketModal";
+import { priceWithSpace } from "../../../../../utils/priceWithSpace";
 import "primereact/resources/themes/lara-light-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
@@ -124,8 +125,8 @@ function formatValue(col, value) {
   if (col.includes("sale") || col === "createdAt") {
     return new Date(value).toLocaleDateString("hu-HU");
   }
-  if (col === "priceInEur") {
-    return value / 100;
+  if (col === "priceInEur" || col === "priceInHuf") {
+    return priceWithSpace(value, true);
   }
 
   return value;

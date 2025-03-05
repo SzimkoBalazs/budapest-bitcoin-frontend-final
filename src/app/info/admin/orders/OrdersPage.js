@@ -4,8 +4,11 @@ import { useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { SelectButton } from "primereact/selectbutton";
 import { Column } from "primereact/column";
+import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { FilterMatchMode } from "primereact/api";
+import { resendTicketEmail } from "@/app/actions/resendTicketEmail";
+import { priceWithSpace } from "../../../../../utils/priceWithSpace";
 import "primereact/resources/themes/lara-light-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
@@ -25,7 +28,19 @@ export default function OrdersPage({ orders }) {
     email: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
 
-  const columns = Object.keys(orders[0]).filter((col) => col !== "couponId");
+  const columns = Object.keys(orders[0]).filter(
+    (col) => col !== "couponId" && col !== "reminderSent"
+  );
+
+  async function handleSendTicket(order) {
+    try {
+      const result = await resendTicketEmail(order);
+      console.log(result.message);
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+    }
+  }
 
   // 🔹 Globális kereső a táblázat felett
   const renderHeader = () => {
@@ -49,6 +64,18 @@ export default function OrdersPage({ orders }) {
           placeholder="Search..."
         />
       </div>
+    );
+  };
+
+  const actionBodyTemplate = (rowData) => {
+    return (
+      <Button
+        icon="pi pi-envelope"
+        tooltip="Send ticket email"
+        tooltipOptions={{ position: "top" }}
+        onClick={() => handleSendTicket(rowData)}
+        disabled={rowData.status !== "PAID"}
+      />
     );
   };
 
@@ -96,6 +123,7 @@ export default function OrdersPage({ orders }) {
             />
           ) : null
         )}
+        <Column header="Actions" body={actionBodyTemplate} />
       </DataTable>
     </div>
   );
@@ -127,8 +155,13 @@ function formatValue(col, value, rowData) {
     "discountInCents",
     "finalAmountInCents",
   ];
-  if (priceFields.includes(col) && rowData.currency === "EUR") {
-    return value / 100;
+  if (
+    priceFields.includes(col) &&
+    (rowData.currency === "EUR" || rowData.currency === "HUF")
+  ) {
+    // Ha az érték már centben van, a priceWithSpace alapértelmezetten eloszt 100-zal,
+    // így az eredmény megfelelő formátumú lesz.
+    return priceWithSpace(value);
   }
 
   if (col === "createdAt") {

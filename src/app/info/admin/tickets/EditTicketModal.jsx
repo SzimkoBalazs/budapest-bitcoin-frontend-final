@@ -23,7 +23,7 @@ export default function EditTicketModal({ visible, onClose, ticket }) {
             : "",
         priceInHuf:
           ticket.priceInHuf !== undefined && ticket.priceInHuf !== null
-            ? String(ticket.priceInHuf)
+            ? String(ticket.priceInHuf / 100)
             : "",
         currency: ticket.currency ?? "EUR",
         quantityAvailable:

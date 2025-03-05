@@ -174,6 +174,16 @@ export async function POST(req) {
 
       const downloadUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/download-ticket?token=${token}`;
 
+      try {
+        await prisma.voucher.update({
+          where: { id: voucherId },
+          data: { downloadUrl },
+        });
+      } catch (error) {
+        logger.error(`Error updating voucher: ${error.stack}`);
+        return new NextResponse("Internal server error", { status: 500 });
+      }
+
       const defaultInvoiceData = {
         buyerName: "",
         email: order.email,
@@ -216,6 +226,16 @@ export async function POST(req) {
 
       const invoiceResult = await createInvoice(defaultInvoiceData);
       logger.info("Invoice result:", invoiceResult);
+
+      try {
+        await prisma.voucher.update({
+          where: { id: voucherId },
+          data: { invoicePath: invoiceResult.invoiceFilePath },
+        });
+      } catch (error) {
+        logger.error(`Error updating voucher: ${error.stack}`);
+        return new NextResponse("Internal server error", { status: 500 });
+      }
 
       await sendTransactionalEmail(order, downloadUrl, invoiceResult.pdf);
 

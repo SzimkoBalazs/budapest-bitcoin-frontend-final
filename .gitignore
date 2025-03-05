@@ -42,4 +42,9 @@ next-env.d.ts
 
 /tickets
 
+/invoices
+
 .idea/workspace.xml
+
+errors.log*
+/logs

@@ -138,6 +138,15 @@ export async function POST(req) {
     }
     // Összeállítjuk a letöltési URL-t
     const downloadUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/download-ticket?token=${token}`;
+    try {
+      await prisma.voucher.update({
+        where: { id: voucherId },
+        data: { downloadUrl },
+      });
+    } catch (error) {
+      logger.error(`Error updating voucher: ${error.stack}`);
+      return new NextResponse("Internal server error", { status: 500 });
+    }
 
     const invoiceNeeded = metadata.invoiceNeeded === "true";
 
@@ -240,12 +249,30 @@ export async function POST(req) {
         : defaultInvoiceData.taxNumber,
       items: defaultInvoiceData.items, // Az items rész nem változik
       currency: order.currency,
+      orderID: order.id,
     };
 
     console.log("Final invoiceData:", finalInvoiceData);
 
     const invoiceResult = await createInvoice(finalInvoiceData);
-    logger.info("Invoice result:", invoiceResult);
+    logger.info(
+      "Invoice result at the webhook:",
+      invoiceResult.invoiceFilePath
+    );
+    console.log(
+      "Invoice file path to update voucher with:",
+      invoiceResult.invoiceFilePath
+    );
+
+    try {
+      await prisma.voucher.update({
+        where: { id: voucherId },
+        data: { invoicePath: invoiceResult.invoiceFilePath },
+      });
+    } catch (error) {
+      logger.error(`Error updating voucher: ${error.stack}`);
+      return new NextResponse("Internal server error", { status: 500 });
+    }
 
     await sendTransactionalEmail(order, downloadUrl, invoiceResult.pdf);
   } else if (event.type === "payment_intent.payment_failed") {
