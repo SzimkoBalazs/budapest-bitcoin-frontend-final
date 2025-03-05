@@ -70,7 +70,7 @@ export default async function SuccessPage({ searchParams, params }) {
                   {successText.paymentId}
                 </h3>
                 <h3 className="text-white font-exo text-[18px] font-bold">
-                  {order.payments[0].providerId}
+                  {order.id}
                 </h3>
               </div>
               <div className="flex flex-col xxs:gap-y-1 flex-wrap">
