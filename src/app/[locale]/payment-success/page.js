@@ -43,7 +43,7 @@ export default async function SuccessPage({ searchParams, params }) {
   if (order == null) return notFound();
 
   const isSuccess = paymentIntent.status === "succeeded";
-  const isPaid = order.status === "PAID";
+  // const isPaid = order.status === "PAID";
 
   // TODO: Ide meg felvinni a forditasokat strapibol
 
@@ -52,7 +52,7 @@ export default async function SuccessPage({ searchParams, params }) {
       className="mt-[80px] sm:mt-[120px]"
       maxWidth={"max-w-[800px]"}
     >
-      {isSuccess && isPaid ? (
+      {isSuccess ? (
         <div className="flex flex-col">
           <div className="flex flex-col">
             <h1 className="text-white font-exo text-[32px] sm:text-[48px] font-black">
