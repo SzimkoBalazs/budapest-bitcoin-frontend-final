@@ -196,6 +196,7 @@ export async function POST(req) {
         address: "",
         taxNumber: "",
         currency: order.currency,
+        orderID: order.id,
         items: order.items.map((item) => {
           const isEUR = order.currency.toUpperCase() === "EUR";
           let grossUnitPrice;
