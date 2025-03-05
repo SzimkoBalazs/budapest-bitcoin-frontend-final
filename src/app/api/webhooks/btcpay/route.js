@@ -119,7 +119,11 @@ export async function POST(req) {
           });
           await tx.order.update({
             where: { id: order.id },
-            data: { status: OrderStatus.PAID, currency: Currency.SATS },
+            data: {
+              status: OrderStatus.PAID,
+              currency: Currency.SATS,
+              finalAmountInCents: satoshiAmount,
+            },
           });
           if (order.couponId && order.coupon) {
             await tx.coupon.update({
