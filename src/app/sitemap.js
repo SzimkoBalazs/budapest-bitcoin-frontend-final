@@ -1,7 +1,7 @@
 export default async function sitemap() {
   const locales = ["en", "hu"];
 
-  const staticPages = ["", "terms-and-conditions", "speakers"];
+  const staticPages = ["", "terms-and-conditions", "speakers", "checkout"];
 
   const baseUrl = "https://www.budapestbitcoin.com";
 
