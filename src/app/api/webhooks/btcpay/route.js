@@ -266,8 +266,6 @@ export async function POST(req) {
     event &&
     (event.type === "InvoiceExpired" || event.type === "InvoiceInvalid")
   ) {
-    const invoice = event?.payment;
-
     const orderId = event.metadata.orderId;
 
     const order = await getOrder(parseInt(orderId, 10));
@@ -280,7 +278,7 @@ export async function POST(req) {
         await tx.payment.create({
           data: {
             orderId: order.id,
-            providerId: invoice.id,
+            providerId: event.invoiceId,
             amountInCents: order.finalAmountInCents,
             currency: "EUR",
             status: PaymentStatus.FAILED,
@@ -303,6 +301,7 @@ export async function POST(req) {
       );
     }
     logger.error(`Payment failed for Order ID ${order.id}`);
+    return NextResponse.json({ received: true }, { status: 200 });
   }
   return NextResponse.json({ received: true }, { status: 200 });
 }
