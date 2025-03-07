@@ -4,6 +4,15 @@ import SecondaryCTAButton from "../SecondaryCTAButton";
 import WhyPartnerUsHODLSVG from "@/utilities/WhyPartnerUsHODLSVG";
 import MainMediaPartnerSVG from "@/utilities/MainMediaPartnerSVG";
 import SectionMainTitle from "@/components/SectionMainTitle";
+import Image from 'next/image';
+import BtcPayLogo from '../../../public/logos/btc_pay_logo.svg';
+import BitvocationLogo from '../../../public/logos/bitvocation_logo.png';
+import CryptokenLogo from '../../../public/logos/cryptoken_logo.png';
+import BrandPrLogo from '../../../public/logos/brandpr_logo.svg';
+import CryptoBrowserLogo from '../../../public/logos/crypto_browser_logo.svg';
+import Partner from '../Partners/Partner';
+import PartnersAndSponsors from '../Partners/PartnersAndSponsors';
+
 
 async function fetchPartnerUsSectionData(locale) {
   const res = await fetch(
@@ -34,10 +43,9 @@ const WhyPartnerWithUs = async ({ locale }) => {
                   textTop={partnerUsSectionData.TitleTopText}
                   textBottom={partnerUsSectionData.TitleBottomText}
                   color="bg-primary-500"
-                  topTextClass={'text-nowrap tracking-[2px]'}
-                  textSize={locale === 'hu' && 'text-[30px] xxs:text-[34px] sm:text-[52px]'}
-                  widthClass={locale === 'hu' ? 'w-[250px] xxs:w-[270px] sm:w-[440px]' : "w-[210px] sm:w-[310px]"}
-                  minWidth={210}
+                  topTextClass={'text-nowrap tracking-[1px] mb-[2px]'}
+                  textSize={locale === 'hu' ? 'text-[28px] xxs:text-[34px] sm:text-[52px]' : 'text-[28px] xs:text-[40px] sm:text-[56px]'}
+                  widthClass={locale === 'hu' ? 'w-[232px] xxs:w-[270px] sm:w-[440px]' : "w-[160px] xxs:w-[210px] sm:w-[310px]"}
                 />
               </div>
             </div>
@@ -59,21 +67,21 @@ const WhyPartnerWithUs = async ({ locale }) => {
             <WhyPartnerUsHODLSVG />
           </div>
         </div>
-        <div className="flex flex-col items-center gap-[40px]">
-          <div className="flex p-[10px] justify-center items-center gap-[10px]">
+        <div className="flex flex-col gap-y-16 items-center">
+          <div className="flex flex-col items-center gap-[24px]">
             <h3 className="text-neutral-200 text-center font-exo text-[28px] xs:text-[32px] md:text-[40px] font-extrabold leading-[130%] tracking-[2.5px]">
               {partnerUsSectionData.MediaPartnerText}
             </h3>
-          </div>
-          <div className="flex max-w-[440px] px-[16px] flex-col items-center gap-[40px]">
-            <div className="flex w-full max-w-full">
+            <div className="flex max-w-[440px] px-[16px] flex-col items-center gap-[16px]">
               <MainMediaPartnerSVG />
+              <p className="self-stretch text-white text-center font-exo text-[18px] font-medium leading-[150%] tracking-[1px]">
+                {partnerUsSectionData.MediaPartnerDescription}
+              </p>
             </div>
-            <p className="self-stretch text-white text-center font-exo text-[18px] font-medium leading-[150%] tracking-[1px]">
-              {partnerUsSectionData.MediaPartnerDescription}
-            </p>
           </div>
+          <PartnersAndSponsors title={partnerUsSectionData.ourPartnersTitle}/>
         </div>
+
       </ContentWrapper>
     </div>
   );

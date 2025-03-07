@@ -52,10 +52,10 @@ const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
 
   // Mid form or footer form
   const underlineWidth = comingSoonFormData
-    ? 'w-[220px] xxs:w-[230px] sm:w-[290px]'
-    : 'w-[200px] xxs:w-[350px] sm:w-[250px]';
+    ? 'w-[220px] xxs:w-[230px] sm:w-[275px]'
+    : 'w-[180px] xxs:w-[97%] sm:w-[250px]';
   const underlineWidthEn = comingSoonFormData
-    ? 'w-[250px] xxs:w-[320px] sm:w-[420px]'
+    ? 'w-[250px] xxs:w-[190px] sm:w-[270px]'
     : 'w-[97%] md:w-[65%] footerTitle:w-[95%]';
 
   return (
@@ -71,7 +71,7 @@ const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
             {/* Kék csík */}
             <div
               className={cln(
-                'absolute bottom-[5px] left-0 right-0 h-[6px] z-0 bg-primary-500',
+                'absolute bottom-[6px] sm:bottom-[8px] left-0 right-0 h-[6px] z-0 bg-primary-500',
                 locale === 'hu' ? underlineWidth : underlineWidthEn,
               )}
             />
@@ -81,7 +81,7 @@ const StayUpdatedForm = ({ data, comingSoonFormData, locale }) => {
                 fontWeight: 800,
                 textShadow: '2px 2px 2px rgba(0,0,0,1)',
               }}
-              className="text-white font-exo text-[26px] sm:text-[32px] leading-[100%] tracking-[6px] sm:tracking-[8.4px] uppercase z-10 relative"
+              className={cln(comingSoonFormData ? 'text-[24px] sm:text-[32px]' : 'text-[28px] sm:text-[34px]', "text-white font-exo leading-[110%] tracking-[2px] sm:tracking-[4px] uppercase z-10 relative")}
             >
               {comingSoonFormData ? comingSoonFormData.MainTitle : data.MainTitle}
             </h3>
