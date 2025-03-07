@@ -6,7 +6,7 @@ const WhatToExpectSection = ({number,text}) => {
                 <p className="text-center font-exo text-[24px] xxs:text-[28px] sm:text-[40px] font-extrabold leading-[100%] tracking-[6px]">
                     {number}
                 </p>
-                <h4 className="no-underline text-center font-exo text-[16px] xxs:text-[18px] sm:text-[24px] font-normal leading-[100%] tracking-[3.6px]">
+                <h4 className="no-underline text-center font-exo text-[16px] xxs:text-[18px] sm:text-[24px] font-normal leading-[100%] tracking-[2px]">
                     {text}
                 </h4>
               </div>

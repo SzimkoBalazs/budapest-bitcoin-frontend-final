@@ -9,6 +9,8 @@ const GetInTouch = ({ data, locale }) => {
     telegramLink: data.TelegramLink,
     xLink: data.XLink,
     instagramLink: data.InstagramLink,
+    nostrLink:data.nostrLink,
+    primalLink:data.primalLink,
   };
   return (
     <div className="flex flex-1/3 flex-col w-fit gap-[40px]">
@@ -30,7 +32,7 @@ const GetInTouch = ({ data, locale }) => {
             {data.SecondRightText}
           </p>
         </div>
-        <div className="flex items-center gap-[16px] sm:gap-[24px]">
+        <div className="flex items-center justify-center sm:justify-start gap-[16px] sm:gap-[24px] flex-wrap">
           <SocialIconsSVG links={socialLinks} />
         </div>
       </div>
