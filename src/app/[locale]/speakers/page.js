@@ -56,13 +56,11 @@ const speakersPage = async ({ params }) => {
           {pageData.subtitle}
         </h2>
       </ContentWrapper>
-      <div className="max-w-[1128px] mb-10 z-20 relative scrollbar-container px-[16px] sm:px-[40px] h-auto mt-10 flex gl:mx-auto gl:justify-center items-start content-center gap-x-[40px] md:gap-y-[80px] md:gap-x-[40px] pb-[24px] overflow-x-scroll flex-nowrap md:flex-wrap">
+      <div className="max-w-[1128px] mb-10 z-20 relative scrollbar-container px-[16px] sm:px-[40px] h-auto mt-10 flex gl:mx-auto gl:justify-center items-start content-center gap-y-[56px] md:gap-y-[80px] md:gap-x-[40px] pb-[24px] overflow-x-scroll flex-wrap">
         {speakerCardData.map((speaker, index) => (
           <div
             key={index}
-            className={`flex min-w-fit md:min-w-[220px] justify-center items-start gap-[10px] flex-[1_0_0] ${
-              index % 2 === 1 ? 'mt-0 md:mt-[48px]' : ''
-            }`}
+            className={`flex min-w-fit md:min-w-[240px] justify-center items-start gap-[10px] flex-[1_0_0]`}
           >
             <SpeakerCard
               speakerData={speaker}
