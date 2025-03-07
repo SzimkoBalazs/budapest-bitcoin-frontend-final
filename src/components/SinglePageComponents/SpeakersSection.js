@@ -1,11 +1,11 @@
-import ContentWrapper from "@/utilities/ContentWrapper";
 import SpeakersBigTextOutline from "../SpeakersBigTextOutline";
 import SectionMainTitle from "../SectionMainTitle";
 import SpeakerCard from "../SpeakerCard";
 import MoreSpeakersTag from "../MoreSpeakersTag";
 
-import speakers from "@/utilities/constants";
 import SecondaryCTAButton from "../SecondaryCTAButton";
+import ContentWrapper from "@/utilities/ContentWrapper";
+import GetYourPassCTAButton from "@/components/GetYourPassCTAButton";
 
 async function fetchSpeakersSectionData(locale) {
   const res = await fetch(
@@ -73,7 +73,7 @@ const SpeakersSection = async ({ locale }) => {
             <SecondaryCTAButton
               text={speakerSetionData.ButtonText}
               type="button"
-               href="hello@budapestbitcoin.com"
+              href="hello@budapestbitcoin.com"
               actionType="mailto"
             />
           </div>
@@ -81,28 +81,34 @@ const SpeakersSection = async ({ locale }) => {
       </ContentWrapper>
       {/*SPEAKER CARDS CONTAINER*/}
       <div className="max-w-[1128px] z-20 relative scrollbar-container px-[16px] sm:px-[40px] h-auto mt-10 flex gl:mx-auto gl:justify-center items-start content-center gap-x-[40px] md:gap-y-[80px] md:gap-x-[40px] pb-[24px] overflow-x-scroll flex-nowrap md:flex-wrap">
-        {speakerCardData.map((speaker, index) => (
-          <div
-            key={index}
-            className={`flex min-w-fit md:min-w-[200px] justify-center items-start gap-[10px] flex-[1_0_0] ${
-              index % 2 === 1 ? "mt-0 md:mt-[48px]" : ""
-            }`}
-          >
-            <SpeakerCard
-              name={speaker.Name}
-              description={speaker.Position}
-              image={
-                speaker.Picture?.formats?.small?.url
-                  ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${speaker.Picture.formats.small.url}`
-                  : `${process.env.NEXT_PUBLIC_STRAPI_URL}${speaker.Picture.formats.thumbnail.url}`
-              }
-              company={speaker.Company}
-            />
-          </div>
-        ))}
-        <MoreSpeakersTag
-          mainText={speakerSetionData.TagMainText}
-          secondaryText={speakerSetionData.TagSecondaryText}
+        {/*TODO: Show only 8 speakers */}
+        {speakerCardData.map(
+          (speaker, index) =>
+            index < 12 && (
+              <div
+                key={index}
+                className={`flex min-w-fit md:min-w-[200px] justify-center items-start gap-[10px] flex-[1_0_0] ${
+                  index % 2 === 1 ? "mt-0 md:mt-[48px]" : ""
+                }`}
+              >
+                <SpeakerCard
+                  image={
+                    speaker.Picture?.formats?.small?.url
+                      ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${speaker.Picture.formats.small.url}`
+                      : `${process.env.NEXT_PUBLIC_STRAPI_URL}${speaker.Picture.formats.thumbnail.url}`
+                  }
+                  speakerData={speaker}
+                />
+              </div>
+            )
+        )}
+      </div>
+      <div className="flex flex-col mt-[32px] sm:mt-10 w-full items-center">
+        <GetYourPassCTAButton
+          anchorOrButton={"anchor"}
+          locale={locale}
+          href={"/speakers"}
+          buttonText={speakerSetionData.MoreSpeakersButton}
         />
       </div>
     </div>

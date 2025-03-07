@@ -18,7 +18,7 @@ import {
 const szamlazzClient = new Client({
   //   user: process.env.SZAMLAZZ_USERNAME,
   //   password: process.env.SZAMLAZZ_PASSWORD,
-  authToken: "97039xbwy2gws4iv7yn4xk8cniuird56tyamat6gy3",
+  authToken: process.env.SZAMLAZZ_AGENT_KEY,
   eInvoice: true, // (ha elektronikus számlát szeretnél)
   requestInvoiceDownload: true, // PDF letöltés kérésének engedélyezése
   timeout: 5000,

@@ -43,7 +43,7 @@ export default async function SuccessPage({ searchParams, params }) {
   if (order == null) return notFound();
 
   const isSuccess = paymentIntent.status === "succeeded";
-  const isPaid = order.status === "PAID";
+  // const isPaid = order.status === "PAID";
 
   // TODO: Ide meg felvinni a forditasokat strapibol
 
@@ -52,14 +52,14 @@ export default async function SuccessPage({ searchParams, params }) {
       className="mt-[80px] sm:mt-[120px]"
       maxWidth={"max-w-[800px]"}
     >
-      {isSuccess && isPaid ? (
+      {isSuccess ? (
         <div className="flex flex-col">
           <div className="flex flex-col">
             <h1 className="text-white font-exo text-[32px] sm:text-[48px] font-black">
               {successText.successfulPayment}
             </h1>
             <h2 className="text-white font-exo text-[20px] sm:text-[24px] font-normal">
-              You're in! See you at Budapest Bitcoin.
+              {successText.youAreIn}
             </h2>
           </div>
 
@@ -67,15 +67,15 @@ export default async function SuccessPage({ searchParams, params }) {
             <div className="flex flex-col gap-y-2 xxs:gap-y-4">
               <div className="flex flex-col xxs:gap-y-1 mt-4 xxs:mt-8 flex-wrap">
                 <h3 className="text-white/80 font-exo text-[18px] font-normal">
-                  Payment ID:
+                  {successText.paymentId}
                 </h3>
                 <h3 className="text-white font-exo text-[18px] font-bold">
-                  {order.payments[0].providerId}
+                  {order.id}
                 </h3>
               </div>
               <div className="flex flex-col xxs:gap-y-1 flex-wrap">
                 <h4 className="text-white/80 font-exo text-[18px] font-normal">
-                  Your ticket has been sent to:{" "}
+                  {successText.ticketSentTo}{" "}
                 </h4>
                 <h4 className="text-white font-exo text-[18px] font-bold">
                   {order.email}
@@ -93,7 +93,7 @@ export default async function SuccessPage({ searchParams, params }) {
 
           <div className="flex gap-x-2 mt-[20px] xxs:mt-[44px] flex-wrap justify-center">
             <h4 className="text-white font-exo text-[16px] text-center xxs:text-left font-normal">
-              Need any help? Get in touch with us at:
+              {successText.needHelp}
             </h4>
             <h4 className="text-white font-exo text-[16px] font-bold">
               info@bitcoinbudapest.com

@@ -33,10 +33,25 @@ async function fetchGYPButton(locale) {
   return data.data || [];
 }
 
-const Navbar = async ({ locale, params }) => {
+async function fetchHeroSectionData(locale) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/hero-section?locale=${locale}`
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch hero section data");
+  }
+
+  const data = await res.json();
+  return data.data || [];
+}
+
+const Navbar = async ({ locale }) => {
   // const locale = "hu"; // Változtasd dinamikusan, ha van nyelvkezelés
   const navLinks = await fetchNavLinks(locale);
   const buttonText = await fetchGYPButton(locale);
+  const heroSectionData = await fetchHeroSectionData(locale)
+
 
   return (
     <div
@@ -59,13 +74,17 @@ const Navbar = async ({ locale, params }) => {
         </div>
         <div className="hidden navbarBreak:flex justify-end items-center   gap-4 xl:gap-8">
           <LanguageSwitch currentLocale={locale} />
-          <GetYourPassCTAButton buttonText={buttonText.ButtonText} locale={locale} />
+          <GetYourPassCTAButton
+            buttonText={buttonText.ButtonText}
+            locale={locale}
+          />
         </div>
         <div className="flex navbarBreak:hidden">
           <NavHamburgerIcon
             navLinks={navLinks}
             currentLocale={locale}
-            buttonText={buttonText.ButtonText}
+            buttonText={heroSectionData.GetYourPassBTNText}
+            secondaryButtonText={heroSectionData.SecondaryButtonText}
           />
         </div>
       </header>

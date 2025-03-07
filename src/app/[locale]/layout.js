@@ -20,16 +20,15 @@ export const metadata = {
   metadataBase: new URL('https://www.budapestbitcoin.com/'),
 
   title: {
-    default: 'Budapest Bitcoin',
+    default: 'Budapest Bitcoin - The Bitcoin Conference with a bit of difference',
     template: '%s | Budapest Bitcoin',
   },
-  description: 'The Bitcoin Conference with a bit of difference',
-  other:{
-  "color-scheme": "only light"
-  },
+  description:
+    'This isn’t just another Bitcoin event, it’s a new beginning! No distractions, no noise, just Bitcoin, networking, and good Budapest vibes.',
   openGraph: {
-    title: 'Budapest Bitcoin',
-    description: 'The Bitcoin Conference with a bit of difference',
+    title: 'Budapest Bitcoin - The Bitcoin Conference with a bit of difference',
+    description:
+      'This isn’t just another Bitcoin event, it’s a new beginning! No distractions, no noise, just Bitcoin, networking, and good Budapest vibes.',
     type: 'website',
     url: 'https://www.budapestbitcoin.com/',
     sitename: 'Budapest Bitcoin',
@@ -58,13 +57,13 @@ export default async function SiteLayout({ children, params }) {
     <html lang={actualLocale}>
       <head>
         {/*COOKIEBOT*/}
-        {/* <Script
+        <Script
           id="Cookiebot"
           src="https://consent.cookiebot.com/uc.js"
           data-cbid={process.env.COKKIEBOT_DOMAIN_GROUPID}
           data-blockingmode="auto"
           type="text/javascript"
-        ></Script> */}
+        />
 
         {/* Google Tag Manager */}
         <Script id="google-tag-manager" strategy="afterInteractive">

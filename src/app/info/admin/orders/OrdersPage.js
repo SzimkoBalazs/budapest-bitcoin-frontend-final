@@ -39,19 +39,25 @@ export default function OrdersPage({ orders }) {
     setIsLoading(true);
     try {
       const result = await resendTicketEmail(order);
-      toast.current.show({
-        severity: "success",
-        summary: "Success",
-        detail: result.message || "Ticket email re-sent successfully",
-        life: 3000,
-      });
+      if (toast.current) {
+        toast.current.show({
+          severity: "success",
+          summary: "Success",
+          detail: result.message || "Ticket email re-sent successfully",
+          life: 3000,
+        });
+      } else {
+        console.error("Toast ref is not available");
+      }
     } catch (error) {
-      toast.current.show({
-        severity: "error",
-        summary: "Error",
-        detail: error.message || "Failed to resend ticket email",
-        life: 3000,
-      });
+      if (toast.current) {
+        toast.current.show({
+          severity: "error",
+          summary: "Error",
+          detail: error.message || "Failed to resend ticket email",
+          life: 3000,
+        });
+      }
     } finally {
       setIsLoading(false);
     }
