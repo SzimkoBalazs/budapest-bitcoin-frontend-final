@@ -8,7 +8,7 @@ export default function NavLink({ path, text, locale }) {
   const router = useRouter();
   const newpath = path.slice(1);
 
-  const activePaths = ['speakers'];
+  const activePaths = ['speakers', 'our-team'];
 
   const handleClick = (e) => {
     e.preventDefault();
