@@ -21,7 +21,7 @@ export default {
       xxs: "390px",
       gl: "900px",
       footerTitle: "800px",
-      navbarBreak: "1200px",
+      navbarBreak: "1280px",
       whatToExpectBreak: "1000px",
       whaleTextXs: "410px",
       whaleTextXsHu: "373px",
