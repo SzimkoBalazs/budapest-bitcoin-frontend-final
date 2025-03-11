@@ -11,7 +11,7 @@ import { createVoucher } from "@/app/actions/voucher";
 import { generateOrderQrCodes } from "../../../../../utils/generateOrderQrCodes";
 import { sendTransactionalEmail } from "../../../../../utils/sendTransactionalEmail";
 import { generateDownloadToken } from "@/app/actions/generateDownloadToken";
-import { createInvoice } from "@/app/actions/szamlazzInvoice";
+// import { createInvoice } from "@/app/actions/szamlazzInvoice";
 import { generateNewTicketPdf } from "@/app/actions/generateNewTicketPDF";
 import { handleContactSubscription } from "@/app/actions/brevoReminderContact";
 
@@ -105,144 +105,144 @@ export async function POST(req) {
       const amountPaid = invoice.value;
       const satoshiAmount = Math.round(parseFloat(amountPaid) * 100000000);
 
-      try {
-        await prisma.$transaction(async (tx) => {
-          await tx.payment.create({
-            data: {
-              orderId: order.id,
-              providerId: invoice.id,
-              amountInCents: satoshiAmount,
-              currency: Currency.SATS,
-              status: PaymentStatus.SUCCESS,
-              errorMessage: null,
-            },
-          });
-          await tx.order.update({
-            where: { id: order.id },
-            data: {
-              status: OrderStatus.PAID,
-              currency: Currency.SATS,
-              finalAmountInCents: satoshiAmount,
-            },
-          });
-          if (order.couponId && order.coupon) {
-            await tx.coupon.update({
-              where: { id: order.coupon.id },
-              data: { usedRedemptions: { increment: 1 } },
-            });
-          }
-        });
-      } catch (error) {
-        logger.error(
-          `Error processing BTCPay payment transaction: ${error.stack}`
-        );
-        return NextResponse.json(
-          { error: "Internal server error" },
-          { status: 500 }
-        );
-      }
+      // try {
+      //   await prisma.$transaction(async (tx) => {
+      //     await tx.payment.create({
+      //       data: {
+      //         orderId: order.id,
+      //         providerId: invoice.id,
+      //         amountInCents: satoshiAmount,
+      //         currency: Currency.SATS,
+      //         status: PaymentStatus.SUCCESS,
+      //         errorMessage: null,
+      //       },
+      //     });
+      //     await tx.order.update({
+      //       where: { id: order.id },
+      //       data: {
+      //         status: OrderStatus.PAID,
+      //         currency: Currency.SATS,
+      //         finalAmountInCents: satoshiAmount,
+      //       },
+      //     });
+      //     if (order.couponId && order.coupon) {
+      //       await tx.coupon.update({
+      //         where: { id: order.coupon.id },
+      //         data: { usedRedemptions: { increment: 1 } },
+      //       });
+      //     }
+      //   });
+      // } catch (error) {
+      //   logger.error(
+      //     `Error processing BTCPay payment transaction: ${error.stack}`
+      //   );
+      //   return NextResponse.json(
+      //     { error: "Internal server error" },
+      //     { status: 500 }
+      //   );
+      // }
 
-      const qrCodesByItem = await generateOrderQrCodes(order);
-      logger.info("QR Codes:", qrCodesByItem);
+      // const qrCodesByItem = await generateOrderQrCodes(order);
+      // logger.info("QR Codes:", qrCodesByItem);
 
-      const ticketData = {
-        orderId: order.id,
-        email: order.email,
-        // Az items tömb tartalmazza az egyes jegyek adatait:
-        items: await Promise.all(
-          qrCodesByItem.map(async (item) => {
-            const ticket = await getTicket(item.ticketId);
-            const ticketName = await ticket.name;
-            return {
-              ticketId: item.ticketId,
-              ticketName,
-              quantity: item.quantity,
-              qrCodes: item.codes,
-            };
-          })
-        ),
-      };
+      // const ticketData = {
+      //   orderId: order.id,
+      //   email: order.email,
+      //   // Az items tömb tartalmazza az egyes jegyek adatait:
+      //   items: await Promise.all(
+      //     qrCodesByItem.map(async (item) => {
+      //       const ticket = await getTicket(item.ticketId);
+      //       const ticketName = await ticket.name;
+      //       return {
+      //         ticketId: item.ticketId,
+      //         ticketName,
+      //         quantity: item.quantity,
+      //         qrCodes: item.codes,
+      //       };
+      //     })
+      //   ),
+      // };
 
-      const result = await generateNewTicketPdf(ticketData);
-      logger.info("generateTicketPdf result:", result);
-      const { voucherId, pdfPath, expiresAt } = result;
-      await createVoucher(voucherId, order.id, pdfPath, expiresAt);
+      // const result = await generateNewTicketPdf(ticketData);
+      // logger.info("generateTicketPdf result:", result);
+      // const { voucherId, pdfPath, expiresAt } = result;
+      // await createVoucher(voucherId, order.id, pdfPath, expiresAt);
 
-      let token;
-      try {
-        token = await generateDownloadToken(voucherId, expiresAt);
-        logger.info("JWT token:", token);
-      } catch (error) {
-        logger.error(`Error generating token: ${error}`);
-      }
+      // let token;
+      // try {
+      //   token = await generateDownloadToken(voucherId, expiresAt);
+      //   logger.info("JWT token:", token);
+      // } catch (error) {
+      //   logger.error(`Error generating token: ${error}`);
+      // }
 
-      const downloadUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/download-ticket?token=${token}`;
+      // const downloadUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/download-ticket?token=${token}`;
 
-      try {
-        await prisma.voucher.update({
-          where: { id: voucherId },
-          data: { downloadUrl },
-        });
-      } catch (error) {
-        logger.error(`Error updating voucher: ${error.stack}`);
-        return new NextResponse("Internal server error", { status: 500 });
-      }
+      // try {
+      //   await prisma.voucher.update({
+      //     where: { id: voucherId },
+      //     data: { downloadUrl },
+      //   });
+      // } catch (error) {
+      //   logger.error(`Error updating voucher: ${error.stack}`);
+      //   return new NextResponse("Internal server error", { status: 500 });
+      // }
 
-      const defaultInvoiceData = {
-        buyerName: "",
-        email: order.email,
-        zip: "",
-        city: "",
-        address: "",
-        taxNumber: "",
-        currency: order.currency,
-        orderID: order.id,
-        items: order.items.map((item) => {
-          const isEUR = order.currency.toUpperCase() === "EUR";
-          let grossUnitPrice;
-          if (isEUR) {
-            grossUnitPrice = item.priceAtPurchase / 100;
-          } else {
-            grossUnitPrice = item.priceAtPurchase;
-          }
+      // const defaultInvoiceData = {
+      //   buyerName: "",
+      //   email: order.email,
+      //   zip: "",
+      //   city: "",
+      //   address: "",
+      //   taxNumber: "",
+      //   currency: order.currency,
+      //   orderID: order.id,
+      //   items: order.items.map((item) => {
+      //     const isEUR = order.currency.toUpperCase() === "EUR";
+      //     let grossUnitPrice;
+      //     if (isEUR) {
+      //       grossUnitPrice = item.priceAtPurchase / 100;
+      //     } else {
+      //       grossUnitPrice = item.priceAtPurchase;
+      //     }
 
-          if (order.coupon && order.coupon.discountValue != null) {
-            if (order.coupon.discountType === "PERCENTAGE") {
-              grossUnitPrice =
-                grossUnitPrice * (1 - order.coupon.discountValue / 100);
-            } else if (order.coupon.discountType === "FIXED") {
-              grossUnitPrice = grossUnitPrice - order.coupon.discountValue;
-              if (grossUnitPrice < 0) grossUnitPrice = 0;
-            }
-          }
+      //     if (order.coupon && order.coupon.discountValue != null) {
+      //       if (order.coupon.discountType === "PERCENTAGE") {
+      //         grossUnitPrice =
+      //           grossUnitPrice * (1 - order.coupon.discountValue / 100);
+      //       } else if (order.coupon.discountType === "FIXED") {
+      //         grossUnitPrice = grossUnitPrice - order.coupon.discountValue;
+      //         if (grossUnitPrice < 0) grossUnitPrice = 0;
+      //       }
+      //     }
 
-          if (isEUR) {
-            grossUnitPrice = parseFloat(grossUnitPrice.toFixed(2));
-          }
-          return {
-            label: "Konferencia jegy",
-            quantity: item.quantity,
-            vat: 27,
-            grossUnitPrice: grossUnitPrice,
-            unit: "pcs",
-          };
-        }),
-      };
+      //     if (isEUR) {
+      //       grossUnitPrice = parseFloat(grossUnitPrice.toFixed(2));
+      //     }
+      //     return {
+      //       label: "Konferencia jegy",
+      //       quantity: item.quantity,
+      //       vat: 27,
+      //       grossUnitPrice: grossUnitPrice,
+      //       unit: "pcs",
+      //     };
+      //   }),
+      // };
 
-      const invoiceResult = await createInvoice(defaultInvoiceData);
-      logger.info("Invoice result:", invoiceResult);
+      // const invoiceResult = await createInvoice(defaultInvoiceData);
+      // logger.info("Invoice result:", invoiceResult);
 
-      try {
-        await prisma.voucher.update({
-          where: { id: voucherId },
-          data: { invoicePath: invoiceResult.invoiceFilePath },
-        });
-      } catch (error) {
-        logger.error(`Error updating voucher: ${error.stack}`);
-        return new NextResponse("Internal server error", { status: 500 });
-      }
+      // try {
+      //   await prisma.voucher.update({
+      //     where: { id: voucherId },
+      //     data: { invoicePath: invoiceResult.invoiceFilePath },
+      //   });
+      // } catch (error) {
+      //   logger.error(`Error updating voucher: ${error.stack}`);
+      //   return new NextResponse("Internal server error", { status: 500 });
+      // }
 
-      await sendTransactionalEmail(order, downloadUrl, invoiceResult.pdf);
+      // await sendTransactionalEmail(order, downloadUrl, invoiceResult.pdf);
 
       const orderEmail = order.email && order.email.trim();
       if (!orderEmail) {
