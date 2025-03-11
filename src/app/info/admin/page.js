@@ -1,27 +1,51 @@
-"use client";
+import { getAdminInfo, getOrdersForGeneralTab } from "@/app/actions/adminInfo";
+import { getMonthlySalesData } from "@/app/actions/adminInfo";
+import { getWeeklySalesData } from "@/app/actions/adminInfo";
+import { getPaidOrderCurrencyDistribution } from "@/app/actions/adminInfo";
+import {
+  getHourlySalesStatistics,
+  getWeeklySalesTrend,
+  getTicketsSalesStatistics,
+  getMonthlyTicketSalesByType,
+  getWeeklyTicketSalesByType,
+  getTicketSalesByTypeForPieChart,
+  getOrderTicketCountDistribution,
+} from "@/app/actions/adminInfo";
+import Dashboard from "./Dashboard";
 
-import AdminNavigation from "../components/AdminNavigation";
-import { logout } from "../login/actions";
-import { useRouter } from "next/navigation";
-export const dynamic = 'force-dynamic';
+export default async function DashboardPage() {
+  // Szerver oldalon, SSR-kor meghívjuk a server actiont
+  const stats = await getAdminInfo();
+  const chartData = await getMonthlySalesData();
+  const weeklyChartData = await getWeeklySalesData();
+  const ordersForGeneralTab = await getOrdersForGeneralTab();
+  const currencyData = await getPaidOrderCurrencyDistribution();
+  const salesStatistics = await getHourlySalesStatistics();
+  const salesTrend = await getWeeklySalesTrend();
+  const ticketStats = await getTicketsSalesStatistics();
+  const weeklyTicketSalesStackedChartData = await getWeeklyTicketSalesByType();
+  const monthlyTicketSalesStackedChartData =
+    await getMonthlyTicketSalesByType();
+  const ticketSalesPieChart = await getTicketSalesByTypeForPieChart();
+  const getTicketCountDistribution = await getOrderTicketCountDistribution();
 
-export default function Dashboard() {
-  const router = useRouter();
+  console.log("currency data:", currencyData);
 
-  const handleLogout = async () => {
-    const result = await logout();
-    if (result?.redirectTo) {
-      router.push(result.redirectTo);
-    }
-  };
-
+  // Az adatot propként átadjuk a kliens komponensnek
   return (
-    <div className="p-6 pt-20">
-      <AdminNavigation onLogout={handleLogout} />
-      <h1 className="text-3xl font-bold mb-4 text-gray-700">Admin Dashboard</h1>
-      <p className="text-gray-400">
-        Manage everything from here. Under construction
-      </p>
-    </div>
+    <Dashboard
+      stats={stats}
+      chartData={chartData}
+      weeklyChartData={weeklyChartData}
+      ordersForGeneralTab={ordersForGeneralTab}
+      currencyData={currencyData}
+      salesStatistics={salesStatistics}
+      salesTrend={salesTrend}
+      ticketStats={ticketStats}
+      ticketWeeklyData={weeklyTicketSalesStackedChartData}
+      ticketMonthlyData={monthlyTicketSalesStackedChartData}
+      ticketSalesPieChart={ticketSalesPieChart}
+      getTicketCountDistribution={getTicketCountDistribution}
+    />
   );
 }

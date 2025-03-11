@@ -31,7 +31,7 @@ export default async function AdminLayout({ children }) {
         className={`${fredoka.variable} ${exo.variable} antialiased bg-neutral-300`}
       >
         <AdminNavigation />
-        <main className="pt-16 px-6">{children}</main>
+        <main className="pt-16 px-0 lg:px-6">{children}</main>
       </body>
     </html>
   );
