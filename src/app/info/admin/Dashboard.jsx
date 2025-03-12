@@ -38,6 +38,9 @@ export default function Dashboard({
   hourlyTicketSalesExpo,
   hourlyTicketSalesConference,
   hourlyTicketSalesWhale,
+  couponsStatistics,
+  activeCouponsUsage,
+  overallCouponsUsage,
 }) {
   const router = useRouter();
   const [activeIndex, setActiveIndex] = useState(0);
@@ -77,7 +80,13 @@ export default function Dashboard({
           />
         );
       case 2:
-        return <CouponsTab />;
+        return (
+          <CouponsTab
+            couponStats={couponsStatistics}
+            activeCouponsUsage={activeCouponsUsage}
+            overallCouponsUsage={overallCouponsUsage}
+          />
+        );
       default:
         return null;
     }

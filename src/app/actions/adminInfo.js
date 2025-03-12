@@ -655,3 +655,115 @@ export async function getHourlyTicketSalesByType(ticketTypeKeyword) {
   const labels = Array.from({ length: 24 }, (_, i) => i.toString());
   return { labels, data: hourlyData };
 }
+
+export async function getCouponsStatistics() {
+  // Referencia dátum: a régebbi rendelések nem számítanak
+  const referenceDate = new Date("2025-01-01T00:00:00.000Z");
+  // Ma elejét számoljuk ki
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+
+  // 1. Összes kupon felhasználás: az összes coupon.usedRedemptions összege
+  const couponAgg = await prisma.coupon.aggregate({
+    _sum: { usedRedemptions: true },
+  });
+  const couponsUsed = couponAgg._sum.usedRedemptions || 0;
+
+  // 2. Kupon felhasználás "today": hány PAID rendelésnél volt kupon, a mai nap óta
+  const couponsUsedToday = await prisma.order.count({
+    where: {
+      status: OrderStatus.PAID,
+      createdAt: { gte: todayStart },
+      couponId: { not: null },
+    },
+  });
+
+  // 3. EUR Discount: PAID rendeléseknél, ahol a currency EUR, discountInCents összege
+  const eurSatsAgg = await prisma.order.aggregate({
+    where: {
+      status: OrderStatus.PAID,
+      currency: { in: ["EUR", "SATS"] },
+      discountInCents: { not: null },
+      createdAt: { gte: referenceDate },
+    },
+    _sum: { discountInCents: true },
+  });
+  const eurSatsDiscount = (eurSatsAgg._sum.discountInCents || 0) / 100;
+  const eurSatsAggToday = await prisma.order.aggregate({
+    where: {
+      status: OrderStatus.PAID,
+      currency: { in: ["EUR", "SATS"] },
+      discountInCents: { not: null },
+      createdAt: { gte: todayStart },
+    },
+    _sum: { discountInCents: true },
+  });
+  const eurSatsDiscountToday =
+    (eurSatsAggToday._sum.discountInCents || 0) / 100;
+
+  // 4. HUF Discount: ugyanígy a HUF rendeléseknél
+  const hufAgg = await prisma.order.aggregate({
+    where: {
+      status: OrderStatus.PAID,
+      currency: "HUF",
+      discountInCents: { not: null },
+      createdAt: { gte: referenceDate },
+    },
+    _sum: { discountInCents: true },
+  });
+  const hufDiscount = (hufAgg._sum.discountInCents || 0) / 100;
+  const hufAggToday = await prisma.order.aggregate({
+    where: {
+      status: OrderStatus.PAID,
+      currency: "HUF",
+      discountInCents: { not: null },
+      createdAt: { gte: todayStart },
+    },
+    _sum: { discountInCents: true },
+  });
+  const hufDiscountToday = (hufAggToday._sum.discountInCents || 0) / 100;
+
+  // 5. Active és inaktív kuponok
+  const activeCoupons = await prisma.coupon.count({
+    where: { isActive: true },
+  });
+  const inactiveCoupons = await prisma.coupon.count({
+    where: { isActive: false },
+  });
+
+  return {
+    couponsUsed,
+    couponsUsedToday,
+    eurSatsDiscount,
+    eurSatsDiscountToday,
+    hufDiscount,
+    hufDiscountToday,
+    activeCoupons,
+    inactiveCoupons,
+  };
+}
+
+//coupon usage for doughnutcharts
+
+export async function getActiveCouponsUsage() {
+  const activeCoupons = await prisma.coupon.findMany({
+    where: { isActive: true },
+    select: { code: true, usedRedemptions: true },
+  });
+
+  const labels = activeCoupons.map((coupon) => coupon.code);
+  const data = activeCoupons.map((coupon) => coupon.usedRedemptions || 0);
+
+  return { labels, data };
+}
+
+export async function getAllCouponsUsage() {
+  const coupons = await prisma.coupon.findMany({
+    select: { code: true, usedRedemptions: true },
+  });
+
+  const labels = coupons.map((coupon) => coupon.code);
+  const data = coupons.map((coupon) => coupon.usedRedemptions || 0);
+
+  return { labels, data };
+}

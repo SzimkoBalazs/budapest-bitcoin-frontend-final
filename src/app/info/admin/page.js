@@ -10,6 +10,9 @@ import {
   getWeeklyTicketSalesByType,
   getTicketSalesByTypeForPieChart,
   getOrderTicketCountDistribution,
+  getCouponsStatistics,
+  getActiveCouponsUsage,
+  getAllCouponsUsage,
 } from "@/app/actions/adminInfo";
 import {
   getHourlyTicketSalesExpo,
@@ -36,6 +39,9 @@ export default async function DashboardPage() {
   const hourlyTicketSalesExpo = await getHourlyTicketSalesExpo();
   const hourlyTicketSalesConference = await getHourlyTicketSalesConference();
   const hourlyTicketSalesWhale = await getHourlyTicketSalesWhale();
+  const couponsStatistics = await getCouponsStatistics();
+  const activeCouponsUsage = await getActiveCouponsUsage();
+  const overallCouponsUsage = await getAllCouponsUsage();
 
   console.log("currency data:", currencyData);
 
@@ -57,6 +63,9 @@ export default async function DashboardPage() {
       hourlyTicketSalesExpo={hourlyTicketSalesExpo}
       hourlyTicketSalesConference={hourlyTicketSalesConference}
       hourlyTicketSalesWhale={hourlyTicketSalesWhale}
+      couponsStatistics={couponsStatistics}
+      activeCouponsUsage={activeCouponsUsage}
+      overallCouponsUsage={overallCouponsUsage}
     />
   );
 }
