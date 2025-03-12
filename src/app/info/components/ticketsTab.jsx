@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { SelectButton } from "primereact/selectbutton";
 import GeneralTabStackedMonthlyChart from "./charts/GeneralTabStackedMonthlyChart";
 import CurrencyPieChart from "./charts/CurrencyPieChart";
+import TicketsHourlyChartsSwitcher from "./TicketsHourlyChartsSwitcher";
 
 import "primereact/resources/themes/lara-light-blue/theme.css";
 import "primereact/resources/primereact.min.css";
@@ -15,6 +16,9 @@ const ticketsTab = ({
   ticketMonthlyData,
   ticketSalesPieChart,
   getTicketCountDistribution,
+  expoData,
+  conferenceData,
+  whaleData,
 }) => {
   const [selectedChart, setSelectedChart] = useState("monthly");
   const options = [
@@ -140,12 +144,16 @@ const ticketsTab = ({
         </div>
       </div>
 
-      {/* <div className="mt-6">
-        <SalesTrendsChartSwitcher
-          salesStatistics={salesStatistics}
-          salesTrend={salesTrend}
+      <div className="mt-6">
+        <h3 className="text-gray-700 text-lg mb-4">
+          Hourly Ticket Sales by Type
+        </h3>
+        <TicketsHourlyChartsSwitcher
+          expoData={expoData}
+          conferenceData={conferenceData}
+          whaleData={whaleData}
         />
-      </div> */}
+      </div>
     </div>
   );
 };

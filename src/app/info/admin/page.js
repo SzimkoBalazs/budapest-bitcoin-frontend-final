@@ -11,6 +11,11 @@ import {
   getTicketSalesByTypeForPieChart,
   getOrderTicketCountDistribution,
 } from "@/app/actions/adminInfo";
+import {
+  getHourlyTicketSalesExpo,
+  getHourlyTicketSalesConference,
+  getHourlyTicketSalesWhale,
+} from "@/app/actions/getHourlyTicketSales";
 import Dashboard from "./Dashboard";
 
 export default async function DashboardPage() {
@@ -28,6 +33,9 @@ export default async function DashboardPage() {
     await getMonthlyTicketSalesByType();
   const ticketSalesPieChart = await getTicketSalesByTypeForPieChart();
   const getTicketCountDistribution = await getOrderTicketCountDistribution();
+  const hourlyTicketSalesExpo = await getHourlyTicketSalesExpo();
+  const hourlyTicketSalesConference = await getHourlyTicketSalesConference();
+  const hourlyTicketSalesWhale = await getHourlyTicketSalesWhale();
 
   console.log("currency data:", currencyData);
 
@@ -46,6 +54,9 @@ export default async function DashboardPage() {
       ticketMonthlyData={monthlyTicketSalesStackedChartData}
       ticketSalesPieChart={ticketSalesPieChart}
       getTicketCountDistribution={getTicketCountDistribution}
+      hourlyTicketSalesExpo={hourlyTicketSalesExpo}
+      hourlyTicketSalesConference={hourlyTicketSalesConference}
+      hourlyTicketSalesWhale={hourlyTicketSalesWhale}
     />
   );
 }

@@ -626,3 +626,32 @@ export async function getOrderTicketCountDistribution() {
     data: [count1, count2, count3plus],
   };
 }
+
+// ticket sales hourly by tickettype
+
+export async function getHourlyTicketSalesByType(ticketTypeKeyword) {
+  const referenceDate = new Date("2025-01-01T00:00:00.000Z");
+
+  const orderItems = await prisma.orderItem.findMany({
+    where: {
+      order: {
+        status: OrderStatus.PAID,
+        createdAt: { gte: referenceDate },
+      },
+      ticket: {
+        name: {
+          contains: ticketTypeKeyword,
+        },
+      },
+    },
+    include: { order: true },
+  });
+
+  const hourlyData = Array(24).fill(0);
+  orderItems.forEach((item) => {
+    const hour = new Date(item.order.createdAt).getHours();
+    hourlyData[hour] += item.quantity;
+  });
+  const labels = Array.from({ length: 24 }, (_, i) => i.toString());
+  return { labels, data: hourlyData };
+}

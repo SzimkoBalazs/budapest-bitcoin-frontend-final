@@ -59,17 +59,19 @@ const OrderListComponent = ({ ordersForGeneralTab }) => {
         <img
           src="/ticket.png"
           alt="Ticket"
-          className="w-12 h-12 rounded shadow-md flex-shrink-0"
+          className="w-8 h-8 lg:w-12 lg:h-12 rounded shadow-md flex-shrink-0"
         />
         {/* Két soros szöveg */}
         <div className="flex flex-col">
-          <span className="font-semibold text-gray-800">{order.email}</span>
-          <span className="text-sm text-gray-500">
+          <span className="font-semibold text-sm lg:text-base text-gray-800">
+            {order.email}
+          </span>
+          <span className="text-xs lg:text-sm text-gray-500">
             {formatDate(order.createdAt)}
           </span>
         </div>
         {/* Jobb oldalon az ár (automatikusan a jobb szélére kerül a ml-auto miatt) */}
-        <span className="ml-auto font-bold text-gray-900">
+        <span className="ml-auto text-sm lg:text-base font-bold text-gray-900">
           {formatAmount(order)}
         </span>
       </div>

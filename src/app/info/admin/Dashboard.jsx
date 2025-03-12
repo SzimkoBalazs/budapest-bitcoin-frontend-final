@@ -35,6 +35,9 @@ export default function Dashboard({
   ticketMonthlyData,
   ticketSalesPieChart,
   getTicketCountDistribution,
+  hourlyTicketSalesExpo,
+  hourlyTicketSalesConference,
+  hourlyTicketSalesWhale,
 }) {
   const router = useRouter();
   const [activeIndex, setActiveIndex] = useState(0);
@@ -68,6 +71,9 @@ export default function Dashboard({
             ticketMonthlyData={ticketMonthlyData}
             ticketSalesPieChart={ticketSalesPieChart}
             getTicketCountDistribution={getTicketCountDistribution}
+            expoData={hourlyTicketSalesExpo}
+            conferenceData={hourlyTicketSalesConference}
+            whaleData={hourlyTicketSalesWhale}
           />
         );
       case 2:
