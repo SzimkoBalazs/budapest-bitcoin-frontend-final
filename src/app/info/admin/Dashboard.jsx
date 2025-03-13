@@ -120,7 +120,7 @@ export default function Dashboard({
           activeIndex={activeIndex}
           onTabChange={(e) => setActiveIndex(e.index)}
         />
-        <div className="mt-0 lg:mt-4">{renderTabContent()}</div>
+        <div className="mt-0 lg:mt-4 w-full">{renderTabContent()}</div>
       </div>
     </div>
   );
