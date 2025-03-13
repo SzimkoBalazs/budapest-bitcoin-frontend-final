@@ -8,6 +8,7 @@ import WhyPartnerWithUs from '@/components/SinglePageComponents/WhyPartnerWithUs
 import Footer from '@/components/SinglePageComponents/Footer';
 import GallerySection from '@/components/SinglePageComponents/GallerySection';
 import ComingSoonForm from '@/components/SinglePageComponents/ComingSoonForm';
+import TopicsSection from '@/components/SinglePageComponents/TopicsSection';
 
 export default async function Home({ params }) {
   const { locale } = await params;
@@ -19,6 +20,7 @@ export default async function Home({ params }) {
       <TicketsSection locale={locale} />
       <ComingSoonForm locale={locale} />
       <WhatToExpectSection locale={locale} />
+      <TopicsSection locale={locale}/>
       <ThereIsMore locale={locale} />
       <GallerySection locale={locale} />
       <WhaleVenuePicturesSection locale={locale} />
