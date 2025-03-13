@@ -111,7 +111,7 @@ export default function Dashboard({
   ];
 
   return (
-    <div className="flex p-0 lg:p-6 pt-10 w-full">
+    <div className="flex p-0 lg:p-6 pt-0 lg:pt-10 w-full">
       <AdminNavigation onLogout={handleLogout} />
 
       <div className="flex flex-col items-center justify-center w-full">
@@ -120,7 +120,7 @@ export default function Dashboard({
           activeIndex={activeIndex}
           onTabChange={(e) => setActiveIndex(e.index)}
         />
-        <div className="mt-4">{renderTabContent()}</div>
+        <div className="mt-0 lg:mt-4">{renderTabContent()}</div>
       </div>
     </div>
   );

@@ -114,7 +114,7 @@ const couponsTab = ({
         )}
       </div> */}
 
-      <div className="flex flex-col lg:flex-row justify-center gap-10 lg:gap-0 items-center lg:justify-between mt-10 lg:p-10">
+      <div className="flex flex-col lg:flex-row justify-center gap-10 lg:gap-0 items-center lg:justify-around mt-10 lg:p-10">
         <div className="flex flex-col gap-4">
           <h3 className="text-center">Active coupons used</h3>
           <CurrencyPieChart currencyData={activeCouponsUsage} />

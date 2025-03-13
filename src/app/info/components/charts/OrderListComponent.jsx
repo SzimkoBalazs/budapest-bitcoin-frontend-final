@@ -104,40 +104,68 @@ const OrderListComponent = ({ ordersForGeneralTab }) => {
       <Dialog
         header="Order Details"
         visible={displayDialog}
-        style={{ width: "50vw" }}
+        style={{ width: "90vw", maxWidth: "600px" }}
         onHide={hideDialog}
       >
         {selectedOrder && (
-          <div>
+          <div className="space-y-4 p-4">
             <div>
-              <strong>Email:</strong> {selectedOrder.email}
+              <span className="font-bold text-gray-700">Email:</span>
+              <div className="text-gray-900">{selectedOrder.email}</div>
             </div>
             <div>
-              <strong>Date:</strong> {formatDate(selectedOrder.createdAt)}
+              <span className="font-bold text-gray-700">Date:</span>
+              <div className="text-gray-900">
+                {formatDate(selectedOrder.createdAt)}
+              </div>
             </div>
             <div>
-              <strong>Total Amount:</strong> {formatAmount(selectedOrder)}
+              <span className="font-bold text-gray-700">Total Amount:</span>
+              <div className="text-gray-900">{formatAmount(selectedOrder)}</div>
             </div>
             {selectedOrder.coupon && (
               <div>
-                <strong>Coupon:</strong> {selectedOrder.coupon.code}
+                <span className="font-bold text-gray-700">Coupon:</span>
+                <div className="text-gray-900">{selectedOrder.coupon.code}</div>
               </div>
             )}
-            <div className="mt-2">
-              <strong>Items:</strong>
-              <ul>
-                {selectedOrder.items?.map((item) => (
-                  <li key={item.id}>
-                    {item.ticket ? item.ticket.name : "Ticket"} - Qty:{" "}
-                    {item.quantity} - Price:{" "}
-                    {(item.priceAtPurchase / 100).toFixed(2)}{" "}
-                    {selectedOrder.currency === "EUR"
-                      ? "EUR"
-                      : selectedOrder.currency === "HUF"
-                      ? "HUF"
-                      : "sats"}
-                  </li>
-                ))}
+            <div>
+              <span className="font-bold text-gray-700">Items:</span>
+              <ul className="space-y-2 mt-2">
+                {selectedOrder.items?.map((item) => {
+                  // Alap ár (feltételezve, hogy item.priceAtPurchase az eredeti ár centben)
+                  let basePrice = item.priceAtPurchase;
+                  let adjustedPrice = basePrice; // alapértelmezett, ha nincs kupon
+                  // Ha van kupon kedvezmény az egész orderben, és a valuta EUR vagy HUF
+                  if (
+                    selectedOrder.coupon &&
+                    (selectedOrder.currency === "EUR" ||
+                      selectedOrder.currency === "HUF")
+                  ) {
+                    // Összegyűjtjük az összes item árát (centben) az orderben
+                    const totalItemCost = selectedOrder.items.reduce(
+                      (sum, it) => sum + it.priceAtPurchase * it.quantity,
+                      0
+                    );
+                    const discount = selectedOrder.discountInCents || 0;
+                    const discountRatio =
+                      totalItemCost > 0 ? discount / totalItemCost : 0;
+                    adjustedPrice = basePrice * (1 - discountRatio);
+                  }
+                  const actualPrice = (adjustedPrice / 100).toFixed(2);
+                  return (
+                    <li key={item.id} className="text-sm text-gray-800">
+                      <span className="font-semibold">
+                        {item.ticket ? item.ticket.name : "Ticket"}
+                      </span>{" "}
+                      - Qty: {item.quantity} - Price:{" "}
+                      {priceWithSpaceForAdmin(Number(actualPrice))}{" "}
+                      {(selectedOrder.currency === "EUR" ||
+                        selectedOrder.currency === "HUF") &&
+                        selectedOrder.currency}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           </div>

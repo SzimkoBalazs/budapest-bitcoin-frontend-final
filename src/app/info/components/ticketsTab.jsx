@@ -133,7 +133,7 @@ const ticketsTab = ({
         )}
       </div>
 
-      <div className="flex flex-col lg:flex-row justify-center gap-10 lg:gap-0 items-center lg:justify-between mt-10 lg:p-10">
+      <div className="flex flex-col lg:flex-row justify-center gap-10 lg:gap-0 items-center lg:justify-around mt-10 lg:p-10">
         <div className="flex flex-col gap-4">
           <h3 className="text-center">Ticket types sold</h3>
           <CurrencyPieChart currencyData={ticketSalesPieChart} />
