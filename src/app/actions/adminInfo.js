@@ -235,6 +235,7 @@ export async function getWeeklySalesData() {
 
 export async function getOrdersForGeneralTab() {
   const orders = await prisma.order.findMany({
+    where: { status: OrderStatus.PAID },
     orderBy: { createdAt: "desc" },
     include: {
       coupon: true,
