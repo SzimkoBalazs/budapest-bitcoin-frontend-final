@@ -21,6 +21,8 @@ import {
 } from "@/app/actions/getHourlyTicketSales";
 import Dashboard from "./Dashboard";
 
+export const dynamic = "force-dynamic";
+
 export default async function DashboardPage() {
   // Szerver oldalon, SSR-kor meghívjuk a server actiont
   const stats = await getAdminInfo();
