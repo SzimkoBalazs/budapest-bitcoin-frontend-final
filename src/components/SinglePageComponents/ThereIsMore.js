@@ -23,7 +23,7 @@ const ThereIsMore = async ({ locale }) => {
   const thereIsMoreSectionData = await fetchThereIsMoreSectionData(locale);
   return (
     <div>
-      <ContentWrapper className="pt-[56px] md:pt-[156px] mb-[160px] sm:mb-[220px] flex-col">
+      <ContentWrapper className="pt-[24px] md:pt-[40px] mb-[160px] sm:mb-[220px] flex-col">
         <FirstConference data={thereIsMoreSectionData} />
       </ContentWrapper>
       <ThereIsMoreSectionDividerText
