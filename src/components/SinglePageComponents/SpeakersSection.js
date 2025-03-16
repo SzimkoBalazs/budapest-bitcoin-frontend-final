@@ -40,7 +40,7 @@ const SpeakersSection = async ({ locale }) => {
   return (
     <div
       id="speakers"
-      className="mb-[80px] md:mb-[176px] relative scroll-mt-[0px]"
+      className="mb-[80px] md:mb-[96px] relative scroll-mt-[0px]"
       style={{
         background: "linear-gradient(to top right, #1f1f1f 75%, #F7931A 35%)",
         backgroundRepeat: "no-repeat",
@@ -48,7 +48,7 @@ const SpeakersSection = async ({ locale }) => {
         backgroundPosition: "center",
       }}
     >
-      <div className="flex w-full flex-row items-between opacity-[0.075] z-0 absolute left-0 top-0 px-[40px] pt-[80px]">
+      <div className="flex w-full flex-row items-between opacity-[0.075] h-[110%] sm:h-full z-0 absolute left-0 top-0 px-[40px] pt-[80px] overflow-hidden">
         <div className="flex justify-center flex-1">
           <SpeakersBigTextOutline />
         </div>

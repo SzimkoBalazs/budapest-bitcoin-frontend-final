@@ -38,7 +38,7 @@ const TopicsSection = async ({ locale }) => {
   return (
     <div
       id="topics"
-      className="flex w-full py-[56px] sm:py-[80px] flex-col items-center scroll-mt-[40px] sm:scroll-mt-[60px]"
+      className="flex w-full py-[56px] sm:py-[80px] mb-[56px] md:mb-[72px] flex-col items-center scroll-mt-[40px] sm:scroll-mt-[60px]"
     >
       <ContentWrapper className="w-full flex flex-col gap-y-6">
         <SectionMainTitle

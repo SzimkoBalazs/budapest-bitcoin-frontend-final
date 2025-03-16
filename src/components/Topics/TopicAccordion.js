@@ -26,11 +26,11 @@ const TopicAccordion = ({ data, onClick }) => {
                 {data.subTitle}
             </h5>}
         </div>
-          <h5 className={cln('top-[8px]', "font-exo absolute whitespace-nowrap left-[16px] font-extrabold text-[72px] text-neutral-800")}
+          <h5 className={cln(data?.isOpened ? 'top-[8px]' : 'top-[50%] translate-y-[-50%]', "font-exo absolute whitespace-nowrap left-[16px] font-extrabold text-[72px] text-neutral-800")}
                 style={{
                   letterSpacing: '20%',
                     lineHeight:'100%',
-                  opacity:0.1 ,
+                  opacity:0.05,
                   textShadow:'-1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white',
                 }}
             >
