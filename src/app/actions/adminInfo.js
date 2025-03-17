@@ -4,7 +4,8 @@ import { OrderStatus, PaymentProvider, Currency } from "@prisma/client";
 
 export async function getAdminInfo() {
   // Teszt dátum: 2025. január 1.
-  const referenceDate = new Date("2025-01-01T00:00:00.000Z");
+  // const referenceDate = new Date("2025-01-01T00:00:00.000Z");
+  const referenceDate = new Date("2025-03-05T16:00:00.000Z");
 
   // Az aktuális nap kezdete (helyi idő szerinti éjfél)
   const todayStart = new Date();
@@ -95,8 +96,8 @@ export async function getAdminInfo() {
 
 export async function getMonthlySalesData() {
   // Állítsd be a referencia dátumot (például a releváns kezdő dátumot)
-  // const referenceDate = new Date("2025-03-05T16:00:00.000Z");
-  const referenceDate = new Date("2025-01-01T00:00:00.000Z");
+  const referenceDate = new Date("2025-03-05T16:00:00.000Z");
+  // const referenceDate = new Date("2025-01-01T00:00:00.000Z");
 
   // Lekérjük az összes PAID rendelést a referenceDate óta
   const orders = await prisma.order.findMany({
@@ -174,8 +175,8 @@ function getWeekLabel(date) {
 }
 
 export async function getWeeklySalesData() {
-  //   const referenceDate = new Date("2025-03-05T16:00:00.000Z");
-  const referenceDate = new Date("2025-01-01T00:00:00.000Z");
+  const referenceDate = new Date("2025-03-05T16:00:00.000Z");
+  // const referenceDate = new Date("2025-01-01T00:00:00.000Z");
 
   const orders = await prisma.order.findMany({
     where: {
@@ -234,8 +235,9 @@ export async function getWeeklySalesData() {
 //get orders for general tab
 
 export async function getOrdersForGeneralTab() {
+  const referenceDate = new Date("2025-03-05T16:00:00.000Z");
   const orders = await prisma.order.findMany({
-    where: { status: OrderStatus.PAID },
+    where: { status: OrderStatus.PAID, createdAt: { gte: referenceDate } },
     orderBy: { createdAt: "desc" },
     include: {
       coupon: true,
@@ -252,17 +254,30 @@ export async function getOrdersForGeneralTab() {
 //orders chart distributed by currency
 
 export async function getPaidOrderCurrencyDistribution() {
+  const referenceDate = new Date("2025-03-05T16:00:00.000Z");
   // Megszámoljuk a PAID státuszú rendelések számát pénznemenként
   const eurCount = await prisma.order.count({
-    where: { status: OrderStatus.PAID, currency: "EUR" },
+    where: {
+      status: OrderStatus.PAID,
+      currency: "EUR",
+      createdAt: { gte: referenceDate },
+    },
   });
 
   const hufCount = await prisma.order.count({
-    where: { status: OrderStatus.PAID, currency: "HUF" },
+    where: {
+      status: OrderStatus.PAID,
+      currency: "HUF",
+      createdAt: { gte: referenceDate },
+    },
   });
 
   const satsCount = await prisma.order.count({
-    where: { status: OrderStatus.PAID, currency: "SATS" },
+    where: {
+      status: OrderStatus.PAID,
+      currency: "SATS",
+      createdAt: { gte: referenceDate },
+    },
   });
 
   // Visszaadjuk a chart számára megfelelő struktúrában
@@ -275,7 +290,8 @@ export async function getPaidOrderCurrencyDistribution() {
 //generaltab monthly sales trend linechart
 
 export async function getWeeklySalesTrend() {
-  const referenceDate = new Date("2025-01-01T00:00:00.000Z");
+  // const referenceDate = new Date("2025-01-01T00:00:00.000Z");
+  const referenceDate = new Date("2025-03-05T16:00:00.000Z");
 
   // Lekérjük a PAID rendeléseket a referencia dátumtól, beépítve az order itemeket
   const orders = await prisma.order.findMany({
@@ -330,7 +346,8 @@ export async function getWeeklySalesTrend() {
 
 export async function getHourlySalesStatistics() {
   // Ez a dátum a referencia idő, ahonnan nézzük a rendelések óránkénti eloszlását
-  const referenceDate = new Date("2025-01-01T00:00:00.000Z");
+  // const referenceDate = new Date("2025-01-01T00:00:00.000Z");
+  const referenceDate = new Date("2025-03-05T16:00:00.000Z");
 
   // Lekérjük az összes PAID státuszú rendelést a referenceDate óta
   const orders = await prisma.order.findMany({
@@ -362,7 +379,8 @@ export async function getHourlySalesStatistics() {
 
 export async function getTicketsSalesStatistics() {
   // Definiáljuk a referencia dátumot: a régebbi rendelések nem számítanak
-  const referenceDate = new Date("2025-01-01T00:00:00.000Z");
+  //
+  const referenceDate = new Date("2025-03-05T16:00:00.000Z");
   // Ma elejét számoljuk ki
   const todayStart = new Date();
   todayStart.setHours(0, 0, 0, 0);
@@ -431,8 +449,8 @@ export async function getTicketsSalesStatistics() {
 //ticketsTab weekly and monthly stacked barchart data
 
 export async function getMonthlyTicketSalesByType() {
-  const referenceDate = new Date("2025-01-01T00:00:00.000Z");
-
+  // const referenceDate = new Date("2025-03-05T16:00:00.000Z");
+  const referenceDate = new Date("2025-03-05T16:00:00.000Z");
   // Csak a referencia dátum utáni PAID rendeléseket kérjük le az OrderItem-ekkel
   const orderItems = await prisma.orderItem.findMany({
     where: {
@@ -499,7 +517,8 @@ function getWeeksLabel(date) {
 }
 
 export async function getWeeklyTicketSalesByType() {
-  const referenceDate = new Date("2025-01-01T00:00:00.000Z");
+  // const referenceDate = new Date("2025-01-01T00:00:00.000Z");
+  const referenceDate = new Date("2025-03-05T16:00:00.000Z");
 
   const orderItems = await prisma.orderItem.findMany({
     where: {
@@ -552,7 +571,8 @@ export async function getWeeklyTicketSalesByType() {
 }
 
 export async function getTicketSalesByTypeForPieChart() {
-  const referenceDate = new Date("2025-01-01T00:00:00.000Z");
+  // const referenceDate = new Date("2025-01-01T00:00:00.000Z");
+  const referenceDate = new Date("2025-03-05T16:00:00.000Z");
 
   // Lekérjük a PAID rendeléseket a referencia dátumtól, OrderItem-ekkel
   const orderItems = await prisma.orderItem.findMany({
@@ -590,8 +610,8 @@ export async function getTicketSalesByTypeForPieChart() {
 }
 
 export async function getOrderTicketCountDistribution() {
-  const referenceDate = new Date("2025-01-01T00:00:00.000Z");
-
+  // const referenceDate = new Date("2025-01-01T00:00:00.000Z");
+  const referenceDate = new Date("2025-03-05T16:00:00.000Z");
   // Lekérjük a PAID rendeléseket a referencia dátumtól, OrderItem-ekkel
   const orders = await prisma.order.findMany({
     where: {
@@ -631,7 +651,8 @@ export async function getOrderTicketCountDistribution() {
 // ticket sales hourly by tickettype
 
 export async function getHourlyTicketSalesByType(ticketTypeKeyword) {
-  const referenceDate = new Date("2025-01-01T00:00:00.000Z");
+  // const referenceDate = new Date("2025-01-01T00:00:00.000Z");
+  const referenceDate = new Date("2025-03-05T16:00:00.000Z");
 
   const orderItems = await prisma.orderItem.findMany({
     where: {
@@ -659,13 +680,17 @@ export async function getHourlyTicketSalesByType(ticketTypeKeyword) {
 
 export async function getCouponsStatistics() {
   // Referencia dátum: a régebbi rendelések nem számítanak
-  const referenceDate = new Date("2025-01-01T00:00:00.000Z");
+  // const referenceDate = new Date("2025-01-01T00:00:00.000Z");
+  const referenceDate = new Date("2025-03-05T16:00:00.000Z");
   // Ma elejét számoljuk ki
   const todayStart = new Date();
   todayStart.setHours(0, 0, 0, 0);
 
   // 1. Összes kupon felhasználás: az összes coupon.usedRedemptions összege
   const couponAgg = await prisma.coupon.aggregate({
+    where: {
+      createdAt: { gte: referenceDate },
+    },
     _sum: { usedRedemptions: true },
   });
   const couponsUsed = couponAgg._sum.usedRedemptions || 0;
@@ -747,8 +772,10 @@ export async function getCouponsStatistics() {
 //coupon usage for doughnutcharts
 
 export async function getActiveCouponsUsage() {
+  const referenceDate = new Date("2025-03-05T16:00:00.000Z");
+
   const activeCoupons = await prisma.coupon.findMany({
-    where: { isActive: true },
+    where: { isActive: true, createdAt: { gte: referenceDate } },
     select: { code: true, usedRedemptions: true },
   });
 
@@ -759,8 +786,13 @@ export async function getActiveCouponsUsage() {
 }
 
 export async function getAllCouponsUsage() {
+  const referenceDate = new Date("2025-03-05T16:00:00.000Z");
   const coupons = await prisma.coupon.findMany({
-    select: { code: true, usedRedemptions: true },
+    where: { createdAt: { gte: referenceDate } },
+    select: {
+      code: true,
+      usedRedemptions: true,
+    },
   });
 
   const labels = coupons.map((coupon) => coupon.code);
