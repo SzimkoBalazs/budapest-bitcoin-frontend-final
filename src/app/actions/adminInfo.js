@@ -681,7 +681,7 @@ export async function getHourlyTicketSalesByType(ticketTypeKeyword) {
 export async function getCouponsStatistics() {
   // Referencia dátum: a régebbi rendelések nem számítanak
   // const referenceDate = new Date("2025-01-01T00:00:00.000Z");
-  const referenceDate = new Date("2025-03-05T16:00:00.000Z");
+  const referenceDate = new Date("2025-03-05T13:00:00.000Z");
   // Ma elejét számoljuk ki
   const todayStart = new Date();
   todayStart.setHours(0, 0, 0, 0);
