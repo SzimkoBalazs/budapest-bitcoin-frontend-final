@@ -772,7 +772,7 @@ export async function getCouponsStatistics() {
 //coupon usage for doughnutcharts
 
 export async function getActiveCouponsUsage() {
-  const referenceDate = new Date("2025-03-05T16:00:00.000Z");
+  const referenceDate = new Date("2025-03-05T13:00:00.000Z");
 
   const activeCoupons = await prisma.coupon.findMany({
     where: { isActive: true, createdAt: { gte: referenceDate } },
@@ -786,7 +786,7 @@ export async function getActiveCouponsUsage() {
 }
 
 export async function getAllCouponsUsage() {
-  const referenceDate = new Date("2025-03-05T16:00:00.000Z");
+  const referenceDate = new Date("2025-03-05T13:00:00.000Z");
   const coupons = await prisma.coupon.findMany({
     where: { createdAt: { gte: referenceDate } },
     select: {
