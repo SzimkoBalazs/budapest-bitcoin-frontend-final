@@ -1,6 +1,6 @@
-import React from 'react';
-import TicketCard from './TicketCard';
-import { getTickets } from '@/app/actions/ticket';
+import React from "react";
+import TicketCard from "./TicketCard";
+import { getTickets } from "@/app/actions/ticket";
 
 const TicketCardComponent = async ({ ticketCardContent, locale }) => {
   let tickets = [];
@@ -10,7 +10,6 @@ const TicketCardComponent = async ({ ticketCardContent, locale }) => {
     console.error("Error fetching tickets:", error);
   }
   if (!tickets || tickets.length === 0) {
-    
     return (
       <div className="text-center py-10">
         <p>Nincsenek elérhető jegyek jelenleg.</p>
@@ -23,26 +22,29 @@ const TicketCardComponent = async ({ ticketCardContent, locale }) => {
       {tickets.map((ticket, index) => {
         return index !== 1 ? (
           <TicketCard
-            key={ticketCardContent[index].id}
+            key={ticket.id}
             ticketCardContent={ticketCardContent[index]}
             ticketInfo={ticket}
-            beforePrice={ticketCardContent[index].OldPrice}
+            // beforePrice={ticketCardContent[index].OldPrice}
             locale={locale}
           />
         ) : (
-          <div key={ticketCardContent[index].id} className="flex flex-col gap-y-[56px]">
+          <div
+            key={ticketCardContent[index]}
+            className="flex flex-col gap-y-[56px]"
+          >
             <TicketCard
-              key={ticketCardContent[index].id}
+              key={ticketCardContent[index]}
               ticketCardContent={ticketCardContent[index]}
               ticketInfo={ticket}
               borderColor="primary-500"
-              beforePrice={ticketCardContent[index].OldPrice}
+              // beforePrice={ticketCardContent[index].OldPrice}
               locale={locale}
             />
             <span
               style={{
                 background:
-                  'radial-gradient(50% 50% at 50% 50%, #000 0%, rgba(0, 0, 0, 0.10) 100%)',
+                  "radial-gradient(50% 50% at 50% 50%, #000 0%, rgba(0, 0, 0, 0.10) 100%)",
               }}
               className="w-full h-[28px] rounded-[406px] blur-[6.7px]"
             />
