@@ -1,7 +1,7 @@
 export default async function sitemap() {
   const locales = ["en", "hu"];
 
-  const staticPages = ["", "terms-and-conditions", "speakers", "our-team"]; //chekout deleted until ticket sale
+  const staticPages = ["", "terms-and-conditions", "our-team"]; //chekout, speakers deleted until ticket sale
 
   const baseUrl = "https://www.budapestbitcoin.com";
 
@@ -12,19 +12,19 @@ export default async function sitemap() {
     }))
   );
 
-  let dynamicUrls = [];
-  for (const locale of locales) {
-    const speakerCards = await fetchSpeakerCardData(locale);
-    // Feltételezzük, hogy minden speaker adatnál az URL (ami slugként működik) az attributes.url alatt található.
-    const slugs = speakerCards.map((speaker) => speaker.url);
-    const localeUrls = slugs.map((slug) => ({
-      url: `${baseUrl}/${locale}/speakers/${slug}`,
-      lastModified: new Date().toISOString(),
-    }));
-    dynamicUrls = dynamicUrls.concat(localeUrls);
-  }
+  // let dynamicUrls = [];
+  // for (const locale of locales) {
+  //   const speakerCards = await fetchSpeakerCardData(locale);
 
-  return [...staticUrls, ...dynamicUrls];
+  //   const slugs = speakerCards.map((speaker) => speaker.url);
+  //   const localeUrls = slugs.map((slug) => ({
+  //     url: `${baseUrl}/${locale}/speakers/${slug}`,
+  //     lastModified: new Date().toISOString(),
+  //   }));
+  //   dynamicUrls = dynamicUrls.concat(localeUrls);
+  // }
+
+  return [...staticUrls]; //deleted ...dynamicUrls until sale
 }
 
 async function fetchSpeakerCardData(locale) {

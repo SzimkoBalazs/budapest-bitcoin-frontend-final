@@ -38,16 +38,16 @@ const HeroSectionContent = ({ heroSectionData }) => {
             </h3>
           </div>
           <div className="flex flex-col justify-center items-center">
-            <div className="flex justify-center items-center gap-[10px]">
+            {/* <div className="flex justify-center items-center gap-[10px]">
               <h5 className="text-white font-exo text-[18px] sm:text-[24px] font-extrabold leading-[150%] tracking-[3.12px]">
                 {heroSectionData.HeroSectionDate}
               </h5>
-            </div>
-            <div className="w-[286.173px] h-[95.905px] absolute ">
+            </div> */}
+            {/* <div className="w-[286.173px] h-[95.905px] absolute ">
               <div className="w-[286.173px] h-[95.905px]  opacity-30">
                 <HeroSectionDots />
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

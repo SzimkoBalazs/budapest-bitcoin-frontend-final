@@ -40,7 +40,7 @@ const SpeakersSection = async ({ locale }) => {
   return (
     <div
       id="speakers"
-      className="mb-[80px] md:mb-[176px] relative scroll-mt-[0px]"
+      className="mb-[80px] md:mb-[176px] relative scroll-mt-[0px] overflow-hidden" //overflow hidden added until sale
       style={{
         background: "linear-gradient(to top right, #1f1f1f 75%, #F7931A 35%)",
         backgroundRepeat: "no-repeat",
@@ -48,7 +48,7 @@ const SpeakersSection = async ({ locale }) => {
         backgroundPosition: "center",
       }}
     >
-      <div className="flex w-full flex-row items-between opacity-[0.075] z-0 absolute left-0 top-0 px-[40px] pt-[80px]">
+      {/* <div className="flex w-full flex-row items-between opacity-[0.075] z-0 absolute left-0 top-0 px-[40px] pt-[80px]">
         <div className="flex justify-center flex-1">
           <SpeakersBigTextOutline />
         </div>
@@ -58,7 +58,7 @@ const SpeakersSection = async ({ locale }) => {
         <div className="hidden justify-center sm:flex sm:flex-1">
           <SpeakersBigTextOutline />
         </div>
-      </div>
+      </div> */}
       <ContentWrapper className="pt-[80px]">
         <div className="relative z-10 mx-auto">
           <div className="flex flex-col gap-[16px] sm:gap-[24px] md:pt-[80px]">
@@ -80,8 +80,8 @@ const SpeakersSection = async ({ locale }) => {
         </div>
       </ContentWrapper>
       {/*SPEAKER CARDS CONTAINER*/}
-      <div className="max-w-[1128px] z-20 relative scrollbar-container px-[16px] sm:px-[40px] h-auto mt-10 flex gl:mx-auto gl:justify-center items-start content-center gap-x-[40px] md:gap-y-[80px] md:gap-x-[40px] pb-[24px] overflow-x-scroll flex-nowrap md:flex-wrap">
-        {/*TODO: Show only 8 speakers */}
+      {/* <div className="max-w-[1128px] z-20 relative scrollbar-container px-[16px] sm:px-[40px] h-auto mt-10 flex gl:mx-auto gl:justify-center items-start content-center gap-x-[40px] md:gap-y-[80px] md:gap-x-[40px] pb-[24px] overflow-x-scroll flex-nowrap md:flex-wrap">
+        
         {speakerCardData.map(
           (speaker, index) =>
             index < 12 && (
@@ -102,15 +102,23 @@ const SpeakersSection = async ({ locale }) => {
               </div>
             )
         )}
+      </div> */}
+
+      <div className="max-w-[1128px] z-20 relative scrollbar-container px-[16px] sm:px-[40px] h-auto flex gl:mx-auto gl:justify-center items-start content-center gap-x-[40px] md:gap-y-[80px] md:gap-x-[40px] pb-[24px] overflow-x-scroll flex-nowrap md:flex-wrap mt-[7rem] mb-[6rem]">
+        <MoreSpeakersTag
+          mainText={speakerSetionData.TagMainText}
+          secondaryText={speakerSetionData.TagSecondaryText}
+        />
       </div>
-      <div className="flex flex-col mt-[32px] sm:mt-10 w-full items-center">
+
+      {/* <div className="flex flex-col mt-[32px] sm:mt-10 w-full items-center">
         <GetYourPassCTAButton
           anchorOrButton={"anchor"}
           locale={locale}
           href={"/speakers"}
           buttonText={speakerSetionData.MoreSpeakersButton}
         />
-      </div>
+      </div> */}
     </div>
   );
 };

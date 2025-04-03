@@ -4,15 +4,14 @@ import SecondaryCTAButton from "../SecondaryCTAButton";
 import WhyPartnerUsHODLSVG from "@/utilities/WhyPartnerUsHODLSVG";
 import MainMediaPartnerSVG from "@/utilities/MainMediaPartnerSVG";
 import SectionMainTitle from "@/components/SectionMainTitle";
-import Image from 'next/image';
-import BtcPayLogo from '../../../public/logos/btc_pay_logo.svg';
-import BitvocationLogo from '../../../public/logos/bitvocation_logo.png';
-import CryptokenLogo from '../../../public/logos/cryptoken_logo.png';
-import BrandPrLogo from '../../../public/logos/brandpr_logo.svg';
-import CryptoBrowserLogo from '../../../public/logos/crypto_browser_logo.svg';
-import Partner from '../Partners/Partner';
-import PartnersAndSponsors from '../Partners/PartnersAndSponsors';
-
+import Image from "next/image";
+import BtcPayLogo from "../../../public/logos/btc_pay_logo.svg";
+import BitvocationLogo from "../../../public/logos/bitvocation_logo.png";
+import CryptokenLogo from "../../../public/logos/cryptoken_logo.png";
+import BrandPrLogo from "../../../public/logos/brandpr_logo.svg";
+import CryptoBrowserLogo from "../../../public/logos/crypto_browser_logo.svg";
+import Partner from "../Partners/Partner";
+import PartnersAndSponsors from "../Partners/PartnersAndSponsors";
 
 async function fetchPartnerUsSectionData(locale) {
   const res = await fetch(
@@ -43,9 +42,17 @@ const WhyPartnerWithUs = async ({ locale }) => {
                   textTop={partnerUsSectionData.TitleTopText}
                   textBottom={partnerUsSectionData.TitleBottomText}
                   color="bg-primary-500"
-                  topTextClass={'text-nowrap tracking-[1px] mb-[2px]'}
-                  textSize={locale === 'hu' ? 'text-[28px] xxs:text-[34px] sm:text-[52px]' : 'text-[28px] xs:text-[40px] sm:text-[56px]'}
-                  widthClass={locale === 'hu' ? 'w-[232px] xxs:w-[270px] sm:w-[440px]' : "w-[160px] xxs:w-[210px] sm:w-[310px]"}
+                  topTextClass={"text-nowrap tracking-[1px] mb-[2px]"}
+                  textSize={
+                    locale === "hu"
+                      ? "text-[28px] xxs:text-[34px] sm:text-[52px]"
+                      : "text-[28px] xs:text-[40px] sm:text-[56px]"
+                  }
+                  widthClass={
+                    locale === "hu"
+                      ? "w-[232px] xxs:w-[270px] sm:w-[440px]"
+                      : "w-[160px] xxs:w-[210px] sm:w-[310px]"
+                  }
                 />
               </div>
             </div>
@@ -79,9 +86,8 @@ const WhyPartnerWithUs = async ({ locale }) => {
               </p>
             </div>
           </div>
-          <PartnersAndSponsors title={partnerUsSectionData.ourPartnersTitle}/>
+          {/* <PartnersAndSponsors title={partnerUsSectionData.ourPartnersTitle}/> */}
         </div>
-
       </ContentWrapper>
     </div>
   );

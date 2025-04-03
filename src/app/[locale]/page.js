@@ -17,11 +17,11 @@ export default async function Home({ params }) {
       <HeroSection locale={locale} />
       <SpeakersSection locale={locale} />
       <TicketsSection locale={locale} />
-      {/* <ComingSoonForm locale={locale} /> */}
+      <ComingSoonForm locale={locale} />
       <WhatToExpectSection locale={locale} />
       <ThereIsMore locale={locale} />
       <GallerySection locale={locale} />
-      <WhaleVenuePicturesSection locale={locale} />
+      {/* <WhaleVenuePicturesSection locale={locale} /> */}
       <WhyPartnerWithUs locale={locale} />
       <Footer locale={locale} />
     </>
