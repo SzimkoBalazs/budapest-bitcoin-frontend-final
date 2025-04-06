@@ -73,7 +73,7 @@ const SpeakersSection = async ({ locale }) => {
             <SecondaryCTAButton
               text={speakerSetionData.ButtonText}
               type="button"
-              href="hello@budapestbitcoin.com"
+              href="fanny@budapestbitcoin.com"
               actionType="mailto"
             />
           </div>
