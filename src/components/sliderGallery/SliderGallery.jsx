@@ -19,7 +19,7 @@ const SliderGallery = ({ data }) => {
         effect={"coverflow"}
         grabCursor={true}
         centeredSlides={true}
-        loop={true}
+        loop={false}
         slidesPerView={3}
         coverflowEffect={{
           rotate: 0,

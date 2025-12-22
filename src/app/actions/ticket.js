@@ -3,26 +3,26 @@ import prisma from "../../../utils/db";
 
 // Összes elérhető jegy lekérése
 export async function getTickets() {
-  const tickets = await prisma.ticket.findMany({
-    // where: {
-    //   saleStart: { lte: new Date() }, // Csak azokat a jegyeket listázzuk, amik már elérhetőek
-    //   saleEnd: { gte: new Date() }, // És még nem járt le az értékesítésük
-    // },
-    orderBy: {
-      priceInEur: "asc", // Legolcsóbb jegyek előre
-    },
-  });
-  return tickets;
+  // const tickets = await prisma.ticket.findMany({
+  //   // where: {
+  //   //   saleStart: { lte: new Date() }, // Csak azokat a jegyeket listázzuk, amik már elérhetőek
+  //   //   saleEnd: { gte: new Date() }, // És még nem járt le az értékesítésük
+  //   // },
+  //   orderBy: {
+  //     priceInEur: "asc", // Legolcsóbb jegyek előre
+  //   },
+  // });
+  // return tickets;
 }
 
 export async function getTicketsForAdmin() {
-  try {
-    const tickets = await prisma.ticket.findMany();
-    return tickets;
-  } catch (error) {
-    console.error("Hiba a jegyek lekérdezése közben:", error);
-    return [];
-  }
+  // try {
+  //   const tickets = await prisma.ticket.findMany();
+  //   return tickets;
+  // } catch (error) {
+  //   console.error("Hiba a jegyek lekérdezése közben:", error);
+  //   return [];
+  // }
 }
 
 export async function getTicket(ticketId) {
