@@ -15,14 +15,40 @@ import {
   Languages,
 } from "szamlazz.js";
 
-const szamlazzClient = new Client({
-  //   user: process.env.SZAMLAZZ_USERNAME,
-  //   password: process.env.SZAMLAZZ_PASSWORD,
-  authToken: process.env.SZAMLAZZ_AGENT_KEY,
-  eInvoice: true, // (ha elektronikus számlát szeretnél)
-  requestInvoiceDownload: true, // PDF letöltés kérésének engedélyezése
-  timeout: 5000,
-});
+/**
+ * IMPORTANT (Next build safety):
+ * Next may evaluate route modules during `next build` (route data collection).
+ * If we instantiate `szamlazz.js` Client at module scope and env vars are missing,
+ * it can crash the build. Keep initialization lazy and validate env at call-time.
+ */
+let _szamlazzClient;
+
+function getSzamlazzClient() {
+  if (_szamlazzClient) return _szamlazzClient;
+
+  const authToken = process.env.SZAMLAZZ_AGENT_KEY;
+  const user = process.env.SZAMLAZZ_USERNAME;
+  const password = process.env.SZAMLAZZ_PASSWORD;
+
+  if (!authToken && !(user && password)) {
+    throw new Error(
+      "Missing Számlázz.hu credentials. Set either SZAMLAZZ_AGENT_KEY or both SZAMLAZZ_USERNAME and SZAMLAZZ_PASSWORD."
+    );
+  }
+
+  // Some szamlazz.js versions assert on missing `user` even when authToken is used,
+  // so pass it if available.
+  const options = {
+    ...(authToken ? { authToken } : { user, password }),
+    ...(user ? { user } : {}),
+    eInvoice: true,
+    requestInvoiceDownload: true,
+    timeout: 5000,
+  };
+
+  _szamlazzClient = new Client(options);
+  return _szamlazzClient;
+}
 
 const seller = new Seller({
   bank: {
@@ -92,6 +118,7 @@ export async function createInvoice(orderData) {
     );
 
     // Számla kibocsátása
+    const szamlazzClient = getSzamlazzClient();
     const result = await szamlazzClient.issueInvoice(invoice);
     console.log("Invoice issued:", result);
     let invoiceFilePath;
